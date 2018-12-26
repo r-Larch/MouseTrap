@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,10 @@ namespace MouseTrap {
         public static void Main(string[] args)
         {
             //Application.Run(new ConfigFrom());
+
+            //while (true) {
+            //    Debug.WriteLine(Cursor.Position);
+            //}
 
             var worker = new TrayWorker(new Program().Run);
             worker.TrayIcon = new NotifyIcon {
@@ -33,7 +38,7 @@ namespace MouseTrap {
             var d2 = screens.First(x => x != d1);
 
             const int space = 10;
-            var d1HotSpace = new Rectangle(d1.Bounds.X + d1.Bounds.Width - space, d1.Bounds.Y + 226, space, d1.Bounds.Height - 226);
+            var d1HotSpace = new Rectangle(d1.Bounds.X + d1.Bounds.Width - space, d1.Bounds.Y + 324, space, d1.Bounds.Height - 324);
             var d2HotSpace = new Rectangle(d2.Bounds.X, d2.Bounds.Y, space, d2.Bounds.Height);
 
             //Console.WriteLine(d1.Bounds);
