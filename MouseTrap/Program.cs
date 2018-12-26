@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -7,27 +6,22 @@ using MouseTrap.Properties;
 
 
 namespace MouseTrap {
-    internal class Program : Cmd {
-        [STAThread]
+    public class Program {
         public static void Main(string[] args)
         {
-            new Program {
-                Visible = false
-            }.Start();
-        }
-
-        public Program()
-        {
-            TrayIcon = new NotifyIcon {
+            var worker = new TrayWorker(new Program().Run);
+            worker.TrayIcon = new NotifyIcon {
                 Icon = Resources.AppIcon,
+                Text = nameof(MouseTrap),
                 ContextMenu = new ContextMenu(new[] {
-                    new MenuItem("Exit", (s, e) => Exit())
+                    new MenuItem("Exit", (s, e) => worker.Exit())
                 }),
                 Visible = true
             };
+            worker.Start();
         }
 
-        public override void Start()
+        private void Run()
         {
             var screens = Screen.AllScreens;
 
@@ -84,11 +78,9 @@ namespace MouseTrap {
                     Mouse.MouseMove((d1HotSpace.X - 1), newposy);
                 }
 
-                Application.DoEvents();
                 Thread.Sleep(1);
             }
         }
-
 
         private int _posOldx;
 
