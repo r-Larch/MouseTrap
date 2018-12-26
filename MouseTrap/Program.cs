@@ -10,33 +10,19 @@ namespace MouseTrap {
     public class Program {
         public static void Main(string[] args)
         {
+            //Application.Run(new ConfigFrom());
+
             var worker = new TrayWorker(new Program().Run);
             worker.TrayIcon = new NotifyIcon {
                 Icon = Resources.AppIcon,
                 Text = nameof(MouseTrap),
                 ContextMenu = new ContextMenu(new[] {
-                    new MenuItem("Info", ShowInfo),
+                    new MenuItem("Info", (s, e) => new ConfigFrom().Show()) {DefaultItem = true},
                     new MenuItem("Exit", (s, e) => worker.Exit()),
                 }),
                 Visible = true
             };
             worker.Start();
-        }
-
-        private static void ShowInfo(object sender, EventArgs e)
-        {
-            var screens = Screen.AllScreens;
-
-            var s = "";
-
-            foreach (var screen in screens) {
-                s += $"Name:    {screen.DeviceName}\r\n" +
-                     $"Primary: {screen.Primary}\r\n" +
-                     $"Bounds:  {screen.Bounds}\r\n" +
-                     $"\r\n";
-            }
-
-            MessageBox.Show(s, $"You have {screens.Length} Screens");
         }
 
         private void Run()
