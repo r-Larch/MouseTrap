@@ -15,6 +15,7 @@ namespace MouseTrap {
 
             //while (true) {
             //    Debug.WriteLine(Cursor.Position);
+            //    Thread.Sleep(1);
             //}
 
             var worker = new TrayWorker(new Program().Run);
@@ -37,7 +38,7 @@ namespace MouseTrap {
             var d1 = screens.First(x => x.Primary);
             var d2 = screens.First(x => x != d1);
 
-            const int space = 10;
+            const int space = 1;
             var d1HotSpace = new Rectangle(d1.Bounds.X + d1.Bounds.Width - space, d1.Bounds.Y + 324, space, d1.Bounds.Height - 324);
             var d2HotSpace = new Rectangle(d2.Bounds.X, d2.Bounds.Y, space, d2.Bounds.Height);
 
