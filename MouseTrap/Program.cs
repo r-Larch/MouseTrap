@@ -15,8 +15,8 @@ namespace MouseTrap {
                 Icon = Resources.AppIcon,
                 Text = nameof(MouseTrap),
                 ContextMenu = new ContextMenu(new[] {
-                    new MenuItem("Exit", (s, e) => worker.Exit()),
                     new MenuItem("Info", ShowInfo),
+                    new MenuItem("Exit", (s, e) => worker.Exit()),
                 }),
                 Visible = true
             };
