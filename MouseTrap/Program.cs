@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -14,11 +15,28 @@ namespace MouseTrap {
                 Icon = Resources.AppIcon,
                 Text = nameof(MouseTrap),
                 ContextMenu = new ContextMenu(new[] {
-                    new MenuItem("Exit", (s, e) => worker.Exit())
+                    new MenuItem("Exit", (s, e) => worker.Exit()),
+                    new MenuItem("Info", ShowInfo),
                 }),
                 Visible = true
             };
             worker.Start();
+        }
+
+        private static void ShowInfo(object sender, EventArgs e)
+        {
+            var screens = Screen.AllScreens;
+
+            var s = "";
+
+            foreach (var screen in screens) {
+                s += $"Name:    {screen.DeviceName}\r\n" +
+                     $"Primary: {screen.Primary}\r\n" +
+                     $"Bounds:  {screen.Bounds}\r\n" +
+                     $"\r\n";
+            }
+
+            MessageBox.Show(s, $"You have {screens.Length} Screens");
         }
 
         private void Run()
