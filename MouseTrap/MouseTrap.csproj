@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MouseBrige.cs" />
     <Compile Include="ScreenInterrogatory.cs" />
     <Compile Include="ConfigFrom.cs">
       <SubType>Form</SubType>
