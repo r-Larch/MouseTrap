@@ -31,6 +31,10 @@ namespace MouseTrap.Forms {
             StartPosition = FormStartPosition.Manual;
             Bounds = screen.Bounds;
 
+            // Set KeyPreview object to true to allow the form to process 
+            // the key before the control with focus processes it.
+            this.KeyPreview = true;
+
             //this.SuspendLayout();
             //Panel.SuspendLayout();
 
@@ -74,41 +78,41 @@ namespace MouseTrap.Forms {
             Panel.Controls.Add(BtnBottom);
 
             // Bars
-            BarTop = new EdgeSlider {
+            BarTop = new EdgeSlider(Panel) {
                 Bounds = new Rectangle(0, 0, Width, 60),
                 LayoutStyle = LayoutStyle.Top,
                 TopOffset = 0,
                 BottomOffset = 0
             };
             BarTop.Hide();
-            Panel.Controls.Add(BarTop);
+            //Panel.Controls.Add(BarTop);
 
-            BarBottom = new EdgeSlider {
+            BarBottom = new EdgeSlider(Panel) {
                 Bounds = new Rectangle(0, Height - 60, Width, 60),
                 LayoutStyle = LayoutStyle.Bottom,
                 TopOffset = 0,
                 BottomOffset = 0
             };
             BarBottom.Hide();
-            Panel.Controls.Add(BarBottom);
+            //Panel.Controls.Add(BarBottom);
 
-            BarLeft = new EdgeSlider {
+            BarLeft = new EdgeSlider(Panel) {
                 Bounds = new Rectangle(0, 0, 60, Height),
                 LayoutStyle = LayoutStyle.Left,
                 TopOffset = 0,
                 BottomOffset = 0
             };
             BarLeft.Hide();
-            Panel.Controls.Add(BarLeft);
+            //Panel.Controls.Add(BarLeft);
 
-            BarRight = new EdgeSlider {
+            BarRight = new EdgeSlider(Panel) {
                 Bounds = new Rectangle(Width - 60, 0, 60, Height),
                 LayoutStyle = LayoutStyle.Right,
                 TopOffset = 0,
                 BottomOffset = 0
             };
             BarRight.Hide();
-            Panel.Controls.Add(BarRight);
+            //Panel.Controls.Add(BarRight);
 
             //Panel.ResumeLayout(false);
             //this.ResumeLayout(false);

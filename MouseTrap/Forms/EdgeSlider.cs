@@ -6,9 +6,18 @@ using System.Windows.Forms;
 
 
 namespace MouseTrap.Forms {
-    public partial class EdgeSlider : UserControl {
+    public class EdgeSlider /*: UserControl*/ {
+        public bool Visible { get; set; }
+        public Rectangle Bounds { get; set; }
+        public Size Size => Bounds.Size;
+        public int Width => Bounds.Size.Width;
+        public int Height => Bounds.Size.Height;
+        public Color BackColor { get; set; }
+        public Control Form { get; }
+
         public LayoutStyle LayoutStyle { get; set; }
         internal Bar Bar { get; private set; }
+        internal Bar FullBar => GetBar(Size, 0, 0);
 
         internal int BarLength => Math.Max(Width, Height);
         internal int BarSize => Math.Min(Width, Height);
@@ -25,19 +34,21 @@ namespace MouseTrap.Forms {
             set => _bottomOffset = Math.Max(Math.Min(value, (BarLength - (TopOffset + BarSize * 2))), 0);
         }
 
-        public EdgeSlider()
+        public EdgeSlider(SliderPanel form)
         {
-            InitializeComponent();
-            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            form.Sliders.Add(this);
+            this.Form = form;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            //this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             //this.BackColor = Color.Transparent;
 
-            this.Layout += (s, e) => { Bar = GetBar(Size, TopOffset, BottomOffset); };
-            this.MouseEnter += (s, e) => { HandleHover(); };
-            this.MouseHover += (s, e) => { HandleHover(); };
-            this.MouseMove += (s, e) => { HandleHover(); };
-            this.MouseLeave += (s, e) => { HandleHover(); };
+            this.Form.Layout += (s, e) => { Bar = GetBar(Size, TopOffset, BottomOffset); };
+            this.Form.MouseEnter += (s, e) => { HandleHover(); };
+            this.Form.MouseHover += (s, e) => { HandleHover(); };
+            this.Form.MouseMove += (s, e) => { HandleHover(); };
+            this.Form.MouseLeave += (s, e) => { HandleHover(); };
 
-            this.MouseDown += (s, e) => {
+            this.Form.MouseDown += (s, e) => {
                 Bar.Top.Active = Bar.Top.Hover;
                 Bar.Bottom.Active = Bar.Bottom.Hover;
 
@@ -55,11 +66,11 @@ namespace MouseTrap.Forms {
                     Bar.Bottom.CursorPos = Bar.Bottom.GetBounds().Size - new Size(offset.X, offset.Y);
                 }
             };
-            this.MouseUp += (s, e) => {
+            this.Form.MouseUp += (s, e) => {
                 Bar.Top.Active = false;
                 Bar.Bottom.Active = false;
             };
-            this.MouseMove += (s, e) => {
+            this.Form.MouseMove += (s, e) => {
                 var pos = this.PointToClient(Cursor.Position);
                 if (Bar.Top.Active) {
                     var offset = Bar.Top.CursorPos;
@@ -69,7 +80,7 @@ namespace MouseTrap.Forms {
                     Bar = GetBar(Size, TopOffset, BottomOffset);
                     Bar.Top.Hover = Bar.Top.Active = true;
                     Bar.Top.CursorPos = offset;
-                    this.Invalidate();
+                    this.Invalidate(FullBar);
                 }
 
                 if (Bar.Bottom.Active) {
@@ -80,16 +91,22 @@ namespace MouseTrap.Forms {
                     Bar = GetBar(Size, TopOffset, BottomOffset);
                     Bar.Bottom.Hover = Bar.Bottom.Active = true;
                     Bar.Bottom.CursorPos = offset;
-                    this.Invalidate();
+                    this.Invalidate(FullBar);
                 }
             };
+        }
+
+        private Point PointToClient(Point position)
+        {
+            position = this.Form.PointToClient(position);
+            return new Point(position.X - Bounds.Location.X, position.Y - Bounds.Location.Y);
         }
 
         private void HandleHover()
         {
             var pos = this.PointToClient(Cursor.Position);
             if (Bar.Top.Contains(pos)) {
-                this.Cursor = LayoutStyle == LayoutStyle.Left || LayoutStyle == LayoutStyle.Right ? Cursors.SizeNS : Cursors.SizeWE;
+                this.Form.Cursor = LayoutStyle == LayoutStyle.Left || LayoutStyle == LayoutStyle.Right ? Cursors.SizeNS : Cursors.SizeWE;
                 if (!Bar.Top.Hover) {
                     Bar.Top.Hover = true;
                     this.Invalidate(Bar.Top);
@@ -97,12 +114,12 @@ namespace MouseTrap.Forms {
             }
             else if (Bar.Top.Hover) {
                 Bar.Top.Hover = false;
-                this.Cursor = Cursors.Default;
+                this.Form.Cursor = Cursors.Default;
                 this.Invalidate(Bar.Top);
             }
 
             if (Bar.Bottom.Contains(pos)) {
-                this.Cursor = LayoutStyle == LayoutStyle.Left || LayoutStyle == LayoutStyle.Right ? Cursors.SizeNS : Cursors.SizeWE;
+                this.Form.Cursor = LayoutStyle == LayoutStyle.Left || LayoutStyle == LayoutStyle.Right ? Cursors.SizeNS : Cursors.SizeWE;
                 if (!Bar.Bottom.Hover) {
                     Bar.Bottom.Hover = true;
                     this.Invalidate(Bar.Bottom);
@@ -110,27 +127,42 @@ namespace MouseTrap.Forms {
             }
             else if (Bar.Bottom.Hover) {
                 Bar.Bottom.Hover = false;
-                this.Cursor = Cursors.Default;
+                this.Form.Cursor = Cursors.Default;
                 this.Invalidate(Bar.Bottom);
             }
         }
 
-        protected override void OnPaintBackground(PaintEventArgs e)
+        private void Invalidate(GraphicsPath path)
+        {
+            var points = path.PathData.Points;
+            var types = path.PathData.Types;
+            for (int i = 0; i < points.Length; i++) {
+                points[i] = new PointF(points[i].X + Bounds.Location.X, points[i].Y + Bounds.Location.Y);
+            }
+
+            path = new GraphicsPath(points, types);
+            var region = new Region(path);
+            this.Form.Invalidate(region);
+        }
+
+        public void OnPaintBackground(PaintEventArgs e)
         {
             //base.OnPaintBackground(e);
-            var bar = GetBar(Size, 0, 0);
-            bar.Draw(e.Graphics, BackColor);
+            if (e.Graphics.ClipBounds.IntersectsWith(Bounds)) {
+                e.Graphics.TranslateTransform(Bounds.X, Bounds.Y);
+                FullBar.Draw(e.Graphics, BackColor);
+                e.Graphics.ResetTransform();
+            }
         }
 
-        protected override void OnPaint(PaintEventArgs e)
+        public void OnPaint(PaintEventArgs e)
         {
             //base.OnPaint(e);
-            Draw(e.Graphics, e.ClipRectangle);
-        }
-
-        private void Draw(Graphics graphics, Rectangle clipRectangle)
-        {
-            Bar.Draw(graphics);
+            if (Visible && e.Graphics.ClipBounds.IntersectsWith(Bounds)) {
+                e.Graphics.TranslateTransform(Bounds.X, Bounds.Y);
+                Bar.Draw(e.Graphics);
+                e.Graphics.ResetTransform();
+            }
         }
 
 
@@ -167,6 +199,22 @@ namespace MouseTrap.Forms {
                     throw new ArgumentOutOfRangeException(nameof(LayoutStyle));
             }
         }
+
+        public void Show()
+        {
+            if (!Visible) {
+                Visible = true;
+                this.Invalidate(FullBar);
+            }
+        }
+
+        public void Hide()
+        {
+            if (Visible) {
+                Visible = false;
+                this.Invalidate(FullBar);
+            }
+        }
     }
 
 
@@ -190,6 +238,28 @@ namespace MouseTrap.Forms {
                 Top.Draw(g, bgColor);
                 Bottom.Draw(g, bgColor);
             }
+        }
+
+        public GraphicsPath Path {
+            get {
+                var path = new GraphicsPath();
+                path.AddPolygon(Top.Points);
+                path.AddRectangle(Body);
+                path.AddPolygon(Bottom.Points);
+                return path;
+            }
+        }
+
+        public Region Region => new Region(Path);
+
+        public static implicit operator Region(Bar bar)
+        {
+            return bar.Region;
+        }
+
+        public static implicit operator GraphicsPath(Bar bar)
+        {
+            return bar.Path;
         }
     }
 

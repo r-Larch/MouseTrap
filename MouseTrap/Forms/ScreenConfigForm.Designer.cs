@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Panel = new System.Windows.Forms.Panel();
+            this.Panel = new SliderPanel();
             this.SuspendLayout();
             // 
             // Panel
@@ -54,6 +54,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel Panel;
+        private SliderPanel Panel;
     }
 }

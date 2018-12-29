@@ -54,17 +54,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\EdgeSlider.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\EdgeSlider.Designer.cs">
-      <DependentUpon>EdgeSlider.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Forms\EdgeSlider.cs" />
     <Compile Include="Forms\ScreenConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ScreenConfigForm.Designer.cs">
       <DependentUpon>ScreenConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SliderPanel.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="MouseBrige.cs" />
     <Compile Include="ScreenInterrogatory.cs" />
@@ -97,9 +95,6 @@
   <ItemGroup>
     <EmbeddedResource Include="ConfigFrom.resx">
       <DependentUpon>ConfigFrom.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\EdgeSlider.resx">
-      <DependentUpon>EdgeSlider.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ScreenConfigForm.resx">
       <DependentUpon>ScreenConfigForm.cs</DependentUpon>

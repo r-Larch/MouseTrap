@@ -45,62 +45,22 @@ namespace MouseTrap {
             //d1Bar.Show(this);
             //d2Bar.Show(this);
 
-            new ScreenConfigForm(d1).Show(this);
-            new ScreenConfigForm(d2).Show(this);
+            ShowForms(d1, d2);
         }
 
-        private Form CreateBar(Rectangle bounds, Color color)
+        private void ShowForms(params Screen[] screens)
         {
-            var f = new Form {
-                BackColor = color,
-                ControlBox = false,
-                MaximizeBox = false,
-                MinimizeBox = false,
-                ShowIcon = false,
-                ShowInTaskbar = false,
-                SizeGripStyle = SizeGripStyle.Hide,
-                FormBorderStyle = FormBorderStyle.None,
-                StartPosition = FormStartPosition.Manual,
-                MinimumSize = new Size(0, 0),
-                Bounds = bounds,
-                TopMost = true
-            };
-            return f;
+            var forms = new List<Form>();
+            foreach (var screen in screens) {
+                var form = new ScreenConfigForm(screen);
+                form.KeyDown += (sender, args) => {
+                    if (args.KeyCode == Keys.Escape) {
+                        forms.ForEach(_ => _.Close());
+                    }
+                };
+                form.Show(this);
+                forms.Add(form);
+            }
         }
     }
-
-    //public class BarForm : Form {
-    //    public BarForm(Screen screen, Color color)
-    //    {
-    //        BackColor = color;
-    //        ControlBox = false;
-    //        MaximizeBox = false;
-    //        MinimizeBox = false;
-    //        ShowIcon = false;
-    //        ShowInTaskbar = false;
-    //        SizeGripStyle = SizeGripStyle.Hide;
-    //        FormBorderStyle = FormBorderStyle.None;
-    //        StartPosition = FormStartPosition.Manual;
-    //        MinimumSize = new Size(0, 0);
-    //        Bounds = screen.Bounds;
-    //        TopMost = true;
-    //    }
-
-
-    //    protected override void OnPaint(PaintEventArgs e)
-    //    {
-    //        base.OnPaint(e);
-    //        Draw(e.Graphics, e.ClipRectangle);
-    //    }
-
-    //    private void Draw(Graphics graphics, Rectangle clipRectangle)
-    //    {
-    //        using (var bg = new SolidBrush(BackColor)) {
-    //            graphics.FillRectangle(bg, Bounds);
-
-
-
-    //        }
-    //    }
-    //}
 }
