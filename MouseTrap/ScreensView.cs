@@ -40,7 +40,7 @@ namespace MouseTrap {
 
                 // Draw screens
                 foreach (var screen in screens) {
-                    var rect = new RectangleF(Padding.Left + screen.Bounds.X * scale, Padding.Top + screen.Bounds.Y * scale, screen.Bounds.Width * scale, screen.Bounds.Height * scale);
+                    var rect = Scale(screen.Bounds, scale);
 
                     graphic.FillRectangle(screen1Brush, rect);
                     graphic.FillPolygon(screen2Brush, new[] {
@@ -59,6 +59,16 @@ namespace MouseTrap {
                     graphic.DrawString(infoString, Font, textBrush, textRect, new StringFormat {Alignment = StringAlignment.Center});
                 }
             }
+        }
+
+        private RectangleF Scale(Rectangle rect, float scale)
+        {
+            return new RectangleF(Padding.Left + rect.X * scale, Padding.Top + rect.Y * scale, rect.Width * scale, rect.Height * scale);
+        }
+
+        private PointF Scale(Point rect, float scale)
+        {
+            return new PointF(Padding.Left + rect.X * scale, Padding.Top + rect.Y * scale);
         }
 
         private Color HexColor(string hex, float alpha = 1)
