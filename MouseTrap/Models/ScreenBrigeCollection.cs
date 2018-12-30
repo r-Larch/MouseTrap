@@ -21,7 +21,7 @@ namespace MouseTrap.Models {
 
         public static ScreenBrigesCollection Load()
         {
-            var obj = SettingsFile.Load<ScreenBrigesCollection>();
+            var obj = SettingsFile.Load<ScreenBrigesCollection>() ?? new ScreenBrigesCollection();
 
             var screens = Screen.AllScreens;
 

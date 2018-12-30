@@ -19,12 +19,12 @@ namespace MouseTrap.Models {
             File.WriteAllText(path, json);
         }
 
-        public static T Load<T>() where T : new()
+        public static T Load<T>() where T : class
         {
             var path = SavePath(typeof(T).Name);
             var json = File.Exists(path) ? File.ReadAllText(path) : null;
 
-            return json != null ? Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json) : new T();
+            return json != null ? Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json) : null;
         }
     }
 }
