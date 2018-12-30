@@ -11,16 +11,29 @@ namespace MouseTrap {
             InitializeComponent();
         }
 
+        protected override void OnResize(EventArgs e)
+        {
+            this.Invalidate();
+            base.OnResize(e);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            //base.OnPaintBackground(e);
+            e.Graphics.Clear(BackColor);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-            Draw();
+            //base.OnPaint(e);
+            Draw(e.Graphics, e.ClipRectangle);
         }
+
 
         public int InnerWidth => Width - Padding.Left - Padding.Right;
         public int InnerHeight => Height - Padding.Top - Padding.Bottom;
 
-        public void Draw()
+        private void Draw(Graphics graphics, Rectangle clipRectangle)
         {
             var screens = Screen.AllScreens;
             var bounds = screens.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Bounds));
@@ -30,20 +43,19 @@ namespace MouseTrap {
                 scale = InnerHeight / (float) bounds.Height;
             }
 
-            using (var bgBrush = new SolidBrush(this.BackColor))
+            //using (var bgBrush = new SolidBrush(this.BackColor))
             using (var screen1Brush = new SolidBrush(HexColor("384b5e")))
             using (var screen2Brush = new SolidBrush(HexColor("314150")))
-            using (var textBrush = new SolidBrush(HexColor("f2f2f2")))
-            using (var graphic = this.CreateGraphics()) {
+            using (var textBrush = new SolidBrush(HexColor("f2f2f2"))) {
                 // Draw bg
-                graphic.FillRectangle(bgBrush, this.Bounds);
+                //graphics.FillRectangle(bgBrush, this.Bounds);
 
                 // Draw screens
                 foreach (var screen in screens) {
                     var rect = Scale(screen.Bounds, scale);
 
-                    graphic.FillRectangle(screen1Brush, rect);
-                    graphic.FillPolygon(screen2Brush, new[] {
+                    graphics.FillRectangle(screen1Brush, rect);
+                    graphics.FillPolygon(screen2Brush, new[] {
                         new PointF(rect.X + (rect.Width * .05f), rect.Y + rect.Height),
                         new PointF(rect.X + rect.Width, rect.Y + rect.Height),
                         new PointF(rect.X + rect.Width, rect.Y + (rect.Height * .05f))
@@ -56,7 +68,7 @@ namespace MouseTrap {
                                      $"offset x: {screen.Bounds.X}, y: {screen.Bounds.Y}\r\n" +
                                      $"{(screen.Primary ? "primary screen" : "")}\r\n";
 
-                    graphic.DrawString(infoString, Font, textBrush, textRect, new StringFormat {Alignment = StringAlignment.Center});
+                    graphics.DrawString(infoString, Font, textBrush, textRect, new StringFormat {Alignment = StringAlignment.Center});
                 }
             }
         }

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using MouseTrap.Models;
 
 
 namespace MouseTrap.Forms {
@@ -33,6 +34,7 @@ namespace MouseTrap.Forms {
             get => _bottomOffset;
             set => _bottomOffset = Math.Max(Math.Min(value, (BarLength - (TopOffset + BarSize * 2))), 0);
         }
+        public int TargetScreenId { get; set; }
 
         public EdgeSlider(SliderPanel form)
         {

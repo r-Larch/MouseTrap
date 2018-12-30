@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigFrom));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.ScreensView = new MouseTrap.ScreensView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.BtnShowBriges = new System.Windows.Forms.Button();
             this.CursorPosition = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.MouseTrackTimer = new System.Windows.Forms.Timer(this.components);
+            this.ScreensView = new MouseTrap.ScreensView();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -56,17 +55,6 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1756, 981);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
-            // ScreensView
-            // 
-            this.ScreensView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ScreensView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ScreensView.Location = new System.Drawing.Point(4, 4);
-            this.ScreensView.Margin = new System.Windows.Forms.Padding(4);
-            this.ScreensView.Name = "ScreensView";
-            this.ScreensView.Padding = new System.Windows.Forms.Padding(4);
-            this.ScreensView.Size = new System.Drawing.Size(1748, 781);
-            this.ScreensView.TabIndex = 0;
-            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.BtnShowBriges);
@@ -80,11 +68,12 @@
             // 
             // BtnShowBriges
             // 
-            this.BtnShowBriges.Location = new System.Drawing.Point(1605, 15);
+            this.BtnShowBriges.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnShowBriges.Location = new System.Drawing.Point(1498, 144);
             this.BtnShowBriges.Name = "BtnShowBriges";
-            this.BtnShowBriges.Size = new System.Drawing.Size(136, 33);
+            this.BtnShowBriges.Size = new System.Drawing.Size(243, 33);
             this.BtnShowBriges.TabIndex = 2;
-            this.BtnShowBriges.Text = "Show Briges";
+            this.BtnShowBriges.Text = "Configure Screen Briges";
             this.BtnShowBriges.UseVisualStyleBackColor = true;
             this.BtnShowBriges.Click += new System.EventHandler(this.BtnShowBriges_Click);
             // 
@@ -113,17 +102,27 @@
             this.MouseTrackTimer.Interval = 1;
             this.MouseTrackTimer.Tick += new System.EventHandler(this.MouseTrackTimer_Tick);
             // 
+            // ScreensView
+            // 
+            this.ScreensView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ScreensView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ScreensView.Location = new System.Drawing.Point(4, 4);
+            this.ScreensView.Margin = new System.Windows.Forms.Padding(4);
+            this.ScreensView.Name = "ScreensView";
+            this.ScreensView.Padding = new System.Windows.Forms.Padding(4);
+            this.ScreensView.Size = new System.Drawing.Size(1748, 781);
+            this.ScreensView.TabIndex = 0;
+            // 
             // ConfigFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1756, 981);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::MouseTrap.Properties.Resources.AppIcon;
             this.Name = "ConfigFrom";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Screen infos";
-            this.Load += new System.EventHandler(this.ConfigFrom_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
