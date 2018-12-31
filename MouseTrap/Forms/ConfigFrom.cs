@@ -40,6 +40,9 @@ namespace MouseTrap {
                     Settings.AutoStartEnabled = false;
                 }
             };
+            if (!Settings.Configured && !Settings.AutoStartEnabled) {
+                this.EnableAutoStart.Checked = true;
+            }
         }
 
 

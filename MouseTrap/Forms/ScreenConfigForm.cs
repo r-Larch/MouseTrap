@@ -121,7 +121,7 @@ namespace MouseTrap.Forms {
             inner.Inflate(-5 - 40, -5 - 40);
 
             BtnTop = new Button {
-                Location = new Point((inner.Width / 2) - 20, inner.X),
+                Location = new Point((Width / 2) - 20, inner.X),
                 Size = new Size(40, 40),
                 Text = "+",
                 UseVisualStyleBackColor = true
@@ -130,7 +130,7 @@ namespace MouseTrap.Forms {
             Panel.Controls.Add(BtnTop);
 
             BtnLeft = new Button {
-                Location = new Point(inner.X, (inner.Height / 2) - 20),
+                Location = new Point(inner.X, (Height / 2) - 20),
                 Size = new Size(40, 40),
                 Text = "+",
                 UseVisualStyleBackColor = true
@@ -139,7 +139,7 @@ namespace MouseTrap.Forms {
             Panel.Controls.Add(BtnLeft);
 
             BtnRight = new Button {
-                Location = new Point(inner.Width, (inner.Height / 2) - 20),
+                Location = new Point(inner.Width, (Height / 2) - 20),
                 Size = new Size(40, 40),
                 Text = "+",
                 UseVisualStyleBackColor = true
@@ -148,8 +148,8 @@ namespace MouseTrap.Forms {
             Panel.Controls.Add(BtnRight);
 
             BtnBottom = new Button {
-                Location = new Point((inner.Width / 2) - 20, inner.Height),
                 Size = new Size(40, 40),
+                Location = new Point((Width / 2) - 20, inner.Height),
                 Text = "+",
                 UseVisualStyleBackColor = true
             };
