@@ -7,7 +7,7 @@ using MouseTrap.Properties;
 
 namespace MouseTrap {
     public class Prompt {
-        public static ScreenBriges ChooseScreenDialog(ScreenBrigesCollection screens, ScreenBriges exclude)
+        public static ScreenConfig ChooseScreenDialog(ScreenConfigCollection screens, ScreenConfig exclude)
         {
             var resultId = -1;
             do {

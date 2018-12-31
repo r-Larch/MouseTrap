@@ -23,14 +23,14 @@ namespace MouseTrap.Forms {
 
         public event RemoveBarEvent RemoveBar;
 
-        public ScreenBriges Screen { get; }
+        public ScreenConfig Screen { get; }
 
         public ScreenConfigForm()
         {
             InitializeComponent();
         }
 
-        public ScreenConfigForm(ScreenBriges screen) : this()
+        public ScreenConfigForm(ScreenConfig screen) : this()
         {
             Screen = screen;
 
@@ -278,9 +278,9 @@ namespace MouseTrap.Forms {
         }
 
 
-        public Func<ScreenBriges, BrigePosition, int> GetTargetScreenId { get; set; }
+        public Func<ScreenConfig, BrigePosition, int> GetTargetScreenId { get; set; }
 
-        public ScreenBriges GetConfig()
+        public ScreenConfig GetConfig()
         {
             Screen.TopBrige = BarTop.Visible
                 ? new Brige() {

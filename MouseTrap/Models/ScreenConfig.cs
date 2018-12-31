@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace MouseTrap.Models {
     [Serializable]
     [JsonObject(MemberSerialization.OptIn)]
-    public class ScreenBriges {
+    public class ScreenConfig {
         public Screen Screen;
         [JsonProperty]
         public int ScreenId { get; set; }

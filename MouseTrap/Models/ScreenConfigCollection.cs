@@ -5,12 +5,12 @@ using System.Windows.Forms;
 
 namespace MouseTrap.Models {
     [Serializable]
-    public class ScreenBrigesCollection : List<ScreenBriges> {
-        public ScreenBrigesCollection()
+    public class ScreenConfigCollection : List<ScreenConfig> {
+        public ScreenConfigCollection()
         {
         }
 
-        public ScreenBrigesCollection(IEnumerable<ScreenBriges> enumerable) : base(enumerable)
+        public ScreenConfigCollection(IEnumerable<ScreenConfig> enumerable) : base(enumerable)
         {
         }
 
@@ -19,9 +19,9 @@ namespace MouseTrap.Models {
             SettingsFile.Save(this);
         }
 
-        public static ScreenBrigesCollection Load()
+        public static ScreenConfigCollection Load()
         {
-            var obj = SettingsFile.Load<ScreenBrigesCollection>() ?? new ScreenBrigesCollection();
+            var obj = SettingsFile.Load<ScreenConfigCollection>() ?? new ScreenConfigCollection();
 
             var screens = Screen.AllScreens;
 
@@ -29,7 +29,7 @@ namespace MouseTrap.Models {
                 var index = obj.FindIndex(x => x.ScreenId == i);
                 if (index == -1) {
                     index = obj.Count;
-                    obj.Add(new ScreenBriges() {ScreenId = i});
+                    obj.Add(new ScreenConfig() {ScreenId = i});
                 }
 
                 obj[index].Screen = screens[i];

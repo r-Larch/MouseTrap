@@ -72,8 +72,9 @@
     <Compile Include="Forms\SliderPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Models\ScreenBrige.cs" />
-    <Compile Include="Models\ScreenBrigeCollection.cs" />
+    <Compile Include="Models\ScreenConfig.cs" />
+    <Compile Include="Models\ScreenConfigCollection.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SettingsFile.cs" />
     <Compile Include="MouseBrigeWorker.cs" />
     <Compile Include="Forms\Prompt.cs" />

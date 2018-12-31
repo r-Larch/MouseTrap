@@ -10,12 +10,15 @@ using MouseTrap.Models;
 namespace MouseTrap {
     public partial class ConfigFrom : Form {
         public TrayWorker<MouseBrigeWorker> Worker { get; set; }
+        public List<ScreenConfigForm> Forms { get; set; }
 
         public ConfigFrom(TrayWorker<MouseBrigeWorker> worker)
         {
             InitializeComponent();
             ResizeRedraw = true;
+            BtnConfigure.Click += (s, e) => { ShowForms(); };
             Worker = worker;
+            Forms = new List<ScreenConfigForm>();
         }
 
         private void MouseTrackTimer_Tick(object sender, EventArgs e)
@@ -23,16 +26,10 @@ namespace MouseTrap {
             CursorPosition.Text = $"{Cursor.Position.X}x{Cursor.Position.Y}";
         }
 
-        private void BtnShowBriges_Click(object sender, EventArgs e)
-        {
-            ShowForms();
-        }
-
         private void ShowForms()
         {
-            var screens = ScreenBrigesCollection.Load();
+            var screens = ScreenConfigCollection.Load();
 
-            this.Forms = new List<ScreenConfigForm>();
             foreach (var screen in screens) {
                 var form = new ScreenConfigForm(screen) {
                     GetTargetScreenId = (sourceScreen, position) => {
@@ -74,11 +71,10 @@ namespace MouseTrap {
             }
         }
 
-        public List<ScreenConfigForm> Forms { get; set; }
 
-        public ScreenBrigesCollection GetConfig()
+        public ScreenConfigCollection GetConfig()
         {
-            return new ScreenBrigesCollection(Forms.Select(_ => _.GetConfig()));
+            return new ScreenConfigCollection(Forms.Select(_ => _.GetConfig()));
         }
     }
 

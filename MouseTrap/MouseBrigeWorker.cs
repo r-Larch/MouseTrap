@@ -8,14 +8,14 @@ using MouseTrap.Models;
 
 namespace MouseTrap {
     public class MouseBrigeWorker : IWorker {
-        private readonly ScreenBrigesCollection _screens;
+        private readonly ScreenConfigCollection _screens;
 
         public MouseBrigeWorker()
         {
-            _screens = ScreenBrigesCollection.Load();
+            _screens = ScreenConfigCollection.Load();
         }
 
-        public MouseBrigeWorker(ScreenBrigesCollection screens)
+        public MouseBrigeWorker(ScreenConfigCollection screens)
         {
             _screens = screens;
         }
@@ -136,11 +136,11 @@ namespace MouseTrap {
 
         private int _activeTrap = -1;
 
-        private void MouseTrap(ScreenBriges briges)
+        private void MouseTrap(ScreenConfig config)
         {
-            if (_activeTrap != briges.ScreenId) {
-                Cursor.Clip = briges.Screen.Bounds;
-                _activeTrap = briges.ScreenId;
+            if (_activeTrap != config.ScreenId) {
+                Cursor.Clip = config.Screen.Bounds;
+                _activeTrap = config.ScreenId;
             }
         }
 
@@ -152,7 +152,7 @@ namespace MouseTrap {
             }
         }
 
-        private static void MouseMove(ScreenBriges targetScreen, int x, int y)
+        private static void MouseMove(ScreenConfig targetScreen, int x, int y)
         {
             // first move to center screen, because windows has some problems :(
             Cursor.Position = new Point(targetScreen.Screen.Bounds.Width / 2, targetScreen.Screen.Bounds.Height / 2);
