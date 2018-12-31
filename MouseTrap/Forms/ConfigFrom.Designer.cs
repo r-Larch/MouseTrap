@@ -30,12 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.ScreensView = new MouseTrap.ScreensView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.BtnConfigure = new System.Windows.Forms.Button();
             this.CursorPosition = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.MouseTrackTimer = new System.Windows.Forms.Timer(this.components);
+            this.EnableAutoStart = new System.Windows.Forms.CheckBox();
+            this.InfoText = new System.Windows.Forms.TextBox();
+            this.ScreensView = new MouseTrap.ScreensView();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -55,19 +57,10 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1756, 981);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
-            // ScreensView
-            // 
-            this.ScreensView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ScreensView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ScreensView.Location = new System.Drawing.Point(4, 4);
-            this.ScreensView.Margin = new System.Windows.Forms.Padding(4);
-            this.ScreensView.Name = "ScreensView";
-            this.ScreensView.Padding = new System.Windows.Forms.Padding(4);
-            this.ScreensView.Size = new System.Drawing.Size(1748, 781);
-            this.ScreensView.TabIndex = 0;
-            // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.InfoText);
+            this.panel1.Controls.Add(this.EnableAutoStart);
             this.panel1.Controls.Add(this.BtnConfigure);
             this.panel1.Controls.Add(this.CursorPosition);
             this.panel1.Controls.Add(this.label1);
@@ -113,6 +106,43 @@
             this.MouseTrackTimer.Interval = 1;
             this.MouseTrackTimer.Tick += new System.EventHandler(this.MouseTrackTimer_Tick);
             // 
+            // EnableAutoStart
+            // 
+            this.EnableAutoStart.AutoSize = true;
+            this.EnableAutoStart.Location = new System.Drawing.Point(13, 59);
+            this.EnableAutoStart.Name = "EnableAutoStart";
+            this.EnableAutoStart.Size = new System.Drawing.Size(394, 24);
+            this.EnableAutoStart.TabIndex = 3;
+            this.EnableAutoStart.Text = "Start MouseTrap automatically on Windows startup";
+            this.EnableAutoStart.UseVisualStyleBackColor = true;
+            // 
+            // InfoText
+            // 
+            this.InfoText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.InfoText.BackColor = System.Drawing.SystemColors.Control;
+            this.InfoText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.InfoText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InfoText.ForeColor = System.Drawing.Color.DarkRed;
+            this.InfoText.Location = new System.Drawing.Point(1444, 14);
+            this.InfoText.Multiline = true;
+            this.InfoText.Name = "InfoText";
+            this.InfoText.ReadOnly = true;
+            this.InfoText.Size = new System.Drawing.Size(296, 99);
+            this.InfoText.TabIndex = 4;
+            this.InfoText.Text = "You have not configured any mouse briges yet! Click \"Configure Screen Briges\" to " +
+    "configure some.";
+            // 
+            // ScreensView
+            // 
+            this.ScreensView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ScreensView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ScreensView.Location = new System.Drawing.Point(4, 4);
+            this.ScreensView.Margin = new System.Windows.Forms.Padding(4);
+            this.ScreensView.Name = "ScreensView";
+            this.ScreensView.Padding = new System.Windows.Forms.Padding(4);
+            this.ScreensView.Size = new System.Drawing.Size(1748, 781);
+            this.ScreensView.TabIndex = 0;
+            // 
             // ConfigFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -139,5 +169,7 @@
         private System.Windows.Forms.Timer MouseTrackTimer;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button BtnConfigure;
+        private System.Windows.Forms.CheckBox EnableAutoStart;
+        private System.Windows.Forms.TextBox InfoText;
     }
 }

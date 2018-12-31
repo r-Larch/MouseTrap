@@ -60,6 +60,12 @@ namespace MouseTrap {
             Application.Exit();
         }
 
+        protected override void OnMainFormClosed(object sender, EventArgs e)
+        {
+            // prevent TryIcon form disappearing after first configuration!!
+            //base.OnMainFormClosed(sender, e);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing) {

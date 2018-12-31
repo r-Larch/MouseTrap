@@ -20,5 +20,8 @@ namespace MouseTrap.Models {
         {
             return SettingsFile.Load<Settings>() ?? new Settings();
         }
+
+        public bool AutoStartEnabled { get; set; }
+        public bool Configured { get; set; }
     }
 }

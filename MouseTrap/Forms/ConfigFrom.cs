@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using MouseTrap.Forms;
 using MouseTrap.Models;
 
@@ -11,15 +13,35 @@ namespace MouseTrap {
     public partial class ConfigFrom : Form {
         public TrayWorker<MouseBrigeWorker> Worker { get; set; }
         public List<ScreenConfigForm> Forms { get; set; }
+        public ScreenConfigCollection Screens { get; set; }
+        public Settings Settings { get; }
 
         public ConfigFrom(TrayWorker<MouseBrigeWorker> worker)
         {
-            InitializeComponent();
-            ResizeRedraw = true;
-            BtnConfigure.Click += (s, e) => { ShowForms(); };
             Worker = worker;
             Forms = new List<ScreenConfigForm>();
+            Screens = ScreenConfigCollection.Load();
+            Settings = Settings.Load();
+            Settings.Configured = Screens.Any(_ => _.HasBriges);
+
+            InitializeComponent();
+            this.ResizeRedraw = true;
+            this.InfoText.Visible = Settings.Configured == false;
+            this.BtnConfigure.Click += (s, e) => { ShowForms(); };
+            this.EnableAutoStart.Checked = Settings.AutoStartEnabled;
+            this.EnableAutoStart.CheckedChanged += (s, e) => {
+                var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+                if (EnableAutoStart.Checked) {
+                    key?.SetValue(nameof(MouseTrap), Application.ExecutablePath);
+                    Settings.AutoStartEnabled = true;
+                }
+                else {
+                    key?.DeleteValue(nameof(MouseTrap), throwOnMissingValue: false);
+                    Settings.AutoStartEnabled = false;
+                }
+            };
         }
+
 
         private void MouseTrackTimer_Tick(object sender, EventArgs e)
         {
@@ -28,13 +50,11 @@ namespace MouseTrap {
 
         private void ShowForms()
         {
-            var screens = ScreenConfigCollection.Load();
-
-            foreach (var screen in screens) {
+            foreach (var screen in Screens) {
                 var form = new ScreenConfigForm(screen) {
                     GetTargetScreenId = (sourceScreen, position) => {
-                        var others = screens.Where(_ => _ != sourceScreen).ToArray();
-                        var target = others.Length > 1 ? Prompt.ChooseScreenDialog(screens, sourceScreen) : others.Single();
+                        var others = Screens.Where(_ => _ != sourceScreen).ToArray();
+                        var target = others.Length > 1 ? Prompt.ChooseScreenDialog(Screens, sourceScreen) : others.Single();
                         //var target = Prompt.ChooseScreenDialog(screens, exclude: sourceScreen);
 
                         Forms.Single(_ => _.Screen.ScreenId == target.ScreenId)
@@ -61,7 +81,10 @@ namespace MouseTrap {
                     Forms.ForEach(_ => _.ResetBtn.Hide());
                 };
                 form.SaveBtn.Click += (s, e) => {
-                    GetConfig().Save();
+                    var config = GetConfig();
+                    Settings.Configured = config.Any(_ => _.HasBriges);
+                    this.InfoText.Visible = Settings.Configured == false;
+                    config.Save();
                     Worker.RestartWorker();
                 };
                 form.CancelBtn.Click += (s, e) => { Forms.ForEach(_ => _.Close()); };
@@ -75,6 +98,12 @@ namespace MouseTrap {
         public ScreenConfigCollection GetConfig()
         {
             return new ScreenConfigCollection(Forms.Select(_ => _.GetConfig()));
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            Settings.Save();
+            base.OnClosing(e);
         }
     }
 
