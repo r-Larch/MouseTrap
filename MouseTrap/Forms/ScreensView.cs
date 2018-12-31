@@ -9,7 +9,12 @@ namespace MouseTrap {
         public ScreensView()
         {
             InitializeComponent();
+
+            Screens = Screen.AllScreens;
         }
+
+        public Screen[] Screens { get; set; }
+        public float CurrentScale { get; set; }
 
         protected override void OnResize(EventArgs e)
         {
@@ -26,6 +31,7 @@ namespace MouseTrap {
         protected override void OnPaint(PaintEventArgs e)
         {
             //base.OnPaint(e);
+            CurrentScale = GetScale();
             Draw(e.Graphics, e.ClipRectangle);
         }
 
@@ -33,26 +39,16 @@ namespace MouseTrap {
         public int InnerWidth => Width - Padding.Left - Padding.Right;
         public int InnerHeight => Height - Padding.Top - Padding.Bottom;
 
+
         private void Draw(Graphics graphics, Rectangle clipRectangle)
         {
-            var screens = Screen.AllScreens;
-            var bounds = screens.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Bounds));
-
-            var scale = InnerWidth / (float) bounds.Width;
-            if (bounds.Height * scale > InnerHeight) {
-                scale = InnerHeight / (float) bounds.Height;
-            }
-
             //using (var bgBrush = new SolidBrush(this.BackColor))
             using (var screen1Brush = new SolidBrush(HexColor("384b5e")))
             using (var screen2Brush = new SolidBrush(HexColor("314150")))
             using (var textBrush = new SolidBrush(HexColor("f2f2f2"))) {
-                // Draw bg
-                //graphics.FillRectangle(bgBrush, this.Bounds);
-
                 // Draw screens
-                foreach (var screen in screens) {
-                    var rect = Scale(screen.Bounds, scale);
+                foreach (var screen in Screens) {
+                    var rect = ScaleRect(screen.Bounds);
 
                     graphics.FillRectangle(screen1Brush, rect);
                     graphics.FillPolygon(screen2Brush, new[] {
@@ -61,7 +57,7 @@ namespace MouseTrap {
                         new PointF(rect.X + rect.Width, rect.Y + (rect.Height * .05f))
                     });
 
-                    var textRect = new RectangleF(rect.X, rect.Y, rect.Width, rect.Height);
+                    var textRect = rect;
                     textRect.Inflate(-10, -10);
                     var infoString = $"{screen.DeviceFriendlyName()}\r\n" +
                                      $"{screen.Bounds.Width}x{screen.Bounds.Height}\r\n" +
@@ -73,14 +69,21 @@ namespace MouseTrap {
             }
         }
 
-        private RectangleF Scale(Rectangle rect, float scale)
+        private RectangleF ScaleRect(Rectangle rect)
         {
+            var scale = CurrentScale;
             return new RectangleF(Padding.Left + rect.X * scale, Padding.Top + rect.Y * scale, rect.Width * scale, rect.Height * scale);
         }
 
-        private PointF Scale(Point rect, float scale)
+        private float GetScale()
         {
-            return new PointF(Padding.Left + rect.X * scale, Padding.Top + rect.Y * scale);
+            var bounds = Screens.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Bounds));
+            var scale = InnerWidth / (float) bounds.Width;
+            if (bounds.Height * scale > InnerHeight) {
+                scale = InnerHeight / (float) bounds.Height;
+            }
+
+            return scale;
         }
 
         private Color HexColor(string hex, float alpha = 1)
