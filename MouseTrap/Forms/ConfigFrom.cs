@@ -22,7 +22,7 @@ namespace MouseTrap {
             Forms = new List<ScreenConfigForm>();
             Screens = ScreenConfigCollection.Load();
             Settings = Settings.Load();
-            Settings.Configured = Screens.Any(_ => _.HasBriges);
+            Settings.Configured = Screens.Any(_ => _.HasBridges);
 
             InitializeComponent();
             this.ResizeRedraw = true;
@@ -85,7 +85,7 @@ namespace MouseTrap {
                 };
                 form.SaveBtn.Click += (s, e) => {
                     var config = GetConfig();
-                    Settings.Configured = config.Any(_ => _.HasBriges);
+                    Settings.Configured = config.Any(_ => _.HasBridges);
                     this.InfoText.Visible = Settings.Configured == false;
                     config.Save();
                     Worker.RestartWorker();

@@ -24,7 +24,7 @@ namespace MouseTrap {
         {
             while (true) {
                 var current = _screens.FirstOrDefault(_ => _.Screen.Bounds.Contains(Cursor.Position));
-                if (current != null && current.HasBriges) {
+                if (current != null && current.HasBridges) {
                     MouseTrap(current);
 
                     var direction = GetDirection(Cursor.Position);
@@ -32,7 +32,7 @@ namespace MouseTrap {
                     // ==>
                     var hotspace = current.RightHotSpace;
                     if (direction.HasFlag(Direction.ToRight) && hotspace.Contains(Cursor.Position)) {
-                        var targetScreen = _screens.First(_ => _.ScreenId == current.RightBrige.TargetScreenId);
+                        var targetScreen = _screens.First(_ => _.ScreenId == current.RightBridge.TargetScreenId);
                         var target = targetScreen.LeftHotSpace;
                         if (target != Rectangle.Empty) {
                             MouseTrapClear();
@@ -45,7 +45,7 @@ namespace MouseTrap {
                     // <==
                     hotspace = current.LeftHotSpace;
                     if (direction.HasFlag(Direction.ToLeft) && hotspace.Contains(Cursor.Position)) {
-                        var targetScreen = _screens.First(_ => _.ScreenId == current.LeftBrige.TargetScreenId);
+                        var targetScreen = _screens.First(_ => _.ScreenId == current.LeftBridge.TargetScreenId);
                         var target = targetScreen.RightHotSpace;
                         if (target != Rectangle.Empty) {
                             MouseTrapClear();
@@ -59,7 +59,7 @@ namespace MouseTrap {
                     // ^
                     hotspace = current.TopHotSpace;
                     if (direction.HasFlag(Direction.ToTop) && hotspace.Contains(Cursor.Position)) {
-                        var targetScreen = _screens.First(_ => _.ScreenId == current.TopBrige.TargetScreenId);
+                        var targetScreen = _screens.First(_ => _.ScreenId == current.TopBridge.TargetScreenId);
                         var target = targetScreen.BottomHotSpace;
                         if (target != Rectangle.Empty) {
                             MouseTrapClear();
@@ -72,7 +72,7 @@ namespace MouseTrap {
                     // v
                     hotspace = current.BottomHotSpace;
                     if (direction.HasFlag(Direction.ToBottom) && hotspace.Contains(Cursor.Position)) {
-                        var targetScreen = _screens.First(_ => _.ScreenId == current.BottomBrige.TargetScreenId);
+                        var targetScreen = _screens.First(_ => _.ScreenId == current.BottomBridge.TargetScreenId);
                         var target = targetScreen.TopHotSpace;
                         if (target != Rectangle.Empty) {
                             MouseTrapClear();
@@ -154,7 +154,7 @@ namespace MouseTrap {
 
         private static void MouseMove(ScreenConfig targetScreen, int x, int y)
         {
-            // first move to center screen, because windows has some problems :(
+            // first move to center of screen, because windows has some problems :(
             Cursor.Position = new Point(targetScreen.Screen.Bounds.Width / 2, targetScreen.Screen.Bounds.Height / 2);
             Cursor.Position = new Point(x, y);
         }

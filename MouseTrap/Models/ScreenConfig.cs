@@ -13,51 +13,54 @@ namespace MouseTrap.Models {
         public int ScreenId { get; set; }
         public string ScreenNum => (ScreenId + 1).ToString();
 
-        public bool HasBriges => TopBrige != null || LeftBrige != null || RightBrige != null || BottomBrige != null;
+        [JsonProperty]
+        public string Name => Screen.DeviceFriendlyName();
+
+        public bool HasBridges => TopBridge != null || LeftBridge != null || RightBridge != null || BottomBridge != null;
 
         [JsonProperty]
-        public Brige TopBrige { get; set; }
+        public Bridge TopBridge { get; set; }
         [JsonProperty]
-        public Brige LeftBrige { get; set; }
+        public Bridge LeftBridge { get; set; }
         [JsonProperty]
-        public Brige RightBrige { get; set; }
+        public Bridge RightBridge { get; set; }
         [JsonProperty]
-        public Brige BottomBrige { get; set; }
+        public Bridge BottomBridge { get; set; }
 
         private const int space = 1;
 
-        public Rectangle RightHotSpace => RightBrige != null
+        public Rectangle RightHotSpace => RightBridge != null
             ? new Rectangle(
                 Screen.Bounds.X + Screen.Bounds.Width - space,
-                Screen.Bounds.Y + RightBrige.TopOffset,
+                Screen.Bounds.Y + RightBridge.TopOffset,
                 space,
-                Screen.Bounds.Height - RightBrige.TopOffset - RightBrige.BottomOffset
+                Screen.Bounds.Height - RightBridge.TopOffset - RightBridge.BottomOffset
             )
             : Rectangle.Empty;
 
-        public Rectangle LeftHotSpace => LeftBrige != null
+        public Rectangle LeftHotSpace => LeftBridge != null
             ? new Rectangle(
                 Screen.Bounds.X,
-                Screen.Bounds.Y + LeftBrige.TopOffset,
+                Screen.Bounds.Y + LeftBridge.TopOffset,
                 space,
-                Screen.Bounds.Height - LeftBrige.TopOffset - LeftBrige.BottomOffset
+                Screen.Bounds.Height - LeftBridge.TopOffset - LeftBridge.BottomOffset
             )
             : Rectangle.Empty;
 
-        public Rectangle TopHotSpace => TopBrige != null
+        public Rectangle TopHotSpace => TopBridge != null
             ? new Rectangle(
-                Screen.Bounds.X + TopBrige.TopOffset,
+                Screen.Bounds.X + TopBridge.TopOffset,
                 Screen.Bounds.Y,
-                Screen.Bounds.Width - TopBrige.TopOffset - TopBrige.BottomOffset,
+                Screen.Bounds.Width - TopBridge.TopOffset - TopBridge.BottomOffset,
                 space
             )
             : Rectangle.Empty;
 
-        public Rectangle BottomHotSpace => BottomBrige != null
+        public Rectangle BottomHotSpace => BottomBridge != null
             ? new Rectangle(
-                Screen.Bounds.X + BottomBrige.TopOffset,
+                Screen.Bounds.X + BottomBridge.TopOffset,
                 Screen.Bounds.Y + Screen.Bounds.Height - space,
-                Screen.Bounds.Width - BottomBrige.TopOffset - BottomBrige.BottomOffset,
+                Screen.Bounds.Width - BottomBridge.TopOffset - BottomBridge.BottomOffset,
                 space
             )
             : Rectangle.Empty;
@@ -65,7 +68,7 @@ namespace MouseTrap.Models {
 
     [Serializable]
     [JsonObject(MemberSerialization.OptIn)]
-    public class Brige {
+    public class Bridge {
         [JsonProperty]
         public int TopOffset { get; set; }
         [JsonProperty]

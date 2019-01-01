@@ -162,45 +162,45 @@ namespace MouseTrap.Forms {
             BarTop = new EdgeSlider(Panel) {
                 Bounds = new Rectangle(0, 0, Width, 60),
                 LayoutStyle = LayoutStyle.Top,
-                TopOffset = Screen.TopBrige?.TopOffset ?? 0,
-                BottomOffset = Screen.TopBrige?.BottomOffset ?? 0,
-                //Visible = screen.TopBrige != null
+                TopOffset = Screen.TopBridge?.TopOffset ?? 0,
+                BottomOffset = Screen.TopBridge?.BottomOffset ?? 0,
+                //Visible = screen.TopBridge != null
             };
-            if (Screen.TopBrige != null) {
-                ToggleTop(Screen.TopBrige.TargetScreenId, forceEnable: true);
+            if (Screen.TopBridge != null) {
+                ToggleTop(Screen.TopBridge.TargetScreenId, forceEnable: true);
             }
 
             BarBottom = new EdgeSlider(Panel) {
                 Bounds = new Rectangle(0, Height - 60, Width, 60),
                 LayoutStyle = LayoutStyle.Bottom,
-                TopOffset = Screen.BottomBrige?.TopOffset ?? 0,
-                BottomOffset = Screen.BottomBrige?.BottomOffset ?? 0,
-                //Visible = screen.BottomBrige != null
+                TopOffset = Screen.BottomBridge?.TopOffset ?? 0,
+                BottomOffset = Screen.BottomBridge?.BottomOffset ?? 0,
+                //Visible = screen.BottomBridge != null
             };
-            if (Screen.BottomBrige != null) {
-                ToggleBottom(Screen.BottomBrige.TargetScreenId, forceEnable: true);
+            if (Screen.BottomBridge != null) {
+                ToggleBottom(Screen.BottomBridge.TargetScreenId, forceEnable: true);
             }
 
             BarLeft = new EdgeSlider(Panel) {
                 Bounds = new Rectangle(0, 0, 60, Height),
                 LayoutStyle = LayoutStyle.Left,
-                TopOffset = Screen.LeftBrige?.TopOffset ?? 0,
-                BottomOffset = Screen.LeftBrige?.BottomOffset ?? 0,
-                //Visible = screen.LeftBrige != null
+                TopOffset = Screen.LeftBridge?.TopOffset ?? 0,
+                BottomOffset = Screen.LeftBridge?.BottomOffset ?? 0,
+                //Visible = screen.LeftBridge != null
             };
-            if (Screen.LeftBrige != null) {
-                ToggleLeft(Screen.LeftBrige.TargetScreenId, forceEnable: true);
+            if (Screen.LeftBridge != null) {
+                ToggleLeft(Screen.LeftBridge.TargetScreenId, forceEnable: true);
             }
 
             BarRight = new EdgeSlider(Panel) {
                 Bounds = new Rectangle(Width - 60, 0, 60, Height),
                 LayoutStyle = LayoutStyle.Right,
-                TopOffset = Screen.RightBrige?.TopOffset ?? 0,
-                BottomOffset = Screen.RightBrige?.BottomOffset ?? 0,
-                //Visible = screen.RightBrige != null
+                TopOffset = Screen.RightBridge?.TopOffset ?? 0,
+                BottomOffset = Screen.RightBridge?.BottomOffset ?? 0,
+                //Visible = screen.RightBridge != null
             };
-            if (Screen.RightBrige != null) {
-                ToggleRight(Screen.RightBrige.TargetScreenId, forceEnable: true);
+            if (Screen.RightBridge != null) {
+                ToggleRight(Screen.RightBridge.TargetScreenId, forceEnable: true);
             }
         }
 
@@ -282,32 +282,32 @@ namespace MouseTrap.Forms {
 
         public ScreenConfig GetConfig()
         {
-            Screen.TopBrige = BarTop.Visible
-                ? new Brige() {
+            Screen.TopBridge = BarTop.Visible
+                ? new Bridge() {
                     TopOffset = BarTop.TopOffset,
                     BottomOffset = BarTop.BottomOffset,
                     TargetScreenId = BarTop.TargetScreenId
                 }
                 : null;
 
-            Screen.BottomBrige = BarBottom.Visible
-                ? new Brige() {
+            Screen.BottomBridge = BarBottom.Visible
+                ? new Bridge() {
                     TopOffset = BarBottom.TopOffset,
                     BottomOffset = BarBottom.BottomOffset,
                     TargetScreenId = BarBottom.TargetScreenId
                 }
                 : null;
 
-            Screen.LeftBrige = BarLeft.Visible
-                ? new Brige() {
+            Screen.LeftBridge = BarLeft.Visible
+                ? new Bridge() {
                     TopOffset = BarLeft.TopOffset,
                     BottomOffset = BarLeft.BottomOffset,
                     TargetScreenId = BarLeft.TargetScreenId
                 }
                 : null;
 
-            Screen.RightBrige = BarRight.Visible
-                ? new Brige() {
+            Screen.RightBridge = BarRight.Visible
+                ? new Bridge() {
                     TopOffset = BarRight.TopOffset,
                     BottomOffset = BarRight.BottomOffset,
                     TargetScreenId = BarRight.TargetScreenId

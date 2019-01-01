@@ -62,7 +62,7 @@ namespace MouseTrap {
 
         protected override void OnMainFormClosed(object sender, EventArgs e)
         {
-            // prevent TryIcon form disappearing after first configuration!!
+            // prevent TrayIcon form disappearing after first configuration!!
             //base.OnMainFormClosed(sender, e);
         }
 
