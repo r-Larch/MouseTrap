@@ -11,7 +11,10 @@ So **for this tool to function correctly** you should have at least **Windows bu
 
 ### Download and Setup
 
-> --
+You can find the latest release hier:
+> [Download](https://github.com/r-Larch/MouseTrap/releases)
+
+`TODO provide a chocolatey.org package`
 
 ### Usage and Configuration
 
