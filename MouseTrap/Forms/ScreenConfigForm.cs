@@ -208,7 +208,7 @@ namespace MouseTrap.Forms {
         public void ToggleLeft(int? targetId = null, bool forceEnable = false, bool forceDisable = false)
         {
             if (!BarLeft.Visible && !forceDisable) {
-                BarLeft.TargetScreenId = targetId ?? GetTargetScreenId(Screen, BrigePosition.Left);
+                BarLeft.TargetScreenId = targetId ?? GetTargetScreenId(Screen.ScreenId, BrigePosition.Left);
                 BtnLeft.Location = new Point(BtnLeft.Location.X + 20, BtnLeft.Location.Y);
                 BtnLeft.Text = "-";
                 BarLeft.Show();
@@ -226,7 +226,7 @@ namespace MouseTrap.Forms {
         public void ToggleRight(int? targetId = null, bool forceEnable = false, bool forceDisable = false)
         {
             if (!BarRight.Visible && !forceDisable) {
-                BarRight.TargetScreenId = targetId ?? GetTargetScreenId(Screen, BrigePosition.Right);
+                BarRight.TargetScreenId = targetId ?? GetTargetScreenId(Screen.ScreenId, BrigePosition.Right);
                 BtnRight.Location = new Point(BtnRight.Location.X - 20, BtnRight.Location.Y);
                 BtnRight.Text = "-";
                 BarRight.Show();
@@ -244,7 +244,7 @@ namespace MouseTrap.Forms {
         public void ToggleTop(int? targetId = null, bool forceEnable = false, bool forceDisable = false)
         {
             if (!BarTop.Visible && !forceDisable) {
-                BarTop.TargetScreenId = targetId ?? GetTargetScreenId(Screen, BrigePosition.Top);
+                BarTop.TargetScreenId = targetId ?? GetTargetScreenId(Screen.ScreenId, BrigePosition.Top);
                 BtnTop.Location = new Point(BtnTop.Location.X, BtnTop.Location.Y + 20);
                 BtnTop.Text = "-";
                 BarTop.Show();
@@ -262,7 +262,7 @@ namespace MouseTrap.Forms {
         public void ToggleBottom(int? targetId = null, bool forceEnable = false, bool forceDisable = false)
         {
             if (!BarBottom.Visible && !forceDisable) {
-                BarBottom.TargetScreenId = targetId ?? GetTargetScreenId(Screen, BrigePosition.Bottom);
+                BarBottom.TargetScreenId = targetId ?? GetTargetScreenId(Screen.ScreenId, BrigePosition.Bottom);
                 BtnBottom.Location = new Point(BtnBottom.Location.X, BtnBottom.Location.Y - 20);
                 BtnBottom.Text = "-";
                 BarBottom.Show();
@@ -278,7 +278,7 @@ namespace MouseTrap.Forms {
         }
 
 
-        public Func<ScreenConfig, BrigePosition, int> GetTargetScreenId { get; set; }
+        public TargetScreenIdGetter GetTargetScreenId { get; set; }
 
         public ScreenConfig GetConfig()
         {
@@ -317,42 +317,44 @@ namespace MouseTrap.Forms {
             return Screen;
         }
 
-        public void AddTargetBarForPosition(BrigePosition position, int targetScreenId)
+        public void AddTargetBarForPosition(BrigePosition position, int sourceScreenId)
         {
             switch (position) {
                 case BrigePosition.Top:
-                    ToggleBottom(targetScreenId, forceEnable: true);
+                    ToggleBottom(sourceScreenId, forceEnable: true);
                     break;
                 case BrigePosition.Left:
-                    ToggleRight(targetScreenId, forceEnable: true);
+                    ToggleRight(sourceScreenId, forceEnable: true);
                     break;
                 case BrigePosition.Right:
-                    ToggleLeft(targetScreenId, forceEnable: true);
+                    ToggleLeft(sourceScreenId, forceEnable: true);
                     break;
                 case BrigePosition.Bottom:
-                    ToggleTop(targetScreenId, forceEnable: true);
+                    ToggleTop(sourceScreenId, forceEnable: true);
                     break;
             }
         }
 
-        public void RemoveTargetBarForPosition(BrigePosition position, int targetScreenId)
+        public void RemoveTargetBarForPosition(BrigePosition position)
         {
             switch (position) {
                 case BrigePosition.Top:
-                    if (Screen.ScreenId == targetScreenId) ToggleBottom(forceDisable: true);
+                    ToggleBottom(forceDisable: true);
                     break;
                 case BrigePosition.Left:
-                    if (Screen.ScreenId == targetScreenId) ToggleRight(forceDisable: true);
+                    ToggleRight(forceDisable: true);
                     break;
                 case BrigePosition.Right:
-                    if (Screen.ScreenId == targetScreenId) ToggleLeft(forceDisable: true);
+                    ToggleLeft(forceDisable: true);
                     break;
                 case BrigePosition.Bottom:
-                    if (Screen.ScreenId == targetScreenId) ToggleTop(forceDisable: true);
+                    ToggleTop(forceDisable: true);
                     break;
             }
         }
     }
 
     public delegate void RemoveBarEvent(ScreenConfigForm sender, BrigePosition position, int targetScreenId);
+
+    public delegate int TargetScreenIdGetter(int sourceScreenId, BrigePosition position);
 }

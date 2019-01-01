@@ -1,4 +1,4 @@
-﻿namespace MouseTrap
+﻿namespace MouseTrap.Forms
 {
     partial class ConfigFrom
     {

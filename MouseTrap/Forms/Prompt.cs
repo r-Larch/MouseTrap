@@ -7,7 +7,7 @@ using MouseTrap.Properties;
 
 namespace MouseTrap {
     public class Prompt {
-        public static ScreenConfig ChooseScreenDialog(ScreenConfigCollection screens, ScreenConfig exclude)
+        public static int ChooseScreenDialog(ScreenConfigCollection screens, int screenIdToexclude)
         {
             var resultId = -1;
             do {
@@ -33,7 +33,7 @@ namespace MouseTrap {
                         Text = screen.ScreenNum,
                         Width = 50,
                         Height = 50,
-                        Enabled = screen != exclude
+                        Enabled = screen.ScreenId != screenIdToexclude
                     };
                     button.Click += (sender, e) => {
                         resultId = screen.ScreenId;
@@ -47,7 +47,7 @@ namespace MouseTrap {
                 f.ShowDialog();
             } while (resultId == -1);
 
-            return screens.Single(_ => _.ScreenId == resultId);
+            return resultId;
         }
     }
 }

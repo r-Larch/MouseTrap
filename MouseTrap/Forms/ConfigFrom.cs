@@ -4,12 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using MouseTrap.Forms;
 using MouseTrap.Models;
 
 
 // ReSharper disable LocalizableElement
-namespace MouseTrap {
+namespace MouseTrap.Forms {
     public partial class ConfigFrom : Form {
         public TrayWorker<MouseBrigeWorker> Worker { get; set; }
         public List<ScreenConfigForm> Forms { get; set; }
@@ -51,26 +50,32 @@ namespace MouseTrap {
             CursorPosition.Text = $"{Cursor.Position.X}x{Cursor.Position.Y}";
         }
 
+        private int GetTargetScreenId(int sourceScreenId, BrigePosition position)
+        {
+            var others = Screens.Where(_ => _.ScreenId != sourceScreenId).ToArray();
+
+            var targetId = sourceScreenId;
+            if (others.Length > 1) {
+                targetId = Prompt.ChooseScreenDialog(Screens, sourceScreenId);
+            }
+            else if (others.Length == 1) {
+                targetId = others.Single().ScreenId;
+            }
+
+            Forms.Single(_ => _.Screen.ScreenId == targetId)
+                .AddTargetBarForPosition(position, sourceScreenId);
+
+            return targetId;
+        }
+
         private void ShowForms()
         {
             foreach (var screen in Screens) {
                 var form = new ScreenConfigForm(screen) {
-                    GetTargetScreenId = (sourceScreen, position) => {
-                        var others = Screens.Where(_ => _ != sourceScreen).ToArray();
-                        var target = others.Length > 1 ? Prompt.ChooseScreenDialog(Screens, sourceScreen) : others.Single();
-                        //var target = Prompt.ChooseScreenDialog(screens, exclude: sourceScreen);
-
-                        Forms.Single(_ => _.Screen.ScreenId == target.ScreenId)
-                            .AddTargetBarForPosition(position, sourceScreen.ScreenId);
-
-                        return target.ScreenId;
-                    }
+                    GetTargetScreenId = GetTargetScreenId
                 };
 
-                form.RemoveBar += (s, position, targetScreenId) => {
-                    Forms.Single(_ => _.Screen.ScreenId == targetScreenId)
-                        .RemoveTargetBarForPosition(position, targetScreenId);
-                };
+                form.RemoveBar += (s, position, targetScreenId) => { Forms.SingleOrDefault(_ => _.Screen.ScreenId == targetScreenId)?.RemoveTargetBarForPosition(position); };
 
                 ResetWorker test = null;
                 form.TestBtn.Click += (s, e) => {
@@ -84,13 +89,17 @@ namespace MouseTrap {
                     Forms.ForEach(_ => _.ResetBtn.Hide());
                 };
                 form.SaveBtn.Click += (s, e) => {
+                    form.ResetBtn.PerformClick();
                     var config = GetConfig();
                     Settings.Configured = config.Any(_ => _.HasBridges);
                     this.InfoText.Visible = Settings.Configured == false;
                     config.Save();
                     Worker.RestartWorker();
                 };
-                form.CancelBtn.Click += (s, e) => { Forms.ForEach(_ => _.Close()); };
+                form.CancelBtn.Click += (s, e) => {
+                    form.ResetBtn.PerformClick();
+                    Forms.ForEach(_ => _.Close());
+                };
 
                 form.Show(this);
                 Forms.Add(form);
