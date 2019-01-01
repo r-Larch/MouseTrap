@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MouseTrap.Models;
 
 
 namespace MouseTrap {
@@ -10,10 +11,10 @@ namespace MouseTrap {
         {
             InitializeComponent();
 
-            Screens = Screen.AllScreens;
+            Screens = ScreenConfigCollection.Load();
         }
 
-        public Screen[] Screens { get; set; }
+        public ScreenConfigCollection Screens { get; set; }
         public float CurrentScale { get; set; }
 
         protected override void OnResize(EventArgs e)
@@ -47,8 +48,8 @@ namespace MouseTrap {
             using (var screen2Brush = new SolidBrush(HexColor("314150")))
             using (var textBrush = new SolidBrush(HexColor("f2f2f2"))) {
                 // Draw screens
-                foreach (var screen in Screens) {
-                    var rect = ScaleRect(screen.Bounds);
+                foreach (var config in Screens) {
+                    var rect = ScaleRect(config.Screen.Bounds);
 
                     graphics.FillRectangle(screen1Brush, rect);
                     graphics.FillPolygon(screen2Brush, new[] {
@@ -59,10 +60,10 @@ namespace MouseTrap {
 
                     var textRect = rect;
                     textRect.Inflate(-10, -10);
-                    var infoString = $"{screen.DeviceFriendlyName()}\r\n" +
-                                     $"{screen.Bounds.Width}x{screen.Bounds.Height}\r\n" +
-                                     $"offset x: {screen.Bounds.X}, y: {screen.Bounds.Y}\r\n" +
-                                     $"{(screen.Primary ? "primary screen" : "")}\r\n";
+                    var infoString = $"{config.Name}\r\n" +
+                                     $"{config.Screen.Bounds.Width}x{config.Screen.Bounds.Height}\r\n" +
+                                     $"offset x: {config.Screen.Bounds.X}, y: {config.Screen.Bounds.Y}\r\n" +
+                                     $"{(config.Screen.Primary ? "primary screen" : "")}\r\n";
 
                     graphics.DrawString(infoString, Font, textBrush, textRect, new StringFormat {Alignment = StringAlignment.Center});
                 }
@@ -77,7 +78,7 @@ namespace MouseTrap {
 
         private float GetScale()
         {
-            var bounds = Screens.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Bounds));
+            var bounds = Screens.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Screen.Bounds));
             var scale = InnerWidth / (float) bounds.Width;
             if (bounds.Height * scale > InnerHeight) {
                 scale = InnerHeight / (float) bounds.Height;

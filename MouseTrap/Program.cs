@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using MouseTrap.Forms;
 using MouseTrap.Models;
 using MouseTrap.Properties;
 
@@ -35,6 +36,9 @@ namespace MouseTrap {
             catch (Exception e) {
                 MessageBox.Show($"[{e.GetType().FullName}] {e.Message}\r\n{e.StackTrace}", e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
+            }
+            finally {
+                ScreenConfigCollection.StaticDispose();
             }
         }
 
