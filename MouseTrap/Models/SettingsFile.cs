@@ -1,10 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 
 namespace MouseTrap.Models {
     public class SettingsFile {
-        protected static string SavePath(string name) => Path.Combine(Application.UserAppDataPath, name + ".json");
+        protected static string SavePath(string name) => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(MouseTrap), name + ".json");
 
         public static void Save<T>(T obj)
         {
