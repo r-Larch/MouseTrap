@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>MouseTrap</id>
-    <version>0.2.0</version>
+    <version>1.0.0</version>
     <title>MouseTrap</title>
     <tags>multiscreen mouse-pointer screen-scale dpi-awareness dpi-scaling cursor-moves cursor-position</tags>
     <summary>A small tool to map the cursor between monitors with different scaling </summary>
@@ -82,7 +82,12 @@ If you encounter any bugs don't hesitate to open an issue and I will give my bes
     <docsUrl>https://github.com/r-Larch/MouseTrap/blob/master/README.md</docsUrl>
     <iconUrl>https://raw.githubusercontent.com/r-Larch/MouseTrap/master/MouseTrap/AppIcon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>29515fc add build script
+    <releaseNotes>c3fd99d update build script to auto create choco nupkg
+cbfdeda update build script
+b84836c added nuspec for choco
+13e044a update README.md
+b8cf831 fix setup.cmd
+29515fc add build script
 7fc64c1 auto reload screen configs on SystemEvents.DisplaySettingsChanged
 8cfbf03 fix some potentional exceptions in edge cases
 4b731b1  fix spelling
