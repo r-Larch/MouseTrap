@@ -14,7 +14,21 @@ So **for this tool to function correctly** you should have at least **Windows bu
 You can find the latest release hier:
 > [Download](https://github.com/r-Larch/MouseTrap/releases)
 
-`TODO provide a chocolatey.org package`
+You can install MouseTrap with **chocolatey**:
+```Powershell
+# install the package
+choco install mousetrap --version 1.0.0
+
+# running it
+mousetrap
+```
+
+If you don't have chocolatey allready, I highly recommend installing it.<br>
+It's as simple as pasting this in a cmd or Powershell window:
+```Powershell
+PowerShell
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+```
 
 ### Usage and Configuration
 

@@ -142,7 +142,7 @@ function ChocoPack([string] $nuspec, [string] $nupkg) {
 	
 	if (!$(Get-Command choco -errorAction SilentlyContinue)) {
 		Write-Host "Install chocolatey";
-		iex (([System.Net.WebClient].new()).DownloadString('https://chocolatey.org/install.ps1'));
+		iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
 		$env:Path += ";%ALLUSERSPROFILE%\chocolatey\bin";
 	}
 
