@@ -41,6 +41,16 @@ function Main() {
 		}
 	}
 
+	if ([Git]::HasUnstagedChanges()) {
+		[Git]::ShowUnstaged();
+		if ([UI]::Comfirm("you have unstaged changes! Do you wand to auto commit them?") -eq $false) {
+			[UI]::ThrowError("Please commit your unstaged changes first");
+		}
+		else {
+			[Git]::Stage("*");
+		}
+	}
+
 
 	# version number =============================
 
@@ -86,28 +96,16 @@ function Main() {
 	[Git]::Stage($AssemblyInfo);
 	[Git]::Stage($chocoNuspec);
 
-	if ([Git]::HasUnstagedChanges()) {
-		[Git]::ShowUnstaged();
-		if ([UI]::Comfirm("you have unstaged changes! Do you wand to auto commit them?") -eq $false) {
-			[Git]::FullReset($AssemblyInfo);
-			[Git]::FullReset($chocoNuspec);
-			[UI]::ThrowError("Please commit your unstaged changes first");
-		}
-		else {
-			[Git]::Stage("*");
-		}
-	}
-
 	if ([Git]::HasTag($tag)) {
 		if ([Git]::HasStagedChanges()) {
 			[Git]::RemoveTag($tag);
-			[Git]::Commit("Update $ReleaseVersionNumber");
+			[Git]::Commit("Update $tag");
 			[Git]::AddTag($tag);
 		}
 	}
 	else {
 		if ([Git]::HasStagedChanges()) {
-			[Git]::Commit("Release $ReleaseVersionNumber");
+			[Git]::Commit("Release $tag");
 		}
 		[Git]::AddTag($tag);
 	}
@@ -124,7 +122,14 @@ function Main() {
 
 	# choco =============================
 
-	ChocoPack $xml "$DistFolder\MouseTrap.$ReleaseVersionNumber.nupkg";
+	ChocoPack $chocoNuspec $DistFolder;
+
+
+	# commit results =============================
+
+	[Git]::Stage("$DistFolder\MouseTrap.$ReleaseVersionNumber.exe");
+	[Git]::Stage("$DistFolder\MouseTrap.$ReleaseVersionNumber.nupkg");
+	[Git]::Commit("$tag binarys");
 
 
 	# cleanup =============================
@@ -133,9 +138,29 @@ function Main() {
 }
 
 
-function ChocoPack([xml] $nuspec, [string] $nupkg, [string] $version) {
+function ChocoPack([string] $nuspec, [string] $nupkg) {
 	
+	if (!$(Get-Command choco -errorAction SilentlyContinue)) {
+		Write-Host "Install chocolatey";
+		iex (([System.Net.WebClient].new()).DownloadString('https://chocolatey.org/install.ps1'));
+		$env:Path += ";%ALLUSERSPROFILE%\chocolatey\bin";
+	}
 
+	& choco pack "$nuspec" --outputdirectory "$nupkg";
+	if (-not $?) {
+		throw "The choco pack process returned an error code."
+	}
+
+	$xml = [xml] $(gc -Path $chocoNuspec -Encoding UTF8);
+	$name = $xml.package.metadata.id + "." + $xml.package.metadata.version + ".nupkg";
+	$file = [System.IO.Path]::Combine($nupkg, $name);
+
+	if ([UI]::Ask("Enter 'choco push' to publish '$name':", "choco push")) {
+		& choco push $file;
+		if (-not $?) {
+			throw "The publish process returned an error code."
+		}
+	}
 }
 
 
@@ -226,6 +251,21 @@ class UI {
 		} else {
 			return $false;
 		}
+	}
+	static [bool] Ask([string] $msg, [string] $answare) {
+		$res = "";
+		do {
+			Write-Host "`n`n $msg (<empty> to skip)" -ForegroundColor Green;
+			Write-Host " " -NoNewline;
+
+			$res = Read-Host
+			if ($res -eq $answare) {
+				return $true;
+			}
+		}
+		while (![string]::IsNullOrEmpty($res));
+
+		return $false;
 	}
 	static ThrowError($error) {
 		Write-Host "`n $error" -ForegroundColor Red;
