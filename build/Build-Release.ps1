@@ -3,7 +3,15 @@ param (
     [Parameter(Mandatory=$false)]
     [ValidatePattern("^\d+\.\d+\.\d+$")]
     [string]
-    $ReleaseVersionNumber
+    $ReleaseVersionNumber,
+
+	[Parameter(Mandatory=$false)]
+	[switch]
+	$Alpha = $false,
+
+	[Parameter(Mandatory=$false)]
+	[switch]
+	$Beta = $false
 )
 
 
@@ -12,14 +20,31 @@ $Root = Split-path -parent $(Split-Path -parent $MyInvocation.MyCommand.Path)
 $SolutionFile = [System.IO.Path]::Combine($Root, "MouseTrap.sln");
 $DistFolder   = [System.IO.Path]::Combine($Root, "dist");
 $TempFolder   = [System.IO.Path]::Combine($Root, "temp");
+$ReadmeFile   = [System.IO.Path]::Combine($Root, "README.md");
 $ProjectRoot  = [System.IO.Path]::Combine($Root, "MouseTrap");
 $OutputDir    = [System.IO.Path]::Combine($ProjectRoot, "bin");
 $chocoNuspec  = [System.IO.Path]::Combine($ProjectRoot, "MouseTrap.nuspec");
 $AssemblyInfo = [System.IO.Path]::Combine($ProjectRoot, "Properties/AssemblyInfo.cs");
 
+$GithubGetRepoApi = "https://api.github.com/repos/r-Larch/MouseTrap";
 
 function Main() {
 	
+	# auto commit ? =============================
+
+	if ([Git]::HasStagedChanges()) {
+		[Git]::ShowStaged();
+		if ([UI]::Comfirm("you have staged changes! Do you wand to auto commit them?") -eq $false) {
+			[Git]::Discard($AssemblyInfo);
+			[Git]::Discard($chocoNuspec);
+			[UI]::ThrowError("Please commit your staged changes first");
+		}
+	}
+
+
+	# version number =============================
+
+	[Git]::Stage($AssemblyInfo); # backup
 	if ([string]::IsNullOrEmpty($ReleaseVersionNumber)) {
 		$ReleaseVersionNumber = GetVersion $AssemblyInfo;
 	}
@@ -27,20 +52,186 @@ function Main() {
 		SetVersion $AssemblyInfo $ReleaseVersionNumber;
 	}
 
+
+	# Git tags and history =============================
+
+	$tag = [Git]::CreateVersionTag($ReleaseVersionNumber, $Alpha, $Beta);
+	$previousTag = [Git]::GetVersionTags() | where { $_ -ne $tag } | sort -Descending | select -first 1;
+	$history = [Git]::GetHistorySince($previousTag);
+
+
+	# update .nuspec =============================
+
+	[Git]::Stage($chocoNuspec); # backup
+	$repo = $(Invoke-Webrequest $GithubGetRepoApi).Content | ConvertFrom-Json;
+	$topics = $(Invoke-Webrequest $GithubGetRepoApi/topics -Headers @{'Accept'='application/vnd.github.mercy-preview+json'}).Content | ConvertFrom-Json
+	$xml = [xml] $(gc -Path $chocoNuspec -Encoding UTF8);
+	$xml.package.metadata.version = $ReleaseVersionNumber;
+	$xml.package.metadata.summary = $repo.description;
+	$xml.package.metadata.tags = [string]::Join(" ", $topics.names);
+	$xml.package.metadata.description = [string]::Join("`r`n", $(gc -Path $ReadmeFile));
+	$xml.package.metadata.copyright = "Copyright $([DateTime]::Now.Year) René Larch";
+	$xml.package.metadata.releaseNotes = [string]::Join("`r`n", $history);
+	# $xml.package.metadata.licenseUrl = ;
+	# $xml.package.metadata.projectUrl = $repo.html_url;
+	# $xml.package.metadata.projectSourceUrl = $repo.html_url;
+	# $xml.package.metadata.bugTrackerUrl = ;
+	# $xml.package.metadata.docsUrl = ;
+	# $xml.package.metadata.iconUrl = ;
+	$xml.Save($chocoNuspec);
+	
+
+	# commit changes =============================
+
+	[Git]::Stage($AssemblyInfo);
+	[Git]::Stage($chocoNuspec);
+
+	if ([Git]::HasUnstagedChanges()) {
+		[Git]::ShowUnstaged();
+		if ([UI]::Comfirm("you have unstaged changes! Do you wand to auto commit them?") -eq $false) {
+			[Git]::FullReset($AssemblyInfo);
+			[Git]::FullReset($chocoNuspec);
+			[UI]::ThrowError("Please commit your unstaged changes first");
+		}
+		else {
+			[Git]::Stage("*");
+		}
+	}
+
+	if ([Git]::HasTag($tag)) {
+		if ([Git]::HasStagedChanges()) {
+			[Git]::RemoveTag($tag);
+			[Git]::Commit("Update $ReleaseVersionNumber");
+			[Git]::AddTag($tag);
+		}
+	}
+	else {
+		if ([Git]::HasStagedChanges()) {
+			[Git]::Commit("Release $ReleaseVersionNumber");
+		}
+		[Git]::AddTag($tag);
+	}
+
+
+	# Build =============================
+
 	BuildSolution $SolutionFile "Release" $OutputDir;
-
 	$exacutable = [System.IO.Path]::Combine($OutputDir, "MouseTrap.exe")
-
 	# SignExecutable $exacutable "My Certificate Subject";
-
 	Copy-Item $exacutable "$DistFolder\MouseTrap.$ReleaseVersionNumber.exe";
 	# Zip $OutputDir "$DistFolder\MouseTrap.$ReleaseVersionNumber.zip";
 
-	# ChocoPack $chocoNuspec "$DistFolder\MouseTrap.$ReleaseVersionNumber.nupkg";
 
-	# GitAddTag "v$ReleaseVersionNumber" $alpha $beta
+	# choco =============================
+
+	ChocoPack $xml "$DistFolder\MouseTrap.$ReleaseVersionNumber.nupkg";
+
+
+	# cleanup =============================
 
 	CleanDir $TempFolder;
+}
+
+
+function ChocoPack([xml] $nuspec, [string] $nupkg, [string] $version) {
+	
+
+}
+
+
+class Git {
+	static [string[]] GetTags() {
+		return $(git tag --list).Split("`n");
+	}
+	static [string[]] GetVersionTags() {
+		return [Git]::GetTags() | Select-String -pattern "v[\d+\.]+(-(alpha|beta))?";
+	}
+	static [string] GetLatastVersionTag() {
+		return [Git]::GetVersionTags() | sort -Descending | select -first 1;
+	}
+	static [string[]] GetHistorySince([string] $tagOrHash) {
+        if ([string]::IsNullOrEmpty($tagOrHash)){
+            return $(git log --oneline);
+        }
+		return $(git log "$tagOrHash..HEAD" --oneline);
+	}
+	static AddTag([string] $tag) {
+		git tag -a "$tag" -m "$tag" | Write-Host -ForegroundColor Green;
+	}
+	static RemoveTag([string] $tag) {
+		git tag -d "$tag" | Write-Host -ForegroundColor Magenta;
+	}
+	static [string] CreateVersionTag([string] $version, [bool] $alpha = $false, [bool] $beta = $false) {
+		$tag = "v$version";
+		if ($alpha) {
+			$tag += "-alpha";
+		}
+		elseif ($beta) {
+			$tag += "-beta";
+		}
+		return $tag;
+	}
+	static [bool] HasTag([string] $tag) {
+		return [Git]::GetTags().Contains($tag);
+	}
+
+	static [bool] HasUncommittedChanges() {
+		return [string]::IsNullOrEmpty($(git diff HEAD --stat)) -eq $false;
+	}
+	static [bool] HasUnstagedChanges() {
+		return [string]::IsNullOrEmpty($(git diff --stat)) -eq $false;
+	}
+	static [bool] HasStagedChanges() {
+		return [string]::IsNullOrEmpty($(git diff --staged --stat)) -eq $false;
+	}
+	static ShowUnstaged() {
+		Write-Host "`n Unstaged changes:`n" -ForegroundColor DarkGreen;
+		git diff --stat | Write-Host -ForegroundColor Green;
+	}
+	static ShowStaged() {
+		Write-Host "`n Staged changes:`n" -ForegroundColor DarkGreen;
+		git diff --staged --stat | Write-Host -ForegroundColor Green;
+	}
+
+	static Stage([string] $file) {
+		git add $file | Write-Host -ForegroundColor Green;
+	}
+	static Unstage([string] $file) {
+		git reset HEAD "$file" | Write-Host -ForegroundColor DarkYellow;
+	}
+	static Discard([string] $file) {
+		git checkout -- "$file" | Write-Host -ForegroundColor Magenta;
+	}
+	static FullReset([string] $file) {
+		[Git]::Unstage($file);
+		[Git]::Discard($file);
+	}
+	static Commit([string] $msg) {
+		git commit -m $msg | Write-Host -ForegroundColor Green;
+	}
+}
+
+
+class UI {
+	static [bool] Comfirm([string] $message) {
+
+		$choices = [Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]]::new();
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+		$choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+
+		Write-Host "";
+		$decision = $global:Host.UI.PromptForChoice($null, $message, $choices, 1)
+		if ($decision -eq 0) {
+			return $true;
+		} else {
+			return $false;
+		}
+	}
+	static ThrowError($error) {
+		Write-Host "`n $error" -ForegroundColor Red;
+		Write-Host "";
+		exit;
+	}
 }
 
 
