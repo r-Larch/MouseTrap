@@ -3,13 +3,13 @@
 MouseTrap is a small tool to map the cursor between multiple monitors with <br>
 different resolutions and scaling settings.
 
-### Min requirements
+## Min requirements
 
 This tool needs the dpiAwareness api `PerMonitorV2` first introduced in **Windows 10 Creators update**.<br>
 So **for this tool to function correctly** you should have at least **Windows build 1703**
 
 
-### Download and Setup
+## Download and Setup
 
 You can find the latest release hier:
 > [Download](https://github.com/r-Larch/MouseTrap/releases)
@@ -24,13 +24,14 @@ mousetrap
 ```
 
 If you don't have chocolatey allready, I highly recommend installing it.<br>
-It's as simple as pasting this in a cmd or Powershell window:
+It's as simple as pasting the following in a cmd or Powershell window:
 ```Powershell
 PowerShell
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 ```
+*[Why Chocolatey](https://chocolatey.org/docs/why) + [installation](https://chocolatey.org/docs/installation)*
 
-### Usage and Configuration
+## Usage and Configuration
 
 You can allways find your running **MouseTrap** app as system tray icon in the right corner of your Taskbar.
 Right clicking the icon shows some options:
@@ -53,7 +54,7 @@ if your computer turns of and on again.
 
 ![Settings Screen](https://raw.githubusercontent.com/r-Larch/MouseTrap/master/images/settings-screen.jpg)
 
-#### Configure Screen Bridges
+### Configure Screen Bridges
 
 On the configuration screen hit the '**+**' buttons to add bridges between your Monitors.<br>
 Then resize them to match your physical screen size.
