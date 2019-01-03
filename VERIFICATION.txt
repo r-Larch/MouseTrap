@@ -1,0 +1,10 @@
+﻿
+VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+ 
+
+This package contains MouseTrap.exe; This is an open source Windows Application written by me (René Larch).
+You can find the source code on github:
+
+ * https://github.com/r-Larch/MouseTrap/

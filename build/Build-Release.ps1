@@ -115,7 +115,7 @@ function Main() {
 
 	BuildSolution $SolutionFile "Release" $OutputDir;
 	$exacutable = [System.IO.Path]::Combine($OutputDir, "MouseTrap.exe")
-	# SignExecutable $exacutable "My Certificate Subject";
+	# SignExecutable $exacutable "renelarch@gmail.com";
 	Copy-Item $exacutable "$DistFolder\MouseTrap.$ReleaseVersionNumber.exe";
 	# Zip $OutputDir "$DistFolder\MouseTrap.$ReleaseVersionNumber.zip";
 
@@ -292,7 +292,7 @@ function SignExecutable([string] $executable, [string] $subjectName) {
 		).FullName;
 
 	if (Test-Path $SignTool) {
-		& $SignTool sign /n "$subjectName" "$executable"
+		& $SignTool sign /n "$subjectName" "$executable" #/tr http://timestamp.comodoca.com/authenticode
 	}
 	else {
 		throw 'signtool.exe Not found! Please open "Visual Studio Installer" and install "ClickOnce Publication Tools"';
