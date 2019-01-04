@@ -95,7 +95,7 @@ If you encounter any bugs don't hesitate to open an issue and I will give my bes
     <projectSourceUrl>https://github.com/r-Larch/MouseTrap</projectSourceUrl>
     <bugTrackerUrl>https://github.com/r-Larch/MouseTrap/issues</bugTrackerUrl>
     <docsUrl>https://github.com/r-Larch/MouseTrap/blob/master/README.md</docsUrl>
-    <iconUrl>https://raw.githubusercontent.com/r-Larch/MouseTrap/master/MouseTrap/AppIcon.ico</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/r-Larch/MouseTrap/master/MouseTrap/AppIcon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>79350d4 set thread priority higher so moves smooth even if all CPU cores are at 100%
 dfbc0ff added VERIFICATION.txt for choco
