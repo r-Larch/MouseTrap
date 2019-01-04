@@ -26,7 +26,9 @@ namespace MouseTrap {
         private void StartWorker(IWorker worker)
         {
             if (_thread == null) {
-                _thread = new Thread(worker.Run);
+                _thread = new Thread(worker.Run) {
+                    Priority = ThreadPriority.Highest
+                };
                 _thread.Start();
             }
         }
