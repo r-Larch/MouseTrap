@@ -27,7 +27,8 @@ namespace MouseTrap {
         {
             if (_thread == null) {
                 _thread = new Thread(worker.Run) {
-                    Priority = ThreadPriority.Highest
+                    Priority = ThreadPriority.Highest,
+                    IsBackground = true
                 };
                 _thread.Start();
             }
