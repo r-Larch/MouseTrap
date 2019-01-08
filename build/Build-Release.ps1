@@ -66,7 +66,7 @@ function Main() {
 	# Git tags and history =============================
 
 	$tag = [Git]::CreateVersionTag($ReleaseVersionNumber, $Alpha, $Beta);
-	$previousTag = [Git]::GetVersionTags() | where { $_ -ne $tag } | sort -Descending | select -first 1;
+	$previousTag = [Git]::GetVersionTags() | where { $_ -ne $tag } | sort -Descending | select -first 4 | select -last 1;
 	$history = [Git]::GetHistorySince($previousTag);
 
 
@@ -79,7 +79,7 @@ function Main() {
 	$xml.package.metadata.version = $ReleaseVersionNumber;
 	$xml.package.metadata.summary = $repo.description;
 	$xml.package.metadata.tags = [string]::Join(" ", $topics.names);
-	$xml.package.metadata.description = [string]::Join("`r`n", $(gc -Path $ReadmeFile));
+	# $xml.package.metadata.description = [string]::Join("`r`n", $(gc -Path $ReadmeFile));
 	$xml.package.metadata.copyright = "Copyright $([DateTime]::Now.Year) René Larch";
 	$xml.package.metadata.releaseNotes = [string]::Join("`r`n", $history);
 	# $xml.package.metadata.licenseUrl = ;
