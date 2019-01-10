@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using MouseTrap.Models;
+using MouseTrap.Native;
 
 
 namespace MouseTrap {
@@ -138,8 +139,8 @@ namespace MouseTrap {
 
         private void MouseTrap(ScreenConfig config)
         {
-            if (_activeTrap != config.ScreenId) {
-                Cursor.Clip = config.Screen.Bounds;
+            if (_activeTrap != config.ScreenId || Mouse.Clip != config.Screen.Bounds) {
+                Mouse.Clip = config.Screen.Bounds;
                 _activeTrap = config.ScreenId;
             }
         }
@@ -147,16 +148,23 @@ namespace MouseTrap {
         private void MouseTrapClear()
         {
             if (_activeTrap != -1) {
-                Cursor.Clip = Rectangle.Empty;
+                Mouse.Clip = Rectangle.Empty;
                 _activeTrap = -1;
             }
         }
 
         private static void MouseMove(ScreenConfig targetScreen, int x, int y)
         {
+            Mouse.SwitchToInputDesktop();
+
             // first move to center of screen, because windows has some problems :(
-            Cursor.Position = new Point(targetScreen.Screen.Bounds.Width / 2, targetScreen.Screen.Bounds.Height / 2);
-            Cursor.Position = new Point(x, y);
+            Mouse.MoveCursor(targetScreen.Screen.Bounds.X + (targetScreen.Screen.Bounds.Width / 2), targetScreen.Screen.Bounds.Y + (targetScreen.Screen.Bounds.Height / 2));
+            Mouse.MoveCursor(x, y);
+
+            //var pos = Cursor.Position;
+            //if (pos.X != x || pos.Y != y) {
+            //    Console.WriteLine($"wrong pos: {x}, {y} -> {pos.X}, {pos.Y}");
+            //}
         }
     }
 

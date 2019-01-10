@@ -11,6 +11,9 @@ namespace MouseTrap {
     public class Program {
         public static void Main(string[] args)
         {
+
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+
             try {
                 var worker = new TrayWorker<MouseBrigeWorker>();
                 worker.TrayIcon = new NotifyIcon {

@@ -78,6 +78,8 @@
     <Compile Include="Models\SettingsFile.cs" />
     <Compile Include="MouseBrigeWorker.cs" />
     <Compile Include="Forms\Prompt.cs" />
+    <Compile Include="src\Native\Mouse.cs" />
+    <Compile Include="src\Native\Win32.cs" />
     <Compile Include="src\ScreenInterrogatory.cs" />
     <Compile Include="Forms\ConfigFrom.cs">
       <SubType>Form</SubType>
