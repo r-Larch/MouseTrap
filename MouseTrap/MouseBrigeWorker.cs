@@ -28,16 +28,7 @@ namespace MouseTrap {
                 Loop();
             }
             catch (Exception e) {
-                var msg = "";
-                do {
-                    msg += $"{e.GetType().FullName}: {e.Message}\r\n{e.StackTrace}";
-                    e = e.InnerException;
-                } while (e != null);
-
-                // log
-                EventLog.WriteEntry(nameof(MouseTrap), msg, EventLogEntryType.Error);
-
-                // rerun
+                Logger.Error(e.Message, e);
                 Run();
             }
         }
