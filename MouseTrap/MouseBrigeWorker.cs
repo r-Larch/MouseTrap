@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -22,6 +23,26 @@ namespace MouseTrap {
         }
 
         public void Run()
+        {
+            try {
+                Loop();
+            }
+            catch (Exception e) {
+                var msg = "";
+                do {
+                    msg += $"{e.GetType().FullName}: {e.Message}\r\n{e.StackTrace}";
+                    e = e.InnerException;
+                } while (e != null);
+
+                // log
+                EventLog.WriteEntry(nameof(MouseTrap), msg, EventLogEntryType.Error);
+
+                // rerun
+                Run();
+            }
+        }
+
+        private void Loop()
         {
             while (true) {
                 var current = _screens.FirstOrDefault(_ => _.Screen.Bounds.Contains(Cursor.Position));
