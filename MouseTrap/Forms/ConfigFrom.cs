@@ -29,7 +29,7 @@ namespace MouseTrap.Forms {
             this.BtnConfigure.Click += (s, e) => { ShowForms(); };
             this.EnableAutoStart.Checked = Settings.AutoStartEnabled;
             this.EnableAutoStart.CheckedChanged += (s, e) => {
-                var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+                var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
                 if (EnableAutoStart.Checked) {
                     key?.SetValue(nameof(MouseTrap), Application.ExecutablePath);
                     Settings.AutoStartEnabled = true;
