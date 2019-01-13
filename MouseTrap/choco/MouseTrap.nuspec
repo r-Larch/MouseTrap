@@ -31,8 +31,7 @@ Here you can find the [documentation](https://github.com/r-Larch/MouseTrap/blob/
     <docsUrl>https://github.com/r-Larch/MouseTrap/blob/master/README.md</docsUrl>
     <iconUrl>https://raw.githubusercontent.com/r-Larch/MouseTrap/master/MouseTrap/AppIcon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>f9c4c7e Update v1.0.0-beta
-ead647c fixes countless issues and makes app more stable
+    <releaseNotes>a53dee1 fixes countless issues and makes app more stable
 245377b requireAdministrator
 1ed14d9 added logger
 7a5957c Update v1.0.0-beta
