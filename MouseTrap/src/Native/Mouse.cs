@@ -32,14 +32,23 @@ namespace MouseTrap.Native {
 
         public static void SwitchToInputDesktop()
         {
-            var threadCurrent = GetCurrentDesktop();
-            var inputCurrent = GetInputDesktop();
+            try {
+                var threadCurrent = GetCurrentDesktop();
+                var inputCurrent = GetInputDesktop();
 
-            if (threadCurrent != inputCurrent) {
-                SetCurrentDesktop(inputCurrent);
+                if (threadCurrent != inputCurrent) {
+                    SetCurrentDesktop(inputCurrent);
+                }
+                else {
+                    Win32.CloseDesktop(inputCurrent);
+                }
             }
-            else {
-                Win32.CloseDesktop(inputCurrent);
+            catch (Win32Exception e) {
+                const int accessIsDenied = 5;
+
+                if (e.NativeErrorCode != accessIsDenied) {
+                    throw;
+                }
             }
         }
 

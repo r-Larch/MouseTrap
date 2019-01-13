@@ -24,14 +24,19 @@ Here you can find the [documentation](https://github.com/r-Larch/MouseTrap/blob/
     <authors>René Larch</authors>
     <owners>René Larch</owners>
     <copyright>Copyright 2019 René Larch</copyright>
-    <licenseUrl>https://github.com/r-Larch/MouseTrap/blob/master/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/r-Larch/MouseTrap/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/r-Larch/MouseTrap</projectUrl>
     <projectSourceUrl>https://github.com/r-Larch/MouseTrap</projectSourceUrl>
     <bugTrackerUrl>https://github.com/r-Larch/MouseTrap/issues</bugTrackerUrl>
     <docsUrl>https://github.com/r-Larch/MouseTrap/blob/master/README.md</docsUrl>
     <iconUrl>https://raw.githubusercontent.com/r-Larch/MouseTrap/master/MouseTrap/AppIcon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>36bb4c2 fixed: Cursor gets trapped on one screen after switching between windows running under different users
+    <releaseNotes>f9c4c7e Update v1.0.0-beta
+ead647c fixes countless issues and makes app more stable
+245377b requireAdministrator
+1ed14d9 added logger
+7a5957c Update v1.0.0-beta
+36bb4c2 fixed: Cursor gets trapped on one screen after switching between windows running under different users
 01ccabe fix issues in .nuspec
 a764c94 v1.0.0-beta binarys
 02f2e04 Update v1.0.0-beta
@@ -60,9 +65,10 @@ b8cf831 fix setup.cmd
     </dependencies>
   </metadata>
   <files>
-    <file src="..\LICENSE" target="LICENSE.txt" />
-    <file src="..\VERIFICATION.txt" />
-    <file src="bin\*.dll" target="tools" />
-    <file src="bin\*.exe" target="tools" />
+    <file src="..\..\LICENSE.txt" />
+    <file src="..\..\VERIFICATION.txt" />
+    <file src="..\bin\*.dll" target="tools" />
+    <file src="..\bin\*.exe" target="tools" />
+    <file src="*.ps1" target="tools" />
   </files>
 </package>

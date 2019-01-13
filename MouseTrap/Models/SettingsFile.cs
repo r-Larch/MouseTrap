@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace MouseTrap.Models {
     public class SettingsFile {
-        protected static string SavePath(string name) => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(MouseTrap), name + ".json");
+        protected static string SavePath(string name) => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), App.Name, name + ".json");
 
         public static void Save<T>(T obj)
         {

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -9,17 +9,21 @@ using MouseTrap.Native;
 
 
 namespace MouseTrap {
-    public class MouseBrigeWorker : IWorker {
+    public class MouseBrigeService : IService {
         private readonly ScreenConfigCollection _screens;
 
-        public MouseBrigeWorker()
+        public MouseBrigeService()
         {
             _screens = ScreenConfigCollection.Load();
         }
 
-        public MouseBrigeWorker(ScreenConfigCollection screens)
+        public MouseBrigeService(ScreenConfigCollection screens)
         {
             _screens = screens;
+        }
+
+        public void OnStart()
+        {
         }
 
         public void Run()
@@ -27,11 +31,16 @@ namespace MouseTrap {
             try {
                 Loop();
             }
-            catch (Exception e) {
-                Logger.Error(e.Message, e);
+            catch (Win32Exception) {
                 Run();
             }
         }
+
+        public void OnExit()
+        {
+            MouseTrapClear();
+        }
+
 
         private void Loop()
         {
@@ -181,8 +190,10 @@ namespace MouseTrap {
     }
 
 
-    public interface IWorker {
+    public interface IService {
         void Run();
+        void OnStart();
+        void OnExit();
     }
 
 

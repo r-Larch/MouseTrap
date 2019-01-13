@@ -16,7 +16,7 @@ namespace MouseTrap {
             } while (e != null);
 
             // log
-            EventLog.WriteEntry(nameof(MouseTrap), msg.ToString(), EventLogEntryType.Error);
+            EventLog.WriteEntry(App.Name, msg.ToString(), EventLogEntryType.Error);
         }
     }
 }

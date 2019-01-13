@@ -18,7 +18,7 @@ namespace MouseTrap {
                     AutoSizeMode = AutoSizeMode.GrowOnly,
                     StartPosition = FormStartPosition.CenterScreen,
                     Text = "Choose target screen",
-                    Icon = Resources.AppIcon
+                    Icon = App.Icon
                 };
 
                 var container = new FlowLayoutPanel {

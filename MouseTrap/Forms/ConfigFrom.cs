@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using MouseTrap.Models;
@@ -10,14 +12,16 @@ using MouseTrap.Models;
 // ReSharper disable LocalizableElement
 namespace MouseTrap.Forms {
     public partial class ConfigFrom : Form {
-        public TrayWorker<MouseBrigeWorker> Worker { get; set; }
+        public ServiceThread Service { get; set; }
         public List<ScreenConfigForm> Forms { get; set; }
         public ScreenConfigCollection Screens { get; set; }
         public Settings Settings { get; }
 
-        public ConfigFrom(TrayWorker<MouseBrigeWorker> worker)
+        public ConfigFrom(ServiceThread service)
         {
-            Worker = worker;
+            this.Icon = App.Icon;
+
+            Service = service;
             Forms = new List<ScreenConfigForm>();
             Screens = ScreenConfigCollection.Load();
             Settings = Settings.Load();
@@ -26,16 +30,17 @@ namespace MouseTrap.Forms {
             InitializeComponent();
             this.ResizeRedraw = true;
             this.InfoText.Visible = Settings.Configured == false;
-            this.BtnConfigure.Click += (s, e) => { ShowForms(); };
+            this.BtnConfigure.Click += (s, e) => {
+                ShowForms();
+            };
             this.EnableAutoStart.Checked = Settings.AutoStartEnabled;
-            this.EnableAutoStart.CheckedChanged += (s, e) => {
-                var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            this.EnableAutoStart.CheckedChanged += delegate {
                 if (EnableAutoStart.Checked) {
-                    key?.SetValue(nameof(MouseTrap), Application.ExecutablePath);
+                    Task.Run(() => ProjectInstaller.Install());
                     Settings.AutoStartEnabled = true;
                 }
                 else {
-                    key?.DeleteValue(nameof(MouseTrap), throwOnMissingValue: false);
+                    Task.Run(() => ProjectInstaller.Uninstall());
                     Settings.AutoStartEnabled = false;
                 }
             };
@@ -75,16 +80,17 @@ namespace MouseTrap.Forms {
                     GetTargetScreenId = GetTargetScreenId
                 };
 
-                form.RemoveBar += (s, position, targetScreenId) => { Forms.SingleOrDefault(_ => _.Screen.ScreenId == targetScreenId)?.RemoveTargetBarForPosition(position); };
+                form.RemoveBar += (s, position, targetScreenId) => {
+                    Forms.SingleOrDefault(_ => _.Screen.ScreenId == targetScreenId)?.RemoveTargetBarForPosition(position);
+                };
 
-                ResetWorker test = null;
                 form.TestBtn.Click += (s, e) => {
-                    test = Worker.SwapWorker(new MouseBrigeWorker(GetConfig()));
+                    Service.StartService(new MouseBrigeService(GetConfig()));
                     Forms.ForEach(_ => _.TestBtn.Hide());
                     Forms.ForEach(_ => _.ResetBtn.Show());
                 };
                 form.ResetBtn.Click += (s, e) => {
-                    test?.Reset();
+                    Service.RestartService();
                     Forms.ForEach(_ => _.TestBtn.Show());
                     Forms.ForEach(_ => _.ResetBtn.Hide());
                 };
@@ -94,7 +100,7 @@ namespace MouseTrap.Forms {
                     Settings.Configured = config.Any(_ => _.HasBridges);
                     this.InfoText.Visible = Settings.Configured == false;
                     config.Save();
-                    Worker.RestartWorker();
+                    Service.RestartService();
                 };
                 form.CancelBtn.Click += (s, e) => {
                     form.ResetBtn.PerformClick();

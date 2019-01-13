@@ -23,7 +23,7 @@ $TempFolder   = [System.IO.Path]::Combine($Root, "temp");
 $ReadmeFile   = [System.IO.Path]::Combine($Root, "README.md");
 $ProjectRoot  = [System.IO.Path]::Combine($Root, "MouseTrap");
 $OutputDir    = [System.IO.Path]::Combine($ProjectRoot, "bin");
-$chocoNuspec  = [System.IO.Path]::Combine($ProjectRoot, "MouseTrap.nuspec");
+$chocoNuspec  = [System.IO.Path]::Combine($ProjectRoot, "choco/MouseTrap.nuspec");
 $AssemblyInfo = [System.IO.Path]::Combine($ProjectRoot, "Properties/AssemblyInfo.cs");
 
 $GithubGetRepoApi = "https://api.github.com/repos/r-Larch/MouseTrap";

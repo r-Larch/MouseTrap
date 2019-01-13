@@ -1,15 +1,16 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using MouseTrap;
+
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MouseTrap")]
-[assembly: AssemblyDescription("MouseTrap is a small tool to map the cursor between multiple monitors with different resolutions and scaling settings.")]
+[assembly: AssemblyTitle(App.Name)]
+[assembly: AssemblyDescription(App.Name + " is a small tool to map the cursor between multiple monitors with different resolutions and scaling settings.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("LarchSys")]
-[assembly: AssemblyProduct("MouseTrap")]
+[assembly: AssemblyProduct(App.Name)]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
