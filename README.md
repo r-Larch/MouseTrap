@@ -17,7 +17,7 @@ You can find the latest release hier:
 You can install MouseTrap with **chocolatey**:
 ```Powershell
 # install the package
-choco install mousetrap --version 1.0.0
+choco install mousetrap --version 1.0.1
 
 # running it
 mousetrap
