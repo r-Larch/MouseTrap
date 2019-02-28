@@ -54,26 +54,30 @@ namespace MouseTrap {
                     // ==>
                     var hotspace = current.RightHotSpace;
                     if (direction.HasFlag(Direction.ToRight) && hotspace.Contains(Cursor.Position)) {
-                        var targetScreen = _screens.First(_ => _.ScreenId == current.RightBridge.TargetScreenId);
-                        var target = targetScreen.LeftHotSpace;
-                        if (target != Rectangle.Empty) {
-                            MouseTrapClear();
+                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.RightBridge.TargetScreenId);
+                        if (targetScreen != null) {
+                            var target = targetScreen.LeftHotSpace;
+                            if (target != Rectangle.Empty) {
+                                MouseTrapClear();
 
-                            var newY = MapY(Cursor.Position.Y, ref hotspace, ref target);
-                            MouseMove(targetScreen, (target.X + target.Width + 1), newY);
+                                var newY = MapY(Cursor.Position.Y, ref hotspace, ref target);
+                                MouseMove(targetScreen, (target.X + target.Width + 1), newY);
+                            }
                         }
                     }
 
                     // <==
                     hotspace = current.LeftHotSpace;
                     if (direction.HasFlag(Direction.ToLeft) && hotspace.Contains(Cursor.Position)) {
-                        var targetScreen = _screens.First(_ => _.ScreenId == current.LeftBridge.TargetScreenId);
-                        var target = targetScreen.RightHotSpace;
-                        if (target != Rectangle.Empty) {
-                            MouseTrapClear();
+                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.LeftBridge.TargetScreenId);
+                        if (targetScreen != null) {
+                            var target = targetScreen.RightHotSpace;
+                            if (target != Rectangle.Empty) {
+                                MouseTrapClear();
 
-                            var newY = MapY(Cursor.Position.Y, ref hotspace, ref target);
-                            MouseMove(targetScreen, (target.X - 1), newY);
+                                var newY = MapY(Cursor.Position.Y, ref hotspace, ref target);
+                                MouseMove(targetScreen, (target.X - 1), newY);
+                            }
                         }
                     }
 
@@ -81,26 +85,30 @@ namespace MouseTrap {
                     // ^
                     hotspace = current.TopHotSpace;
                     if (direction.HasFlag(Direction.ToTop) && hotspace.Contains(Cursor.Position)) {
-                        var targetScreen = _screens.First(_ => _.ScreenId == current.TopBridge.TargetScreenId);
-                        var target = targetScreen.BottomHotSpace;
-                        if (target != Rectangle.Empty) {
-                            MouseTrapClear();
+                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.TopBridge.TargetScreenId);
+                        if (targetScreen != null) {
+                            var target = targetScreen.BottomHotSpace;
+                            if (target != Rectangle.Empty) {
+                                MouseTrapClear();
 
-                            var newX = MapX(Cursor.Position.X, ref hotspace, ref target);
-                            MouseMove(targetScreen, newX, (target.Y - 1));
+                                var newX = MapX(Cursor.Position.X, ref hotspace, ref target);
+                                MouseMove(targetScreen, newX, (target.Y - 1));
+                            }
                         }
                     }
 
                     // v
                     hotspace = current.BottomHotSpace;
                     if (direction.HasFlag(Direction.ToBottom) && hotspace.Contains(Cursor.Position)) {
-                        var targetScreen = _screens.First(_ => _.ScreenId == current.BottomBridge.TargetScreenId);
-                        var target = targetScreen.TopHotSpace;
-                        if (target != Rectangle.Empty) {
-                            MouseTrapClear();
+                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.BottomBridge.TargetScreenId);
+                        if (targetScreen != null) {
+                            var target = targetScreen.TopHotSpace;
+                            if (target != Rectangle.Empty) {
+                                MouseTrapClear();
 
-                            var newX = MapX(Cursor.Position.X, ref hotspace, ref target);
-                            MouseMove(targetScreen, newX, (target.Y + target.Height + 1));
+                                var newX = MapX(Cursor.Position.X, ref hotspace, ref target);
+                                MouseMove(targetScreen, newX, (target.Y + target.Height + 1));
+                            }
                         }
                     }
                 }
