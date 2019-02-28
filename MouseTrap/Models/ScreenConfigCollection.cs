@@ -27,12 +27,6 @@ namespace MouseTrap.Models {
             SystemEvents.DisplaySettingsChanged += DisplaySettingsChanged;
         }
 
-        public static void StaticDispose()
-        {
-            SystemEvents.DisplaySettingsChanged -= DisplaySettingsChanged;
-            Instances.Clear();
-        }
-
         private static void DisplaySettingsChanged(object sender, EventArgs eventArgs)
         {
             lock (StaticReloadLock) {

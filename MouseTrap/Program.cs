@@ -61,9 +61,6 @@ namespace MouseTrap {
                 MessageBox.Show($"[{e.GetType().FullName}] {e.Message}\r\n{e.StackTrace}", e.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
-            finally {
-                ScreenConfigCollection.StaticDispose();
-            }
         }
     }
 }
