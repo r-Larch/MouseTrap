@@ -59,7 +59,6 @@
             // 
             // ScreensView
             // 
-            this.ScreensView.CurrentScale = 0.2013889F;
             this.ScreensView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ScreensView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ScreensView.Location = new System.Drawing.Point(4, 4);
