@@ -1,5 +1,5 @@
 
 
 taskkill /IM "MouseTrap.exe" /F
-copy MouseTrap\bin\MouseTrap.exe C:\Tools\MouseTrap.exe
-start C:\Tools\MouseTrap.exe
+copy MouseTrap\bin\MouseTrap.exe c:\ProgramData\chocolatey\lib\MouseTrap\tools\MouseTrap.exe
+start c:\ProgramData\chocolatey\lib\MouseTrap\tools\MouseTrap.exe
