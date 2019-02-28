@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>MouseTrap</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <title>MouseTrap DPI aware mouse move across screens</title>
     <tags>multiscreen mouse-pointer screen-scale dpi-awareness dpi-scaling cursor-moves cursor-position</tags>
     <summary>A small tool to map the cursor between monitors with different DPIs</summary>
@@ -31,7 +31,13 @@ Here you can find the [documentation](https://github.com/r-Larch/MouseTrap/blob/
     <docsUrl>https://github.com/r-Larch/MouseTrap/blob/master/README.md</docsUrl>
     <iconUrl>https://raw.githubusercontent.com/r-Larch/MouseTrap/master/MouseTrap/AppIcon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>a53dee1 fixes countless issues and makes app more stable
+    <releaseNotes>eb517c3 update setup.cmd
+7ddbf15 makes ScreensView able to handle negative screen coordinates
+e3ac5f0 remove useless dispose
+135c8f9 fixes #1 Unhandled exception while user is logging in.
+f3b141c v1.0.0-beta binarys
+37bde46 Update v1.0.0-beta
+a53dee1 fixes countless issues and makes app more stable
 245377b requireAdministrator
 1ed14d9 added logger
 7a5957c Update v1.0.0-beta
