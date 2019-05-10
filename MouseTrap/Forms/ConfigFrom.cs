@@ -85,7 +85,7 @@ namespace MouseTrap.Forms {
                 };
 
                 form.TestBtn.Click += (s, e) => {
-                    Service.StartService(new MouseBrigeService(GetConfig()));
+                    Service.StartService(new MouseBridgeService(GetConfig()));
                     Forms.ForEach(_ => _.TestBtn.Hide());
                     Forms.ForEach(_ => _.ResetBtn.Show());
                 };

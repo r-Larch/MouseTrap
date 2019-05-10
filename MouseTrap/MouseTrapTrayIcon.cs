@@ -59,6 +59,8 @@ namespace MouseTrap {
                 Close();
             }
 
+            Service.WndProc(ref m);
+
             base.WndProc(ref m);
         }
     }

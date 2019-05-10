@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 
 namespace MouseTrap {
-    internal class MutexRunner {
+    internal class MutexRunner : MsgBroadcast {
         private const string Name = App.Name;
         private static readonly Mutex Mutex = new Mutex(true, Name);
         private static readonly int WmShowApp = RegisterWindowMessage("WM_SHOW_" + Name);
@@ -71,18 +71,19 @@ namespace MouseTrap {
 
             return false;
         }
+    }
 
-
+    public class MsgBroadcast {
         #region Native
 
         // ReSharper disable once InconsistentNaming
-        private static readonly IntPtr HWND_BROADCAST = new IntPtr(0xffff);
+        protected static readonly IntPtr HWND_BROADCAST = new IntPtr(0xffff);
 
         [DllImport("user32")]
-        private static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
+        protected static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
         [DllImport("user32")]
-        private static extern int RegisterWindowMessage(string message);
+        protected static extern int RegisterWindowMessage(string message);
 
         #endregion
     }

@@ -42,7 +42,7 @@ namespace MouseTrap {
                 Application.SetCompatibleTextRenderingDefault(true);
 
                 var service = new ServiceThread {
-                    ServiceFactory = () => new MouseBrigeService()
+                    ServiceFactory = () => new MouseBridgeService()
                 };
 
                 var tray = new MouseTrapTrayIcon(service);

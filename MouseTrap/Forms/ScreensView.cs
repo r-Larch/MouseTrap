@@ -1,8 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Win32;
 using MouseTrap.Models;
 
 
@@ -13,12 +13,12 @@ namespace MouseTrap {
             InitializeComponent();
 
             Screens = ScreenConfigCollection.Load();
-
-            SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
+            ScreenConfigCollection.OnChanged += OnDisplaySettingsChanged;
         }
 
-        private void OnDisplaySettingsChanged(object sender, EventArgs eventArgs)
+        private void OnDisplaySettingsChanged(ScreenConfigCollection config)
         {
+            Screens = config;
             this.Invalidate();
         }
 

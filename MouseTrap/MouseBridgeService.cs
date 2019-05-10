@@ -9,15 +9,18 @@ using MouseTrap.Native;
 
 
 namespace MouseTrap {
-    public class MouseBrigeService : IService {
-        private readonly ScreenConfigCollection _screens;
+    public class MouseBridgeService : IService {
+        private ScreenConfigCollection _screens;
 
-        public MouseBrigeService()
+        public MouseBridgeService()
         {
             _screens = ScreenConfigCollection.Load();
+            ScreenConfigCollection.OnChanged += config => {
+                _screens = config;
+            };
         }
 
-        public MouseBrigeService(ScreenConfigCollection screens)
+        public MouseBridgeService(ScreenConfigCollection screens)
         {
             _screens = screens;
         }
@@ -26,13 +29,21 @@ namespace MouseTrap {
         {
         }
 
+        private int _errorCount = 0;
+
         public void Run()
         {
             try {
                 Loop();
             }
             catch (Win32Exception) {
-                Run();
+                _errorCount++;
+                if (_errorCount < 5) {
+                    Run();
+                }
+                else {
+                    throw;
+                }
             }
         }
 

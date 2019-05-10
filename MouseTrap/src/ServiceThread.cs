@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows.Forms;
 
 
 namespace MouseTrap {
-    public class ServiceThread {
+    public class ServiceThread : MsgBroadcast {
         public Func<IService> ServiceFactory { get; set; }
         private Thread _thread;
 
@@ -27,6 +28,8 @@ namespace MouseTrap {
 
         private ThreadStart Runnable(IService service)
         {
+            var errorCount = 0;
+            var lastError = DateTime.MinValue;
             return () => {
                 service.OnStart();
 
@@ -42,7 +45,23 @@ namespace MouseTrap {
                     Logger.Error(e.Message, e);
 
                     service.OnExit();
-                    throw;
+
+                    if (lastError > DateTime.Now.AddMinutes(-10) && errorCount > 5) {
+                        // throw on more as five errors in 10min
+                        throw;
+                    }
+                    else if (lastError < DateTime.Now.AddMinutes(-10)) {
+                        // reset count after 10min
+                        errorCount = 1;
+                        lastError = DateTime.Now;
+                    }
+                    else {
+                        errorCount++;
+                        lastError = DateTime.Now;
+                    }
+
+                    // restart this current thread
+                    NotifyRestartWorker();
                 }
             };
         }
@@ -61,5 +80,29 @@ namespace MouseTrap {
             StopService();
             StartService(ServiceFactory());
         }
+
+
+        #region WndProc
+
+        private static readonly int WmRestartWorker = RegisterWindowMessage("WM_RESTART_WORKER_" + App.Name);
+
+        private static void NotifyRestartWorker()
+        {
+            PostMessage(
+                (IntPtr) HWND_BROADCAST, WmRestartWorker,
+                IntPtr.Zero,
+                IntPtr.Zero
+            );
+        }
+
+        public void WndProc(ref Message m)
+        {
+            if (m.Msg == WmRestartWorker) {
+                m.Result = new IntPtr(1);
+                RestartService();
+            }
+        }
+
+        #endregion
     }
 }

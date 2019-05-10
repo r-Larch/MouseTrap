@@ -74,7 +74,7 @@
     <Compile Include="Models\ScreenConfigCollection.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SettingsFile.cs" />
-    <Compile Include="MouseBrigeService.cs" />
+    <Compile Include="MouseBridgeService.cs" />
     <Compile Include="Forms\Prompt.cs" />
     <Compile Include="src\ServiceThread.cs" />
     <Compile Include="src\MutexRunner.cs" />
