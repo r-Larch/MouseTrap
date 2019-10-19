@@ -5,6 +5,10 @@ configuration: Release
 platform: Any CPU
 skip_tags: true             # to prevent a endless build loop
 
+environment:
+  choco_api_token:
+    secure: Rym1kbOorVRtBplky8zDAaWiNA3MnD48MoL5SboGtQPXqVJZVXJrytFD0AtwVqID
+
 before_build:
 - cmd: nuget restore
 
@@ -19,18 +23,34 @@ build:
   verbosity: minimal
   project: MouseTrap.sln
 
+after_build:
+- ps: .\build\Build-Release.ps1 $env:appveyor_build_version
+
 artifacts:
 - path: MouseTrap\bin\*.exe
+- path: MouseTrap\bin\*.nupkg
 
 deploy:
-  release: v$(appveyor_build_version)
-  # description: 'Release description'
-  provider: GitHub
+- provider: GitHub
+  release: v$(appveyor_build_version)-beta
+  prerelease: true
+  draft: false
+  description: >
+    MouseTrap.exe is a portable executable.
+    Download and copy it to some save place (were you don't delete it by mistake)
+    and double click it to run.
+
+    [Documentation + Help](https://github.com/r-Larch/MouseTrap/blob/master/README.md)
+
+    ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Please Note!!
+    > The **MouseTrap.exe is not signed!** Because Code signing certificates cost a lot of money.
+    So in case you get some "Windows protected your PC" warning, just hit "more infos" and then "Run anyway".
+    Or download the Source Code and Build it on your own.
   auth_token:
     secure: zYHtyBs13JvlzMOq5tFTt6qCGLGBKEBNGK0Ho/c9ZsuknYU5M62uYMymS66cxgDH
-  # artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
-  draft: false
-  prerelease: false
+  # artifact: /*\.exe/
   on:
-    branch: master                   # release from master branch only
-    # APPVEYOR_REPO_TAG: true          # deploy on tag push only
+    branch: master
+
+after_deploy:
+- ps: choco push $(Resolve-Path $env:appveyor_build_folder\MouseTrap\bin\*.nupkg).ToString() --source https://push.chocolatey.org/ --key $env:choco_api_token

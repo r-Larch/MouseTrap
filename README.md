@@ -17,7 +17,7 @@ You can find the latest release here:
 You can install MouseTrap with **chocolatey**:
 ```Powershell
 # install the package
-choco install mousetrap --version 1.0.1
+choco install mousetrap --version 1.0.2
 
 # running it
 mousetrap
@@ -39,7 +39,7 @@ Right-clicking the icon shows some options:
    Option    |   Description
 -------------|------------------------------------------------------------------
 **Settings** | allows you to configure it
-Reinit       | **[alpha-option]** to reinitialize it, in case it hangs :worried:
+Reinit       | **[beta-option]** to reinitialize it, in case it hangs :worried:
 **Exit**     | to close the running instance
 
 _NOTE: reinit can be triggered by commandline:_ `mousetrap --reinit`
