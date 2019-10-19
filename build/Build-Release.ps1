@@ -29,38 +29,38 @@ $AssemblyInfo = [System.IO.Path]::Combine($ProjectRoot, "Properties/AssemblyInfo
 $GithubGetRepoApi = "https://api.github.com/repos/r-Larch/MouseTrap";
 
 function Main() {
-	
+
 	# auto commit ? =============================
 
-	if ([Git]::HasStagedChanges()) {
-		[Git]::ShowStaged();
-		if ([UI]::Comfirm("you have staged changes! Do you wand to auto commit them?") -eq $false) {
-			[Git]::Discard($AssemblyInfo);
-			[Git]::Discard($chocoNuspec);
-			[UI]::ThrowError("Please commit your staged changes first");
-		}
-	}
+	#if ([Git]::HasStagedChanges()) {
+	#	[Git]::ShowStaged();
+	#	if ([UI]::Comfirm("you have staged changes! Do you wand to auto commit them?") -eq $false) {
+	#		[Git]::Discard($AssemblyInfo);
+	#		[Git]::Discard($chocoNuspec);
+	#		[UI]::ThrowError("Please commit your staged changes first");
+	#	}
+	#}
 
-	if ([Git]::HasUnstagedChanges()) {
-		[Git]::ShowUnstaged();
-		if ([UI]::Comfirm("you have unstaged changes! Do you wand to auto commit them?") -eq $false) {
-			[UI]::ThrowError("Please commit your unstaged changes first");
-		}
-		else {
-			[Git]::Stage("*");
-		}
-	}
+	#if ([Git]::HasUnstagedChanges()) {
+	#	[Git]::ShowUnstaged();
+	#	if ([UI]::Comfirm("you have unstaged changes! Do you wand to auto commit them?") -eq $false) {
+	#		[UI]::ThrowError("Please commit your unstaged changes first");
+	#	}
+	#	else {
+	#		[Git]::Stage("*");
+	#	}
+	#}
 
 
 	# version number =============================
 
-	[Git]::Stage($AssemblyInfo); # backup
-	if ([string]::IsNullOrEmpty($ReleaseVersionNumber)) {
-		$ReleaseVersionNumber = GetVersion $AssemblyInfo;
-	}
-	else {
-		SetVersion $AssemblyInfo $ReleaseVersionNumber;
-	}
+	#[Git]::Stage($AssemblyInfo); # backup
+	#if ([string]::IsNullOrEmpty($ReleaseVersionNumber)) {
+	#	$ReleaseVersionNumber = GetVersion $AssemblyInfo;
+	#}
+	#else {
+	#	SetVersion $AssemblyInfo $ReleaseVersionNumber;
+	#}
 
 
 	# Git tags and history =============================
@@ -72,7 +72,7 @@ function Main() {
 
 	# update .nuspec =============================
 
-	[Git]::Stage($chocoNuspec); # backup
+	# [Git]::Stage($chocoNuspec); # backup
 	$repo = $(Invoke-Webrequest $GithubGetRepoApi).Content | ConvertFrom-Json;
 	$topics = $(Invoke-Webrequest $GithubGetRepoApi/topics -Headers @{'Accept'='application/vnd.github.mercy-preview+json'}).Content | ConvertFrom-Json
 	$xml = [xml] $(gc -Path $chocoNuspec -Encoding UTF8);
@@ -89,47 +89,47 @@ function Main() {
 	# $xml.package.metadata.docsUrl = ;
 	# $xml.package.metadata.iconUrl = ;
 	$xml.Save($chocoNuspec);
-	
+
 
 	# commit changes =============================
 
-	[Git]::Stage($AssemblyInfo);
-	[Git]::Stage($chocoNuspec);
+	#[Git]::Stage($AssemblyInfo);
+	#[Git]::Stage($chocoNuspec);
 
-	if ([Git]::HasTag($tag)) {
-		if ([Git]::HasStagedChanges()) {
-			[Git]::RemoveTag($tag);
-			[Git]::Commit("Update $tag");
-			[Git]::AddTag($tag);
-		}
-	}
-	else {
-		if ([Git]::HasStagedChanges()) {
-			[Git]::Commit("Release $tag");
-		}
-		[Git]::AddTag($tag);
-	}
+	#if ([Git]::HasTag($tag)) {
+	#	if ([Git]::HasStagedChanges()) {
+	#		[Git]::RemoveTag($tag);
+	#		[Git]::Commit("Update $tag");
+	#		[Git]::AddTag($tag);
+	#	}
+	#}
+	#else {
+	#	if ([Git]::HasStagedChanges()) {
+	#		[Git]::Commit("Release $tag");
+	#	}
+	#	[Git]::AddTag($tag);
+	#}
 
 
 	# Build =============================
 
-	BuildSolution $SolutionFile "Release" $OutputDir;
-	$exacutable = [System.IO.Path]::Combine($OutputDir, "MouseTrap.exe")
+	# BuildSolution $SolutionFile "Release" $OutputDir;
+	# $exacutable = [System.IO.Path]::Combine($OutputDir, "MouseTrap.exe")
 	# SignExecutable $exacutable "renelarch@gmail.com";
-	Copy-Item $exacutable "$DistFolder\MouseTrap.$ReleaseVersionNumber.exe";
+	# Copy-Item $exacutable "$DistFolder\MouseTrap.$ReleaseVersionNumber.exe";
 	# Zip $OutputDir "$DistFolder\MouseTrap.$ReleaseVersionNumber.zip";
 
 
 	# choco =============================
 
-	ChocoPack $chocoNuspec $DistFolder;
+	ChocoPack $chocoNuspec $OutputDir;
 
 
 	# commit results =============================
 
-	[Git]::Stage("$DistFolder\MouseTrap.$ReleaseVersionNumber.exe");
-	[Git]::Stage("$DistFolder\MouseTrap.$ReleaseVersionNumber.nupkg");
-	[Git]::Commit("$tag binarys");
+	#[Git]::Stage("$DistFolder\MouseTrap.$ReleaseVersionNumber.exe");
+	#[Git]::Stage("$DistFolder\MouseTrap.$ReleaseVersionNumber.nupkg");
+	#[Git]::Commit("$tag binarys");
 
 
 	# cleanup =============================
@@ -139,7 +139,7 @@ function Main() {
 
 
 function ChocoPack([string] $nuspec, [string] $nupkg) {
-	
+
 	if (!$(Get-Command choco -errorAction SilentlyContinue)) {
 		Write-Host "Install chocolatey";
 		iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
@@ -151,16 +151,18 @@ function ChocoPack([string] $nuspec, [string] $nupkg) {
 		throw "The choco pack process returned an error code."
 	}
 
-	$xml = [xml] $(gc -Path $chocoNuspec -Encoding UTF8);
-	$name = $xml.package.metadata.id + "." + $xml.package.metadata.version + ".nupkg";
-	$file = [System.IO.Path]::Combine($nupkg, $name);
+	#$xml = [xml] $(gc -Path $chocoNuspec -Encoding UTF8);
+	#$name = $xml.package.metadata.id + "." + $xml.package.metadata.version + ".nupkg";
+	#$file = [System.IO.Path]::Combine($nupkg, $name);
 
-	if ([UI]::Ask("Enter 'choco push' to publish '$name':", "choco push")) {
-		& choco push $file;
-		if (-not $?) {
-			throw "The publish process returned an error code."
-		}
-	}
+	# Push-AppveyorArtifact $file;
+
+	# if ([UI]::Ask("Enter 'choco push' to publish '$name':", "choco push")) {
+	# 	& choco push $file;
+	# 	if (-not $?) {
+	# 		throw "The publish process returned an error code."
+	# 	}
+	# }
 }
 
 
@@ -277,7 +279,7 @@ class UI {
 
 function SignExecutable([string] $executable, [string] $subjectName) {
 	# Code signing, works on my machine but probably not very portable
-	# Use the following command to create a self-signed cert to build a signed version of the WACS executable 
+	# Use the following command to create a self-signed cert to build a signed version of the WACS executable
 	# New-SelfSignedCertificate `
 	#     -CertStoreLocation cert:\currentuser\my `
 	#     -Subject "CN=WACS" `
