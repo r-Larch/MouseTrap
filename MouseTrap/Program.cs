@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Forms;
 using MouseTrap.Models;
 
@@ -18,6 +19,9 @@ namespace MouseTrap {
                 case "-u":
                     MutexRunner.CloseRunningInstance();
                     ProjectInstaller.Uninstall();
+                    return;
+                case "--reinit":
+                    ServiceThread.NotifyRestartWorker();
                     return;
                 default:
                     StartProgram();

@@ -46,8 +46,8 @@ namespace MouseTrap {
 
                     service.OnExit();
 
-                    if (lastError > DateTime.Now.AddMinutes(-10) && errorCount > 5) {
-                        // throw on more as five errors in 10min
+                    if (lastError > DateTime.Now.AddMinutes(-10) && errorCount > 50) {
+                        // throw on more as 50 errors in 10min
                         throw;
                     }
                     else if (lastError < DateTime.Now.AddMinutes(-10)) {
@@ -86,7 +86,7 @@ namespace MouseTrap {
 
         private static readonly int WmRestartWorker = RegisterWindowMessage("WM_RESTART_WORKER_" + App.Name);
 
-        private static void NotifyRestartWorker()
+        public static void NotifyRestartWorker()
         {
             PostMessage(
                 (IntPtr) HWND_BROADCAST, WmRestartWorker,
