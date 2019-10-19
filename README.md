@@ -1,5 +1,8 @@
 # MouseTrap
 
+[![Build](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)](https://ci.appveyor.com/project/r-Larch/mousetrap/branch/master)
+[![master](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true&passingText=master%20-%20OK)](https://ci.appveyor.com/project/r-Larch/mousetrap/branch/master)
+
 MouseTrap is a small tool to map the cursor between multiple monitors with <br>
 different resolutions and scaling settings.
 
