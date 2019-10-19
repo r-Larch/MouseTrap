@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -28,6 +29,9 @@ namespace MouseTrap.Forms {
             Settings.Configured = Screens.Any(_ => _.HasBridges);
 
             InitializeComponent();
+
+            this.Text += $" v{Assembly.GetEntryAssembly()?.GetName().Version}";
+
             this.ResizeRedraw = true;
             this.InfoText.Visible = Settings.Configured == false;
             this.BtnConfigure.Click += (s, e) => {
