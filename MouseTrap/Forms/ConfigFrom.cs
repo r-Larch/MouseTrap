@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Win32;
 using MouseTrap.Models;
 
 
@@ -59,7 +57,7 @@ namespace MouseTrap.Forms {
             CursorPosition.Text = $"{Cursor.Position.X}x{Cursor.Position.Y}";
         }
 
-        private int GetTargetScreenId(int sourceScreenId, BrigePosition position)
+        private int GetTargetScreenId(int sourceScreenId, BridgePosition position)
         {
             var others = Screens.Where(_ => _.ScreenId != sourceScreenId).ToArray();
 
@@ -129,7 +127,7 @@ namespace MouseTrap.Forms {
         }
     }
 
-    public enum BrigePosition {
+    public enum BridgePosition {
         Top,
         Left,
         Right,
