@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using MouseTrap.Installer;
+using MouseTrap.Models;
 using MouseTrap.Service;
 
 
@@ -53,7 +54,9 @@ namespace MouseTrap {
 
                 var app = new TrayApplication(tray);
                 app.BeforeStart += (s, e) => {
-                    service.StartService();
+                    if (Settings.Load().TeleportationActive) {
+                        service.StartService();
+                    }
                 };
                 app.BeforeExit += (s, e) => {
                     service.StopService();

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
+using Newtonsoft.Json;
 
 
 namespace MouseTrap.Models {
@@ -11,14 +11,18 @@ namespace MouseTrap.Models {
         {
             var path = SavePath(filename ?? typeof(T).Name);
 
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj, JsonSettings);
 
             if (!Directory.Exists(Path.GetDirectoryName(path))) {
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             }
 
             File.WriteAllText(path, json);
         }
+
+        public static JsonSerializerSettings JsonSettings = new JsonSerializerSettings {
+            NullValueHandling = NullValueHandling.Ignore
+        };
 
         public static T Load<T>(string fileName = null) where T : class, new()
         {

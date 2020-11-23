@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -50,6 +50,18 @@ namespace MouseTrap.Forms {
             if (!Settings.Configured && !Settings.AutoStartEnabled) {
                 this.EnableAutoStart.Checked = true;
             }
+
+            this.TeleportationActive.Checked = Settings.TeleportationActive;
+            this.TeleportationActive.CheckedChanged += delegate {
+                if (TeleportationActive.Checked) {
+                    Service.StartService();
+                    Settings.TeleportationActive = true;
+                }
+                else {
+                    Service.StopService();
+                    Settings.TeleportationActive = false;
+                }
+            };
         }
 
 
@@ -95,6 +107,10 @@ namespace MouseTrap.Forms {
                     form.ResetBtn.PerformClick();
                     forms.ForEach(_ => _.Close());
                     forms.Clear();
+
+                    if (!this.Settings.TeleportationActive) {
+                        Service.StopService();
+                    }
                 };
 
                 form.Show(this);

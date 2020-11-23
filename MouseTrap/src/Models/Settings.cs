@@ -16,5 +16,6 @@ namespace MouseTrap.Models {
 
         public bool AutoStartEnabled { get; set; }
         public bool Configured { get; set; }
+        public bool TeleportationActive { get; set; } = true;
     }
 }

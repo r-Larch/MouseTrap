@@ -1,4 +1,4 @@
-﻿namespace MouseTrap.Forms
+namespace MouseTrap.Forms
 {
     partial class ConfigFrom
     {
@@ -32,6 +32,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.ScreensView = new MouseTrap.ScreensView();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.TeleportationActive = new System.Windows.Forms.CheckBox();
             this.InfoText = new System.Windows.Forms.TextBox();
             this.EnableAutoStart = new System.Windows.Forms.CheckBox();
             this.BtnConfigure = new System.Windows.Forms.Button();
@@ -50,49 +51,64 @@
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80.53008F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.46993F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1756, 981);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1951, 1226);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // ScreensView
             // 
             this.ScreensView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ScreensView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ScreensView.Location = new System.Drawing.Point(4, 4);
-            this.ScreensView.Margin = new System.Windows.Forms.Padding(4);
+            this.ScreensView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ScreensView.Location = new System.Drawing.Point(4, 5);
+            this.ScreensView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ScreensView.Name = "ScreensView";
-            this.ScreensView.Padding = new System.Windows.Forms.Padding(4);
-            this.ScreensView.Size = new System.Drawing.Size(1748, 781);
+            this.ScreensView.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ScreensView.Size = new System.Drawing.Size(1943, 977);
             this.ScreensView.TabIndex = 0;
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.TeleportationActive);
             this.panel1.Controls.Add(this.InfoText);
             this.panel1.Controls.Add(this.EnableAutoStart);
             this.panel1.Controls.Add(this.BtnConfigure);
             this.panel1.Controls.Add(this.CursorPosition);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 792);
+            this.panel1.Location = new System.Drawing.Point(3, 991);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1750, 186);
+            this.panel1.Size = new System.Drawing.Size(1945, 231);
             this.panel1.TabIndex = 2;
+            // 
+            // TeleportationActive
+            // 
+            this.TeleportationActive.AutoSize = true;
+            this.TeleportationActive.Location = new System.Drawing.Point(14, 122);
+            this.TeleportationActive.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.TeleportationActive.Name = "TeleportationActive";
+            this.TeleportationActive.Size = new System.Drawing.Size(249, 29);
+            this.TeleportationActive.TabIndex = 6;
+            this.TeleportationActive.Text = "Mouse teleportation active";
+            this.TeleportationActive.UseVisualStyleBackColor = true;
             // 
             // InfoText
             // 
             this.InfoText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.InfoText.BackColor = System.Drawing.SystemColors.Control;
             this.InfoText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.InfoText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InfoText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.InfoText.ForeColor = System.Drawing.Color.DarkRed;
-            this.InfoText.Location = new System.Drawing.Point(1444, 14);
+            this.InfoText.Location = new System.Drawing.Point(1605, 17);
+            this.InfoText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.InfoText.Multiline = true;
             this.InfoText.Name = "InfoText";
             this.InfoText.ReadOnly = true;
-            this.InfoText.Size = new System.Drawing.Size(296, 99);
+            this.InfoText.Size = new System.Drawing.Size(329, 124);
             this.InfoText.TabIndex = 4;
             this.InfoText.Text = "You have not configured any mouse bridges yet! Click \"Configure Screen Bridges\" t" +
     "o configure some.";
@@ -100,9 +116,10 @@
             // EnableAutoStart
             // 
             this.EnableAutoStart.AutoSize = true;
-            this.EnableAutoStart.Location = new System.Drawing.Point(13, 59);
+            this.EnableAutoStart.Location = new System.Drawing.Point(14, 74);
+            this.EnableAutoStart.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.EnableAutoStart.Name = "EnableAutoStart";
-            this.EnableAutoStart.Size = new System.Drawing.Size(394, 24);
+            this.EnableAutoStart.Size = new System.Drawing.Size(442, 29);
             this.EnableAutoStart.TabIndex = 3;
             this.EnableAutoStart.Text = "Start MouseTrap automatically on Windows startup";
             this.EnableAutoStart.UseVisualStyleBackColor = true;
@@ -110,10 +127,11 @@
             // BtnConfigure
             // 
             this.BtnConfigure.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnConfigure.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnConfigure.Location = new System.Drawing.Point(1444, 119);
+            this.BtnConfigure.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.BtnConfigure.Location = new System.Drawing.Point(1605, 148);
+            this.BtnConfigure.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.BtnConfigure.Name = "BtnConfigure";
-            this.BtnConfigure.Size = new System.Drawing.Size(297, 58);
+            this.BtnConfigure.Size = new System.Drawing.Size(330, 72);
             this.BtnConfigure.TabIndex = 2;
             this.BtnConfigure.Text = "Configure Screen Bridges";
             this.BtnConfigure.UseVisualStyleBackColor = true;
@@ -121,17 +139,17 @@
             // CursorPosition
             // 
             this.CursorPosition.AutoSize = true;
-            this.CursorPosition.Location = new System.Drawing.Point(227, 21);
+            this.CursorPosition.Location = new System.Drawing.Point(252, 26);
             this.CursorPosition.Name = "CursorPosition";
-            this.CursorPosition.Size = new System.Drawing.Size(34, 20);
+            this.CursorPosition.Size = new System.Drawing.Size(40, 25);
             this.CursorPosition.TabIndex = 1;
             this.CursorPosition.Text = "0x0";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 21);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(10, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(201, 20);
             this.label1.TabIndex = 0;
@@ -145,10 +163,11 @@
             // 
             // ConfigFrom
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1756, 981);
+            this.ClientSize = new System.Drawing.Size(1951, 1226);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "ConfigFrom";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MouseTrap Settings";
@@ -170,5 +189,6 @@
         private System.Windows.Forms.Button BtnConfigure;
         private System.Windows.Forms.CheckBox EnableAutoStart;
         private System.Windows.Forms.TextBox InfoText;
+        private System.Windows.Forms.CheckBox TeleportationActive;
     }
 }
