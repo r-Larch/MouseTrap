@@ -31,15 +31,19 @@ namespace MouseTrap {
 
         private int _errorCount = 0;
 
-        public void Run()
+        public void Run(CancellationToken token)
         {
             try {
-                Loop();
+                Loop(token);
             }
             catch (Win32Exception) {
+                if (token.IsCancellationRequested) {
+                    return;
+                }
+
                 _errorCount++;
                 if (_errorCount < 5) {
-                    Run();
+                    Run(token);
                 }
                 else {
                     throw;
@@ -53,9 +57,9 @@ namespace MouseTrap {
         }
 
 
-        private void Loop()
+        private void Loop(CancellationToken token)
         {
-            while (true) {
+            while (!token.IsCancellationRequested) {
                 var current = _screens.FirstOrDefault(_ => _.Screen.Bounds.Contains(Cursor.Position));
                 if (current != null && current.HasBridges) {
                     MouseTrap(current);
@@ -210,7 +214,7 @@ namespace MouseTrap {
 
 
     public interface IService {
-        void Run();
+        void Run(CancellationToken token);
         void OnStart();
         void OnExit();
     }

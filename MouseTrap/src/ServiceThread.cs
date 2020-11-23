@@ -7,7 +7,9 @@ using System.Windows.Forms;
 namespace MouseTrap {
     public class ServiceThread : MsgBroadcast {
         public Func<IService> ServiceFactory { get; set; }
+        private CancellationTokenSource _cts;
         private Thread _thread;
+        private volatile int _errorCount;
 
         public void StartService()
         {
@@ -17,51 +19,62 @@ namespace MouseTrap {
         public void StartService(IService service)
         {
             if (_thread == null) {
-                _thread = new Thread(Runnable(service)) {
+                _cts = new CancellationTokenSource();
+                _thread = new Thread(Runnable(service, _cts.Token)) {
+                    Name = $"{nameof(ServiceThread)}+{service.GetType().FullName}",
                     Priority = ThreadPriority.Highest,
-                    IsBackground = true
+                    IsBackground = true,
                 };
+
+                if (OperatingSystem.IsWindows()) {
+                    _thread.SetApartmentState(ApartmentState.STA);
+                }
+
                 Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
                 _thread.Start();
             }
         }
 
-        private ThreadStart Runnable(IService service)
+        private ThreadStart Runnable(IService service, CancellationToken token)
         {
-            var errorCount = 0;
+            _errorCount = 0;
             var lastError = DateTime.MinValue;
             return () => {
                 service.OnStart();
 
                 try {
-                    service.Run();
-                }
-                catch (Exception e) {
-                    if (e is ThreadAbortException || e is ThreadInterruptedException) {
-                        service.OnExit();
-                        throw;
+                    if (!token.IsCancellationRequested) {
+                        service.Run(token);
                     }
 
+                    service.OnExit();
+                }
+                catch (Exception e) when (token.IsCancellationRequested || e is ThreadAbortException || e is ThreadInterruptedException || e is OperationCanceledException) {
+                    service.OnExit();
+                }
+                catch (Exception e) {
                     Logger.Error(e.Message, e);
 
                     service.OnExit();
 
-                    if (lastError > DateTime.Now.AddMinutes(-10) && errorCount > 50) {
+                    if (lastError > DateTime.Now.AddMinutes(-10) && _errorCount > 50) {
                         // throw on more as 50 errors in 10min
                         throw;
                     }
                     else if (lastError < DateTime.Now.AddMinutes(-10)) {
                         // reset count after 10min
-                        errorCount = 1;
+                        _errorCount = 1;
                         lastError = DateTime.Now;
                     }
                     else {
-                        errorCount++;
+                        Interlocked.Increment(ref _errorCount);
                         lastError = DateTime.Now;
                     }
 
                     // restart this current thread
-                    NotifyRestartWorker();
+                    if (!token.IsCancellationRequested) {
+                        NotifyRestartWorker();
+                    }
                 }
             };
         }
@@ -69,7 +82,9 @@ namespace MouseTrap {
         public virtual void StopService()
         {
             if (_thread != null) {
-                _thread.Abort();
+                _cts.Cancel(true);
+                _thread.Interrupt();
+                _thread.Join();
                 _thread = null;
                 Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
             }
@@ -85,6 +100,7 @@ namespace MouseTrap {
         #region WndProc
 
         private static readonly int WmRestartWorker = RegisterWindowMessage("WM_RESTART_WORKER_" + App.Name);
+
 
         public static void NotifyRestartWorker()
         {
