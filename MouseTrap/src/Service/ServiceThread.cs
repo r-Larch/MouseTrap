@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 
-namespace MouseTrap {
+namespace MouseTrap.Service {
     public class ServiceThread : MsgBroadcast {
         public Func<IService> ServiceFactory { get; set; }
         private CancellationTokenSource _cts;

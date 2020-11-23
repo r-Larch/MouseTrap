@@ -49,7 +49,7 @@ namespace MouseTrap {
 
         private void Draw(Graphics graphics, Rectangle clipRectangle)
         {
-            var bounds = Screens.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Screen.Bounds));
+            var bounds = Screens.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Bounds));
 
             var scale = InnerWidth / (float) bounds.Width;
             if (bounds.Height * scale > InnerHeight) {
@@ -66,7 +66,7 @@ namespace MouseTrap {
             using (var textBrush = new SolidBrush(HexColor("f2f2f2"))) {
                 // Draw screens
                 foreach (var config in Screens) {
-                    var rect = ScaleRect(config.Screen.Bounds, scale);
+                    var rect = ScaleRect(config.Bounds, scale);
 
                     graphics.FillRectangle(screen1Brush, rect);
                     graphics.FillPolygon(screen2Brush, new[] {
@@ -78,9 +78,9 @@ namespace MouseTrap {
                     var textRect = rect;
                     textRect.Inflate(-10, -10);
                     var infoString = $"{config.Name}\r\n" +
-                                     $"{config.Screen.Bounds.Width}x{config.Screen.Bounds.Height}\r\n" +
-                                     $"offset x: {config.Screen.Bounds.X}, y: {config.Screen.Bounds.Y}\r\n" +
-                                     $"{(config.Screen.Primary ? "primary screen" : "")}\r\n";
+                                     $"{config.Bounds.Width}x{config.Bounds.Height}\r\n" +
+                                     $"offset x: {config.Bounds.X}, y: {config.Bounds.Y}\r\n" +
+                                     $"{(config.Primary ? "primary screen" : "")}\r\n";
 
                     graphics.DrawString(infoString, Font, textBrush, textRect, new StringFormat {Alignment = StringAlignment.Center});
                 }

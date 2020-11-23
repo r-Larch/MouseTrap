@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using MouseTrap.Forms;
 using MouseTrap.Models;
+using MouseTrap.Service;
 
 
 namespace MouseTrap {
@@ -72,9 +73,9 @@ namespace MouseTrap {
         /// <summary>
         /// A tiny helper to set font style!
         /// </summary>
-        private static Font WithFontStyle(System.Drawing.Font font, FontStyle style)
+        private static Font WithFontStyle(Font font, FontStyle style)
         {
-            return new System.Drawing.Font(font.Name, font.Size, style, font.Unit);
+            return new Font(font.Name, font.Size, style, font.Unit);
         }
     }
 }

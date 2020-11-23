@@ -8,7 +8,7 @@ using MouseTrap.Models;
 using MouseTrap.Native;
 
 
-namespace MouseTrap {
+namespace MouseTrap.Service {
     public class MouseBridgeService : IService {
         private ScreenConfigCollection _screens;
 
@@ -60,7 +60,7 @@ namespace MouseTrap {
         private void Loop(CancellationToken token)
         {
             while (!token.IsCancellationRequested) {
-                var current = _screens.FirstOrDefault(_ => _.Screen.Bounds.Contains(Cursor.Position));
+                var current = _screens.FirstOrDefault(_ => _.Bounds.Contains(Cursor.Position));
                 if (current != null && current.HasBridges) {
                     MouseTrap(current);
 
@@ -183,8 +183,8 @@ namespace MouseTrap {
 
         private void MouseTrap(ScreenConfig config)
         {
-            if (_activeTrap != config.ScreenId || Mouse.Clip != config.Screen.Bounds) {
-                Mouse.Clip = config.Screen.Bounds;
+            if (_activeTrap != config.ScreenId || Mouse.Clip != config.Bounds) {
+                Mouse.Clip = config.Bounds;
                 _activeTrap = config.ScreenId;
             }
         }
@@ -202,7 +202,7 @@ namespace MouseTrap {
             Mouse.SwitchToInputDesktop();
 
             // first move to center of screen, because windows has some problems :(
-            Mouse.MoveCursor(targetScreen.Screen.Bounds.X + (targetScreen.Screen.Bounds.Width / 2), targetScreen.Screen.Bounds.Y + (targetScreen.Screen.Bounds.Height / 2));
+            Mouse.MoveCursor(targetScreen.Bounds.X + (targetScreen.Bounds.Width / 2), targetScreen.Bounds.Y + (targetScreen.Bounds.Height / 2));
             Mouse.MoveCursor(x, y);
 
             //var pos = Cursor.Position;
@@ -210,13 +210,6 @@ namespace MouseTrap {
             //    Console.WriteLine($"wrong pos: {x}, {y} -> {pos.X}, {pos.Y}");
             //}
         }
-    }
-
-
-    public interface IService {
-        void Run(CancellationToken token);
-        void OnStart();
-        void OnExit();
     }
 
 

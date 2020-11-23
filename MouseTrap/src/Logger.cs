@@ -19,6 +19,9 @@ namespace MouseTrap {
             if (OperatingSystem.IsWindows()) {
                 EventLog.WriteEntry(App.Name, msg.ToString(), EventLogEntryType.Error);
             }
+            else {
+                throw new PlatformNotSupportedException();
+            }
         }
     }
 }

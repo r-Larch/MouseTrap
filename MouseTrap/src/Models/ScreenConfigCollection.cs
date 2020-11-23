@@ -51,7 +51,10 @@ namespace MouseTrap.Models {
             var obj = new ScreenConfigCollection();
             for (var i = 0; i < screens.Length; i++) {
                 var config = loaded.FirstOrDefault(x => x.ScreenId == i) ?? new ScreenConfig() {ScreenId = i};
-                config.Screen = screens[i];
+
+                config.Name = screens[i].DeviceFriendlyName();
+                config.Bounds = screens[i].Bounds;
+                config.Primary = screens[i].Primary;
 
                 // if TargetScreen does not exist anymore
                 if (config.TopBridge != null && config.TopBridge.TargetScreenId >= screens.Length) {

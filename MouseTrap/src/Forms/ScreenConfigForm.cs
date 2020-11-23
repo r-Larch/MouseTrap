@@ -36,7 +36,7 @@ namespace MouseTrap.Forms {
 
             this.SuspendLayout();
             this.StartPosition = FormStartPosition.Manual;
-            this.Bounds = Screen.Screen.Bounds;
+            this.Bounds = Screen.Bounds;
             this.CancelButton = CancelBtn;
             this.KeyPreview = true;
             this.KeyDown += (sender, args) => {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MouseTrap.Installer;
 using MouseTrap.Models;
+using MouseTrap.Service;
 
 
 // ReSharper disable LocalizableElement
