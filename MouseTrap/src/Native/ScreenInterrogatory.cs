@@ -279,15 +279,22 @@ namespace MouseTrap {
 
         public static string DeviceFriendlyName(this Screen screen)
         {
-            var allFriendlyNames = GetAllMonitorsFriendlyNames();
-            var screens = Screen.AllScreens;
-            for (var index = 0; index < screens.Length; index++) {
-                if (Equals(screen, screens[index])) {
-                    return allFriendlyNames.ToArray()[index];
+            try {
+                var allFriendlyNames = GetAllMonitorsFriendlyNames();
+                var screens = Screen.AllScreens;
+                for (var index = 0; index < screens.Length; index++) {
+                    if (Equals(screen, screens[index])) {
+                        return allFriendlyNames.ToArray()[index];
+                    }
                 }
-            }
 
-            return null;
+                return null;
+            }
+            catch (Exception e) {
+                Logger.Error(e.Message, e);
+
+                return $"<{e.Message}>";
+            }
         }
     }
 }

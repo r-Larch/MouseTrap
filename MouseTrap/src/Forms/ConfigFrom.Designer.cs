@@ -33,6 +33,7 @@ namespace MouseTrap.Forms
             this.ScreensView = new MouseTrap.ScreensView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.TeleportationActive = new System.Windows.Forms.CheckBox();
+            this.BtnDiagnostic = new System.Windows.Forms.Button();
             this.InfoText = new System.Windows.Forms.TextBox();
             this.EnableAutoStart = new System.Windows.Forms.CheckBox();
             this.BtnConfigure = new System.Windows.Forms.Button();
@@ -73,6 +74,7 @@ namespace MouseTrap.Forms
             // panel1
             // 
             this.panel1.Controls.Add(this.TeleportationActive);
+            this.panel1.Controls.Add(this.BtnDiagnostic);
             this.panel1.Controls.Add(this.InfoText);
             this.panel1.Controls.Add(this.EnableAutoStart);
             this.panel1.Controls.Add(this.BtnConfigure);
@@ -95,6 +97,15 @@ namespace MouseTrap.Forms
             this.TeleportationActive.TabIndex = 6;
             this.TeleportationActive.Text = "Mouse teleportation active";
             this.TeleportationActive.UseVisualStyleBackColor = true;
+            // 
+            // BtnDiagnostic
+            // 
+            this.BtnDiagnostic.Location = new System.Drawing.Point(14, 167);
+            this.BtnDiagnostic.Name = "BtnDiagnostic";
+            this.BtnDiagnostic.Size = new System.Drawing.Size(197, 53);
+            this.BtnDiagnostic.TabIndex = 5;
+            this.BtnDiagnostic.Text = "Run Diagnostic";
+            this.BtnDiagnostic.UseVisualStyleBackColor = true;
             // 
             // InfoText
             // 
@@ -189,6 +200,7 @@ namespace MouseTrap.Forms
         private System.Windows.Forms.Button BtnConfigure;
         private System.Windows.Forms.CheckBox EnableAutoStart;
         private System.Windows.Forms.TextBox InfoText;
+        private System.Windows.Forms.Button BtnDiagnostic;
         private System.Windows.Forms.CheckBox TeleportationActive;
     }
 }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
+using MouseTrap.Models;
 
 
 namespace MouseTrap.Service {
@@ -49,7 +50,10 @@ namespace MouseTrap.Service {
 
                     service.OnExit();
                 }
-                catch (Exception e) when (token.IsCancellationRequested || e is ThreadAbortException || e is ThreadInterruptedException || e is OperationCanceledException) {
+                catch (Exception e) when (e is ThreadAbortException || e is ThreadInterruptedException) {
+                    // can not do anything!
+                }
+                catch (Exception e) when (token.IsCancellationRequested || e is OperationCanceledException) {
                     service.OnExit();
                 }
                 catch (Exception e) {
@@ -83,6 +87,12 @@ namespace MouseTrap.Service {
         {
             if (_thread != null) {
                 _cts.Cancel(true);
+
+                var end = DateTime.Now.AddSeconds(1);
+                while (_thread.IsAlive && DateTime.Now < end) {
+                    Thread.Sleep(1);
+                }
+
                 _thread.Interrupt();
                 _thread.Join();
                 _thread = null;
@@ -94,6 +104,14 @@ namespace MouseTrap.Service {
         {
             StopService();
             StartService(ServiceFactory());
+        }
+
+        public virtual void RestoreOriginalState()
+        {
+            StopService();
+            if (Settings.Load().TeleportationActive) {
+                StartService(ServiceFactory());
+            }
         }
 
 
@@ -115,7 +133,7 @@ namespace MouseTrap.Service {
         {
             if (m.Msg == WmRestartWorker) {
                 m.Result = new IntPtr(1);
-                RestartService();
+                RestoreOriginalState();
             }
         }
 

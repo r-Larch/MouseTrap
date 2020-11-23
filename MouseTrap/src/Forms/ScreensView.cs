@@ -10,9 +10,14 @@ namespace MouseTrap {
         public ScreensView()
         {
             InitializeComponent();
+        }
 
+        protected override void OnLoad(EventArgs e)
+        {
             Screens = ScreenConfigCollection.Load();
             ScreenConfigCollection.OnChanged += OnDisplaySettingsChanged;
+
+            base.OnLoad(e);
         }
 
         private void OnDisplaySettingsChanged(ScreenConfigCollection config)

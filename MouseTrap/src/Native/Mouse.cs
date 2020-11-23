@@ -33,14 +33,18 @@ namespace MouseTrap.Native {
         public static void SwitchToInputDesktop()
         {
             try {
-                var threadCurrent = GetCurrentDesktop();
+                // var threadCurrent = GetCurrentDesktop();
                 var inputCurrent = GetInputDesktop();
 
-                if (threadCurrent != inputCurrent) {
-                    SetCurrentDesktop(inputCurrent);
-                }
-                else {
-                    Win32.CloseDesktop(inputCurrent);
+                if (inputCurrent != IntPtr.Zero) {
+                    try {
+                        // if (threadCurrent != inputCurrent) {
+                        SetCurrentDesktop(inputCurrent);
+                        // }
+                    }
+                    finally {
+                        Win32.CloseDesktop(inputCurrent);
+                    }
                 }
             }
             catch (Win32Exception e) {
@@ -55,9 +59,11 @@ namespace MouseTrap.Native {
         private static IntPtr GetCurrentDesktop()
         {
             var hDesktop = Win32.GetThreadDesktop(Win32.GetCurrentThreadId());
-            var error = Marshal.GetLastWin32Error();
-            if (error != 0) {
-                throw new Win32Exception(error);
+            if (hDesktop == IntPtr.Zero) {
+                var error = Marshal.GetLastWin32Error();
+                if (error != 0) {
+                    throw new Win32Exception(error);
+                }
             }
 
             return hDesktop;
@@ -65,18 +71,25 @@ namespace MouseTrap.Native {
 
         private static void SetCurrentDesktop(IntPtr desktopHandle)
         {
-            var failed = Win32.SetThreadDesktop(desktopHandle);
-            if (!failed) {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+            var success = Win32.SetThreadDesktop(desktopHandle);
+            if (!success) {
+                var error = Marshal.GetLastWin32Error();
+                if (error == 170 /*The requested resource is in use*/) {
+                    return;
+                }
+
+                throw new Win32Exception(error);
             }
         }
 
         private static IntPtr GetInputDesktop()
         {
             var hDesktop = Win32.OpenInputDesktop(dwFlags: 0, fInherit: false, dwDesiredAccess: 0);
-            var error = Marshal.GetLastWin32Error();
-            if (error != 0) {
-                throw new Win32Exception(error);
+            if (hDesktop == IntPtr.Zero) {
+                var error = Marshal.GetLastWin32Error();
+                if (error != 0) {
+                    throw new Win32Exception(error);
+                }
             }
 
             return hDesktop;

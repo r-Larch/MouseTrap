@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -36,6 +36,9 @@ namespace MouseTrap.Forms {
             this.BtnConfigure.Click += (s, e) => {
                 ShowForms();
             };
+            this.BtnDiagnostic.Click += (s, e) => {
+                ShowDiagnosticForm();
+            };
             this.EnableAutoStart.Checked = Settings.AutoStartEnabled;
             this.EnableAutoStart.CheckedChanged += delegate {
                 if (EnableAutoStart.Checked) {
@@ -71,8 +74,18 @@ namespace MouseTrap.Forms {
         }
 
 
+        private void ShowDiagnosticForm()
+        {
+            Settings.Save();
+
+            new DiagnosticForm(Service).Show();
+        }
+
+
         private void ShowForms()
         {
+            Settings.Save();
+
             var forms = new List<ScreenConfigForm>();
 
             foreach (var screen in Screens) {
@@ -91,7 +104,7 @@ namespace MouseTrap.Forms {
                     forms.ForEach(_ => _.ResetBtn.Show());
                 };
                 form.ResetBtn.Click += (s, e) => {
-                    Service.RestartService();
+                    Service.RestoreOriginalState();
                     forms.ForEach(_ => _.TestBtn.Show());
                     forms.ForEach(_ => _.ResetBtn.Hide());
                 };
@@ -101,16 +114,14 @@ namespace MouseTrap.Forms {
                     Settings.Configured = config.Any(_ => _.HasBridges);
                     this.InfoText.Visible = Settings.Configured == false;
                     config.Save();
-                    Service.RestartService();
+                    Service.RestoreOriginalState();
                 };
                 form.CancelBtn.Click += (s, e) => {
                     form.ResetBtn.PerformClick();
                     forms.ForEach(_ => _.Close());
                     forms.Clear();
 
-                    if (!this.Settings.TeleportationActive) {
-                        Service.StopService();
-                    }
+                    Service.RestoreOriginalState();
                 };
 
                 form.Show(this);

@@ -51,7 +51,7 @@ namespace MouseTrap {
 
         public void Reinit()
         {
-            Service.RestartService();
+            Service.RestoreOriginalState();
         }
 
 

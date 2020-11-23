@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -9,21 +10,36 @@ using MouseTrap.Native;
 
 
 namespace MouseTrap.Service {
-    public class MouseBridgeService : IService {
-        private ScreenConfigCollection _screens;
+    public class MouseBridgeDiagnosticService : IService {
+        private readonly ScreenConfigCollection _screens;
+        private Action<string> _log;
 
-        public MouseBridgeService()
-        {
-            _screens = ScreenConfigCollection.Load();
-            ScreenConfigCollection.OnChanged += config => {
-                _screens = config;
-            };
-        }
-
-        public MouseBridgeService(ScreenConfigCollection screens)
+        public MouseBridgeDiagnosticService(ScreenConfigCollection screens, Action<string> log)
         {
             _screens = screens;
+
+            var sw = new Stopwatch();
+            sw.Start();
+            _log = msg => {
+                log($"{sw.Elapsed,-15:g} [{DirectionArrow(_direction)}]  Cursor({_position.X,4}, {_position.Y,4})  {msg}");
+            };
+
+            static char DirectionArrow(Direction d)
+            {
+                return d switch {
+                    Direction.ToTop => '↑',
+                    Direction.ToBottom => '↓',
+                    Direction.ToLeft => '←',
+                    Direction.ToRight => '→',
+                    Direction.ToTop | Direction.ToLeft => '↖',
+                    Direction.ToTop | Direction.ToRight => '↗',
+                    Direction.ToBottom | Direction.ToLeft => '↙',
+                    Direction.ToBottom | Direction.ToRight => '↘',
+                    _ => ' '
+                };
+            }
         }
+
 
         public void OnStart()
         {
@@ -33,21 +49,34 @@ namespace MouseTrap.Service {
 
         public void Run(CancellationToken token)
         {
+            _log("run");
             try {
                 Loop(token);
             }
-            catch (Win32Exception) {
+            catch (Win32Exception e) {
                 if (token.IsCancellationRequested) {
                     return;
                 }
 
+                _log($"\r\n{e}\r\n");
+
                 _errorCount++;
                 if (_errorCount < 5) {
+                    _log("rerun");
                     Run(token);
                 }
                 else {
+                    // set a noop log func to prevent death locks!
+                    _log = _ => {
+                    };
                     throw;
                 }
+            }
+
+            if (token.IsCancellationRequested) {
+                // set a noop log func to prevent death locks!
+                _log = _ => {
+                };
             }
         }
 
@@ -134,15 +163,17 @@ namespace MouseTrap.Service {
             }
         }
 
+        private Point _position;
 
         private Point GetPosition()
         {
-            return Cursor.Position;
+            return _position = Cursor.Position;
         }
 
 
         private int _posOldx;
         private int _posOldy;
+        private Direction _direction;
 
         private Direction GetDirection(Point pos)
         {
@@ -171,7 +202,7 @@ namespace MouseTrap.Service {
                 ret |= Direction.ToTop;
             }
 
-            return ret;
+            return _direction = ret;
         }
 
         private static int MapY(int y, ref Rectangle src, ref Rectangle dst)
@@ -194,6 +225,7 @@ namespace MouseTrap.Service {
         private void MouseTrap(ScreenConfig config)
         {
             if (_activeTrap != config.ScreenId || Mouse.Clip != config.Bounds) {
+                _log($"MouseTrap({config.Bounds})");
                 Mouse.Clip = config.Bounds;
                 _activeTrap = config.ScreenId;
             }
@@ -202,6 +234,7 @@ namespace MouseTrap.Service {
         private void MouseTrapClear()
         {
             if (_activeTrap != -1) {
+                _log($"MouseTrapClear({_activeTrap})");
                 Mouse.Clip = Rectangle.Empty;
                 _activeTrap = -1;
             }
@@ -209,24 +242,29 @@ namespace MouseTrap.Service {
 
         private void MouseMove(ScreenConfig targetScreen, int x, int y)
         {
+            _log($"Move To Screen -> {targetScreen.Bounds}");
+            _log($"    SwitchToInputDesktop");
+
             Mouse.SwitchToInputDesktop();
 
             // first move to center of screen, because windows has some problems :(
             var cx = targetScreen.Bounds.X + (targetScreen.Bounds.Width / 2);
             var cy = targetScreen.Bounds.Y + (targetScreen.Bounds.Height / 2);
+            _log($"    MoveToCenter   ({cx,4}, {cy,4})");
             Mouse.MoveCursor(cx, cy);
+
+            var pos = GetPosition();
+            if (pos.X != cx || pos.Y != cy) {
+                _log($"    Move Failed ! ({pos.X,4}, {pos.Y,4})");
+            }
+
+            _log($"    MouseMove      ({x,4}, {y,4})");
             Mouse.MoveCursor(x, y);
 
+            pos = GetPosition();
+            if (pos.X != x || pos.Y != y) {
+                _log($"    Move Failed ! ({pos.X,4}, {pos.Y,4})");
+            }
         }
-    }
-
-
-    [Flags]
-    internal enum Direction : byte {
-        None = 0x00,
-        ToLeft = 0x01,
-        ToRight = 0x02,
-        ToTop = 0x04,
-        ToBottom = 0x08,
     }
 }
