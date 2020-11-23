@@ -12,6 +12,7 @@ namespace MouseTrap {
         public TrayIcon()
         {
             NotifyIcon = new NotifyIcon(Components);
+            ContextMenu = new ContextMenuStrip(Components);
 
             // try to show ContextMenu on left and right click
             NotifyIcon.MouseClick += (sender, args) => {
@@ -37,9 +38,9 @@ namespace MouseTrap {
             set => NotifyIcon.Text = value;
         }
 
-        public ContextMenu ContextMenu {
-            get => NotifyIcon.ContextMenu;
-            set => NotifyIcon.ContextMenu = value;
+        public ContextMenuStrip ContextMenu {
+            get => NotifyIcon.ContextMenuStrip;
+            set => NotifyIcon.ContextMenuStrip = value;
         }
 
         public bool Visible {

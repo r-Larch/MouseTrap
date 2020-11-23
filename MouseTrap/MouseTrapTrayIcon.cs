@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using MouseTrap.Forms;
 using MouseTrap.Models;
@@ -14,11 +15,14 @@ namespace MouseTrap {
 
             Icon = App.Icon;
             Text = App.Name;
-            ContextMenu = new ContextMenu(new[] {
-                new MenuItem("Settings", (s, e) => OpenSettings()) {DefaultItem = true},
-                new MenuItem("Reinit", (s, e) => Reinit()),
-                new MenuItem("Exit", (s, e) => Close()),
-            });
+
+            ContextMenu.Items.Add("Settings", null, (s, e) => OpenSettings());
+            ContextMenu.Items.Add("Reinit", null, (s, e) => Reinit());
+            ContextMenu.Items.Add("Exit", null, (s, e) => Close());
+
+            // make first option bold
+            ContextMenu.Items[0].Font = WithFontStyle(ContextMenu.Items[0].Font, FontStyle.Bold);
+
             Visible = true;
 
             // show config form on first startup
@@ -62,6 +66,15 @@ namespace MouseTrap {
             Service.WndProc(ref m);
 
             base.WndProc(ref m);
+        }
+
+
+        /// <summary>
+        /// A tiny helper to set font style!
+        /// </summary>
+        private static Font WithFontStyle(System.Drawing.Font font, FontStyle style)
+        {
+            return new System.Drawing.Font(font.Name, font.Size, style, font.Unit);
         }
     }
 }

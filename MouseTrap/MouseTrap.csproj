@@ -1,156 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7D3F74F8-5F37-4CC2-A82C-64669E4B3AB3}</ProjectGuid>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>MouseTrap</RootNamespace>
-    <AssemblyName>MouseTrap</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
     <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup>
     <ApplicationIcon>AppIcon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="TaskScheduler" Verson="2.8.21" Version="2.8.21" />
+    <PackageReference Include="Costura.Fody" Version="4.1.0" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="All"
+                      IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Costura.Fody">
-      <Version>3.2.1</Version>
-    </PackageReference>
-    <PackageReference Include="Fody">
-      <Version>3.3.3</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="TaskScheduler">
-      <Version>2.8.7</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="App.cs" />
-    <Compile Include="Forms\EdgeSlider.cs" />
-    <Compile Include="Forms\ScreenConfigForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ScreenConfigForm.Designer.cs">
-      <DependentUpon>ScreenConfigForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SliderPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Models\ScreenConfig.cs" />
-    <Compile Include="Models\ScreenConfigCollection.cs" />
-    <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\SettingsFile.cs" />
-    <Compile Include="MouseBridgeService.cs" />
-    <Compile Include="Forms\Prompt.cs" />
-    <Compile Include="src\ServiceThread.cs" />
-    <Compile Include="src\MutexRunner.cs" />
-    <Compile Include="ProjectInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="src\Logger.cs" />
-    <Compile Include="src\Native\Mouse.cs" />
-    <Compile Include="src\Native\Win32.cs" />
-    <Compile Include="src\ScreenInterrogatory.cs" />
-    <Compile Include="Forms\ConfigFrom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ConfigFrom.Designer.cs">
-      <DependentUpon>ConfigFrom.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ScreensView.cs">
+    <Compile Update="Forms\ScreensView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\ScreensView.Designer.cs">
-      <DependentUpon>ScreensView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="src\TrayApplication.cs" />
-    <Compile Include="MouseTrapTrayIcon.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="src\TrayIcon.cs">
-      <SubType>Component</SubType>
-    </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="app.manifest">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="choco\chocolateyinstall.ps1" />
-    <None Include="choco\chocolateyuninstall.ps1" />
-    <None Include="choco\MouseTrap.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+
   <ItemGroup>
     <Content Include="AppIcon.ico" />
     <Content Include="AppIcon.png" />
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

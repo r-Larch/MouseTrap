@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Forms;
-using MouseTrap.Models;
 
 
 // ReSharper disable LocalizableElement

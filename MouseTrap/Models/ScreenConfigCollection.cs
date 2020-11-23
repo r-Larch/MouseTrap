@@ -21,7 +21,9 @@ namespace MouseTrap.Models {
 
         static ScreenConfigCollection()
         {
-            SystemEvents.DisplaySettingsChanged += DisplaySettingsChanged;
+            if (OperatingSystem.IsWindows()) {
+                SystemEvents.DisplaySettingsChanged += DisplaySettingsChanged;
+            }
         }
 
         public static event ScreenConfigChanged OnChanged;

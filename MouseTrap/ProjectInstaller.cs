@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration.Install;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Security.Principal;
 using System.Windows.Forms;
 using Microsoft.Win32.TaskScheduler;
@@ -14,44 +15,50 @@ namespace MouseTrap {
     public class ProjectInstaller : Installer {
         public ProjectInstaller()
         {
-            //var processInstaller = new ServiceProcessInstaller {
-            //    // ServiceAccount.LocalService has no access to staton0 -> default desktop
-            //    Account = ServiceAccount.User,
-            //};
+            if (OperatingSystem.IsWindows()) {
+                //var processInstaller = new ServiceProcessInstaller {
+                //    // ServiceAccount.LocalService has no access to staton0 -> default desktop
+                //    Account = ServiceAccount.User,
+                //};
 
-            //var serviceInstaller = new ServiceInstaller {
-            //    ServiceName = MouseService.Name,
-            //    StartType = ServiceStartMode.Automatic,
-            //};
+                //var serviceInstaller = new ServiceInstaller {
+                //    ServiceName = MouseService.Name,
+                //    StartType = ServiceStartMode.Automatic,
+                //};
 
-            var user = System.Security.Principal.WindowsIdentity.GetCurrent();
+                var user = System.Security.Principal.WindowsIdentity.GetCurrent();
 
-            var taskInstaller = new TaskInstaller() {
-                TaskName = $"\\{App.Name}\\{user.Name.Replace("\\", "_")}",
-                // task
-                ExecutablePath = Application.ExecutablePath,
-                Arguments = null,
-                // user
-                RunAsUser = user,
-                HighestPrivileges = true,
-            };
+                var taskInstaller = new TaskInstaller() {
+                    TaskName = $"\\{App.Name}\\{user.Name.Replace("\\", "_")}",
+                    // task
+                    ExecutablePath = Application.ExecutablePath,
+                    Arguments = null,
+                    // user
+                    RunAsUser = user,
+                    HighestPrivileges = true,
+                };
 
-            Installers.AddRange(new Installer[] {
-                //processInstaller,
-                //serviceInstaller,
-                taskInstaller
-            });
+                Installers.AddRange(new Installer[] {
+                    //processInstaller,
+                    //serviceInstaller,
+                    taskInstaller
+                });
+            }
         }
 
 
         public static void Install()
         {
-            ManagedInstallerClass.InstallHelper(new[] {Application.ExecutablePath});
+            if (OperatingSystem.IsWindows()) {
+                ManagedInstallerClass.InstallHelper(new[] {Application.ExecutablePath});
+            }
         }
 
         public static void Uninstall()
         {
-            ManagedInstallerClass.InstallHelper(new[] {"/u", Application.ExecutablePath});
+            if (OperatingSystem.IsWindows()) {
+                ManagedInstallerClass.InstallHelper(new[] {"/u", Application.ExecutablePath});
+            }
         }
 
 
@@ -66,12 +73,14 @@ namespace MouseTrap {
     }
 
 
+    [SupportedOSPlatform("windows")]
     internal class TaskInstaller : Installer {
         public string TaskName { get; set; }
         public WindowsIdentity RunAsUser { get; set; }
         public bool HighestPrivileges { get; set; }
         public string ExecutablePath { get; set; }
         public string Arguments { get; set; }
+
 
         public override void Install(IDictionary stateSaver)
         {
@@ -141,9 +150,10 @@ namespace MouseTrap {
             );
 
             foreach (var task in tasks) {
-                task.Folder.DeleteTask(task.Name);
-                if (task.Folder.GetTasks().Count == 0) {
-                    task.Folder.Parent.DeleteFolder(task.Folder.Name);
+                var folder = task.Folder;
+                folder.DeleteTask(task.Name);
+                if (folder.GetTasks().Count == 0) {
+                    folder.Parent.DeleteFolder(folder.Name);
                 }
             }
 

@@ -16,7 +16,9 @@ namespace MouseTrap {
             } while (e != null);
 
             // log
-            EventLog.WriteEntry(App.Name, msg.ToString(), EventLogEntryType.Error);
+            if (OperatingSystem.IsWindows()) {
+                EventLog.WriteEntry(App.Name, msg.ToString(), EventLogEntryType.Error);
+            }
         }
     }
 }
