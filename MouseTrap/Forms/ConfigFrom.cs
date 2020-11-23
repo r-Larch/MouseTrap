@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MouseTrap.Installer;
 using MouseTrap.Models;
 
 
@@ -37,11 +38,11 @@ namespace MouseTrap.Forms {
             this.EnableAutoStart.Checked = Settings.AutoStartEnabled;
             this.EnableAutoStart.CheckedChanged += delegate {
                 if (EnableAutoStart.Checked) {
-                    Task.Run(() => ProjectInstaller.Install());
+                    Task.Run(() => new ProjectInstaller().Install());
                     Settings.AutoStartEnabled = true;
                 }
                 else {
-                    Task.Run(() => ProjectInstaller.Uninstall());
+                    Task.Run(() => new ProjectInstaller().Uninstall());
                     Settings.AutoStartEnabled = false;
                 }
             };

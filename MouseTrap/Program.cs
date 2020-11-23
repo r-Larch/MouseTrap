@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using MouseTrap.Installer;
 
 
 // ReSharper disable LocalizableElement
@@ -12,11 +13,11 @@ namespace MouseTrap {
         {
             switch (args.FirstOrDefault()) {
                 case "-i":
-                    ProjectInstaller.Install();
+                    new ProjectInstaller().Install();
                     return;
                 case "-u":
                     MutexRunner.CloseRunningInstance();
-                    ProjectInstaller.Uninstall();
+                    new ProjectInstaller().Uninstall();
                     return;
                 case "--reinit":
                     ServiceThread.NotifyRestartWorker();
