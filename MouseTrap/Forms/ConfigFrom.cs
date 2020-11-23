@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,7 +12,6 @@ using MouseTrap.Models;
 namespace MouseTrap.Forms {
     public partial class ConfigFrom : Form {
         public ServiceThread Service { get; set; }
-        public List<ScreenConfigForm> Forms { get; set; }
         public ScreenConfigCollection Screens { get; set; }
         public Settings Settings { get; }
 
@@ -21,7 +20,7 @@ namespace MouseTrap.Forms {
             this.Icon = App.Icon;
 
             Service = service;
-            Forms = new List<ScreenConfigForm>();
+
             Screens = ScreenConfigCollection.Load();
             Settings = Settings.Load();
             Settings.Configured = Screens.Any(_ => _.HasBridges);
@@ -57,44 +56,30 @@ namespace MouseTrap.Forms {
             CursorPosition.Text = $"{Cursor.Position.X}x{Cursor.Position.Y}";
         }
 
-        private int GetTargetScreenId(int sourceScreenId, BridgePosition position)
-        {
-            var others = Screens.Where(_ => _.ScreenId != sourceScreenId).ToArray();
-
-            var targetId = sourceScreenId;
-            if (others.Length > 1) {
-                targetId = Prompt.ChooseScreenDialog(Screens, sourceScreenId);
-            }
-            else if (others.Length == 1) {
-                targetId = others.Single().ScreenId;
-            }
-
-            Forms.Single(_ => _.Screen.ScreenId == targetId)
-                .AddTargetBarForPosition(position, sourceScreenId);
-
-            return targetId;
-        }
 
         private void ShowForms()
         {
+            var forms = new List<ScreenConfigForm>();
+
             foreach (var screen in Screens) {
                 var form = new ScreenConfigForm(screen) {
                     GetTargetScreenId = GetTargetScreenId
                 };
 
                 form.RemoveBar += (s, position, targetScreenId) => {
-                    Forms.SingleOrDefault(_ => _.Screen.ScreenId == targetScreenId)?.RemoveTargetBarForPosition(position);
+                    forms.SingleOrDefault(_ => _.Screen.ScreenId == targetScreenId)?.RemoveTargetBarForPosition(position);
                 };
 
                 form.TestBtn.Click += (s, e) => {
+                    Service.StopService();
                     Service.StartService(new MouseBridgeService(GetConfig()));
-                    Forms.ForEach(_ => _.TestBtn.Hide());
-                    Forms.ForEach(_ => _.ResetBtn.Show());
+                    forms.ForEach(_ => _.TestBtn.Hide());
+                    forms.ForEach(_ => _.ResetBtn.Show());
                 };
                 form.ResetBtn.Click += (s, e) => {
                     Service.RestartService();
-                    Forms.ForEach(_ => _.TestBtn.Show());
-                    Forms.ForEach(_ => _.ResetBtn.Hide());
+                    forms.ForEach(_ => _.TestBtn.Show());
+                    forms.ForEach(_ => _.ResetBtn.Hide());
                 };
                 form.SaveBtn.Click += (s, e) => {
                     form.ResetBtn.PerformClick();
@@ -106,19 +91,39 @@ namespace MouseTrap.Forms {
                 };
                 form.CancelBtn.Click += (s, e) => {
                     form.ResetBtn.PerformClick();
-                    Forms.ForEach(_ => _.Close());
+                    forms.ForEach(_ => _.Close());
+                    forms.Clear();
                 };
 
                 form.Show(this);
-                Forms.Add(form);
+                forms.Add(form);
+            }
+
+
+            int GetTargetScreenId(int sourceScreenId, BridgePosition position)
+            {
+                var others = Screens.Where(_ => _.ScreenId != sourceScreenId).ToArray();
+
+                var targetId = sourceScreenId;
+                if (others.Length > 1) {
+                    targetId = Prompt.ChooseScreenDialog(Screens, sourceScreenId);
+                }
+                else if (others.Length == 1) {
+                    targetId = others.Single().ScreenId;
+                }
+
+                forms.Single(_ => _.Screen.ScreenId == targetId)
+                    .AddTargetBarForPosition(position, sourceScreenId);
+
+                return targetId;
+            }
+
+            ScreenConfigCollection GetConfig()
+            {
+                return new ScreenConfigCollection(forms.Select(_ => _.GetConfig()));
             }
         }
 
-
-        public ScreenConfigCollection GetConfig()
-        {
-            return new ScreenConfigCollection(Forms.Select(_ => _.GetConfig()));
-        }
 
         protected override void OnClosing(CancelEventArgs e)
         {
