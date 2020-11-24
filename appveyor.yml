@@ -40,8 +40,8 @@ deploy:
     Download the *.zip archive and extract it to some safe place (where you don't delete it by mistake)
     and double click mousetrap.exe to run it.
 
-    Please download and install [**.NET 5 Runtime**](https://dotnet.microsoft.com/download/dotnet/current/runtime)
-    if you have trouble running it (in most cases it will notify you with a simple message dialog).
+    Please download and install [**.NET 5 Runtime**](https://dotnet.microsoft.com/download/dotnet/current/runtime) if you have trouble running mousetrap
+    _in most cases it will notify you with a simple message dialog if the runtime is missing_
 
     [Documentation + Help](https://github.com/r-Larch/MouseTrap/blob/master/README.md)
 
