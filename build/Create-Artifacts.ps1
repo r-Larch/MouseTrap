@@ -22,9 +22,10 @@ $DistFolder   = [System.IO.Path]::Combine($Root, "dist");
 $TempFolder   = [System.IO.Path]::Combine($Root, "temp");
 $ReadmeFile   = [System.IO.Path]::Combine($Root, "README.md");
 $ProjectRoot  = [System.IO.Path]::Combine($Root, "MouseTrap");
+$BuildDir     = [System.IO.Path]::Combine($ProjectRoot, "bin\net5.0-windows");
 $OutputDir    = [System.IO.Path]::Combine($ProjectRoot, "bin");
-$chocoNuspec  = [System.IO.Path]::Combine($ProjectRoot, "choco/MouseTrap.nuspec");
-$AssemblyInfo = [System.IO.Path]::Combine($ProjectRoot, "Properties/AssemblyInfo.cs");
+$chocoNuspec  = [System.IO.Path]::Combine($ProjectRoot, "choco\MouseTrap.nuspec");
+$AssemblyInfo = [System.IO.Path]::Combine($ProjectRoot, "Properties\AssemblyInfo.cs");
 
 $GithubGetRepoApi = "https://api.github.com/repos/r-Larch/MouseTrap";
 
@@ -120,6 +121,18 @@ function Main() {
 	# Zip $OutputDir "$DistFolder\MouseTrap.$ReleaseVersionNumber.zip";
 
 
+	# Release Artifact ==================
+
+	CleanDir $TempFolder;
+	[System.IO.Directory]::CreateDirectory($TempFolder);
+	Copy-Item "$([System.IO.Path]::Combine($BuildDir, "*.exe"))" "$TempFolder\";
+	Copy-Item "$([System.IO.Path]::Combine($BuildDir, "*.dll"))" "$TempFolder\";
+	Copy-Item "$([System.IO.Path]::Combine($BuildDir, "*.pdb"))" "$TempFolder\";
+	Copy-Item "$([System.IO.Path]::Combine($BuildDir, "*.runtimeconfig.json"))" "$TempFolder\";
+	Zip $TempFolder "$OutputDir\MouseTrap.$ReleaseVersionNumber.zip";
+	CleanDir $TempFolder;
+
+
 	# choco =============================
 
 	ChocoPack $chocoNuspec $OutputDir;
@@ -131,10 +144,6 @@ function Main() {
 	#[Git]::Stage("$DistFolder\MouseTrap.$ReleaseVersionNumber.nupkg");
 	#[Git]::Commit("$tag binarys");
 
-
-	# cleanup =============================
-
-	CleanDir $TempFolder;
 }
 
 

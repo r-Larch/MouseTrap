@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using MouseTrap;
 
@@ -11,7 +11,7 @@ using MouseTrap;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("LarchSys")]
 [assembly: AssemblyProduct(App.Name)]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright © 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

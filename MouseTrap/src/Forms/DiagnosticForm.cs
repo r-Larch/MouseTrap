@@ -39,6 +39,10 @@ namespace MouseTrap.Forms {
             this.BtnCopy.Click += delegate {
                 var sb = new StringBuilder();
 
+                // update log infos
+                LogfileBox.Text = string.Empty;
+                InitLogFileInfos();
+
                 sb.AppendLine(InfosBox.Text);
                 sb.AppendLine();
                 sb.AppendLine();

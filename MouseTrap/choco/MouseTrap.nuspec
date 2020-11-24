@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>MouseTrap</id>
-    <version>1.0.1</version>
+    <version>0.0.0</version>
     <title>MouseTrap DPI aware mouse move across screens</title>
     <tags>multiscreen mouse-pointer screen-scale dpi-awareness dpi-scaling cursor-moves cursor-position</tags>
     <summary>A small tool to map the cursor between monitors with different DPIs</summary>
@@ -14,8 +14,10 @@ different resolutions and scaling settings.
 
 ## Min requirements
 
-This tool needs the dpiAwareness api `PerMonitorV2` first introduced in **Windows 10 Creators update**.
-So **for this tool to function correctly** you should have at least **Windows build 1703**
+For this tool to function correctly you should have:
+
+ - At least **Windows 10 Creators update** (Build 1703)
+ - [**.NET 5 Runtime**](https://dotnet.microsoft.com/download/dotnet/current/runtime) (in most cases it will notify you if the runtime is missing)
 
 ## Usage and Configuration
 
@@ -23,7 +25,7 @@ Here you can find the [documentation](https://github.com/r-Larch/MouseTrap/blob/
     </description>
     <authors>René Larch</authors>
     <owners>René Larch</owners>
-    <copyright>Copyright 2019 René Larch</copyright>
+    <copyright>Copyright 2020 René Larch</copyright>
     <licenseUrl>https://github.com/r-Larch/MouseTrap/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/r-Larch/MouseTrap</projectUrl>
     <projectSourceUrl>https://github.com/r-Larch/MouseTrap</projectSourceUrl>
@@ -31,40 +33,7 @@ Here you can find the [documentation](https://github.com/r-Larch/MouseTrap/blob/
     <docsUrl>https://github.com/r-Larch/MouseTrap/blob/master/README.md</docsUrl>
     <iconUrl>https://raw.githubusercontent.com/r-Larch/MouseTrap/master/MouseTrap/AppIcon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>eb517c3 update setup.cmd
-7ddbf15 makes ScreensView able to handle negative screen coordinates
-e3ac5f0 remove useless dispose
-135c8f9 fixes #1 Unhandled exception while user is logging in.
-f3b141c v1.0.0-beta binarys
-37bde46 Update v1.0.0-beta
-a53dee1 fixes countless issues and makes app more stable
-245377b requireAdministrator
-1ed14d9 added logger
-7a5957c Update v1.0.0-beta
-36bb4c2 fixed: Cursor gets trapped on one screen after switching between windows running under different users
-01ccabe fix issues in .nuspec
-a764c94 v1.0.0-beta binarys
-02f2e04 Update v1.0.0-beta
-8bbb1db let worker thread be a background thread
-3bb1efe added choco icon
-4e01838 v1.0.0-beta binarys
-758dcf3 Update v1.0.0-beta
-79350d4 set thread priority higher so moves smooth even if all CPU cores are at 100%
-dfbc0ff added VERIFICATION.txt for choco
-d242fc2 Update README.md
-d73d400 update README.md with choco instractions
-86f2af8 v1.0.0-beta binarys
-882cd8c Release v1.0.0-beta
-c3fd99d update build script to auto create choco nupkg
-cbfdeda update build script
-b84836c added nuspec for choco
-13e044a update README.md
-b8cf831 fix setup.cmd
-29515fc add build script
-7fc64c1 auto reload screen configs on SystemEvents.DisplaySettingsChanged
-8cfbf03 fix some potentional exceptions in edge cases
-4b731b1  fix spelling
-89a35ab updated README.md</releaseNotes>
+    <releaseNotes>...</releaseNotes>
     <dependencies>
       <!--<dependency id="" version=""/>-->
     </dependencies>
@@ -72,8 +41,9 @@ b8cf831 fix setup.cmd
   <files>
     <file src="..\..\LICENSE.txt" />
     <file src="..\..\VERIFICATION.txt" />
-    <file src="..\bin\*.dll" target="tools" />
-    <file src="..\bin\*.exe" target="tools" />
+    <file src="..\bin\net5.0-windows\*.dll" target="tools" />
+    <file src="..\bin\net5.0-windows\*.exe" target="tools" />
+    <file src="..\bin\net5.0-windows\*.runtimeconfig.json" target="tools" />
     <file src="*.ps1" target="tools" />
   </files>
 </package>

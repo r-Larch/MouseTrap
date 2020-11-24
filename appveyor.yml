@@ -1,4 +1,4 @@
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 version: 1.0.{build}
 configuration: Release
@@ -24,10 +24,10 @@ build:
   project: MouseTrap.sln
 
 after_build:
-- ps: .\build\Build-Release.ps1 $env:appveyor_build_version
+- ps: .\build\Create-Artifacts.ps1 $env:appveyor_build_version
 
 artifacts:
-- path: MouseTrap\bin\*.exe
+- path: MouseTrap\bin\*.zip
 - path: MouseTrap\bin\*.nupkg
 
 deploy:
@@ -36,9 +36,12 @@ deploy:
   prerelease: true
   draft: false
   description: |
-    MouseTrap.exe is a portable executable.
-    Download and copy it to some safe place (where you don't delete it by mistake)
-    and double click it to run.
+    MouseTrap is a portable application.
+    Download the *.zip archive and extract it to some safe place (where you don't delete it by mistake)
+    and double click mousetrap.exe to run it.
+
+    Please download and install [**.NET 5 Runtime**](https://dotnet.microsoft.com/download/dotnet/current/runtime)
+    if you have trouble running it (in most cases it will notify you with a simple message dialog).
 
     [Documentation + Help](https://github.com/r-Larch/MouseTrap/blob/master/README.md)
 

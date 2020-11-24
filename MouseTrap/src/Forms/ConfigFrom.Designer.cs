@@ -57,7 +57,7 @@ namespace MouseTrap.Forms
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 250F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1951, 1226);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1378, 844);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // ScreensView
@@ -68,7 +68,7 @@ namespace MouseTrap.Forms
             this.ScreensView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ScreensView.Name = "ScreensView";
             this.ScreensView.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ScreensView.Size = new System.Drawing.Size(1943, 966);
+            this.ScreensView.Size = new System.Drawing.Size(1370, 584);
             this.ScreensView.TabIndex = 0;
             // 
             // panel1
@@ -81,10 +81,10 @@ namespace MouseTrap.Forms
             this.panel1.Controls.Add(this.CursorPosition);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 980);
+            this.panel1.Location = new System.Drawing.Point(3, 598);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1945, 242);
+            this.panel1.Size = new System.Drawing.Size(1372, 242);
             this.panel1.TabIndex = 2;
             // 
             // TeleportationActive
@@ -114,7 +114,7 @@ namespace MouseTrap.Forms
             this.InfoText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.InfoText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.InfoText.ForeColor = System.Drawing.Color.DarkRed;
-            this.InfoText.Location = new System.Drawing.Point(1605, 28);
+            this.InfoText.Location = new System.Drawing.Point(1032, 28);
             this.InfoText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.InfoText.Multiline = true;
             this.InfoText.Name = "InfoText";
@@ -139,7 +139,7 @@ namespace MouseTrap.Forms
             // 
             this.BtnConfigure.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnConfigure.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.BtnConfigure.Location = new System.Drawing.Point(1605, 159);
+            this.BtnConfigure.Location = new System.Drawing.Point(1032, 159);
             this.BtnConfigure.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.BtnConfigure.Name = "BtnConfigure";
             this.BtnConfigure.Size = new System.Drawing.Size(330, 72);
@@ -176,7 +176,7 @@ namespace MouseTrap.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1951, 1226);
+            this.ClientSize = new System.Drawing.Size(1378, 844);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "ConfigFrom";

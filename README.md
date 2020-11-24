@@ -8,8 +8,10 @@ different resolutions and scaling settings.
 
 ## Min requirements
 
-This tool needs the dpiAwareness API `PerMonitorV2` first introduced in **Windows 10 Creators update**.<br>
-So **for this tool to function correctly** you should have at least **Windows build 1703**
+For this tool to function correctly you should have:
+
+ - At least **Windows 10 Creators update** (Build 1703)
+ - [**.NET 5 Runtime**](https://dotnet.microsoft.com/download/dotnet/current/runtime) (in most cases it will notify you if the runtime is missing)
 
 
 ## Download and Setup
@@ -20,7 +22,7 @@ You can find the latest release here:
 You can install MouseTrap with **chocolatey**:
 ```Powershell
 # install the package
-choco install mousetrap --version 1.0.2
+choco install mousetrap
 
 # running it
 mousetrap
@@ -33,6 +35,21 @@ mousetrap
 >Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object >System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 >```
 >*[Why Chocolatey](https://chocolatey.org/docs/why) + [installation](https://chocolatey.org/docs/installation)*
+
+
+## Changelog
+
+### Version 1.0.6
+
+ - **Migrate to .NET 5** _(from legacy .NET Framework)_
+ - Adds **Diagnostic Window**
+   - Realtime Log Viewer
+   - Configutation Viewer
+   - LogFile Viewer
+ - Implements a **potential fix** for **[#2 Unexpected Cursor Teleportation](https://github.com/r-Larch/MouseTrap/issues/2)**
+ - Adds an option to **disable Mouse teleportation** - That's usefull while gaming in fullscreen!
+ - Lots of smaller bugfixes
+
 
 ## Usage and Configuration
 
