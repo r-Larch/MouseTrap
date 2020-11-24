@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -118,13 +119,16 @@ namespace MouseTrap.Native {
         internal static extern bool ShowCursor(bool bShow);
 
         [DllImport("user32.dll")]
-        internal static extern int SetCursorPos(int x, int y);
+        internal static extern int SetCursorPos([In] int x, [In] int y);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool ClipCursor(RECT rcClip);
+        public static extern bool ClipCursor([In] ref RECT rcClip);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool GetClipCursor(RECT rcClip);
+        public static extern bool ClipCursor([In] IntPtr rcClip);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetClipCursor([Out] out RECT rcClip);
 
         [DllImport("user32.dll")]
         internal static extern int GetSystemMetrics(int nIndex);
@@ -132,14 +136,15 @@ namespace MouseTrap.Native {
         [DllImport("user32.dll")]
         public static extern int SystemParametersInfo(int uAction, int uParam, out int lpvParam, int fuWinIni);
 
-        [StructLayout(LayoutKind.Sequential)]
-        public class RECT {
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct RECT {
             public int Left;
             public int Top;
             public int Right;
             public int Bottom;
 
-            public static implicit operator RECT(Rectangle r)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static implicit operator RECT(in Rectangle r)
             {
                 return new RECT {
                     Left = r.Left,
@@ -149,7 +154,8 @@ namespace MouseTrap.Native {
                 };
             }
 
-            public static implicit operator Rectangle(RECT r)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static implicit operator Rectangle(in RECT r)
             {
                 return Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
             }

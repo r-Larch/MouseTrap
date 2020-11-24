@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using MouseTrap.Models;
 using MouseTrap.Native;
@@ -21,7 +22,7 @@ namespace MouseTrap.Service {
             var sw = new Stopwatch();
             sw.Start();
             _log = msg => {
-                log($"{sw.Elapsed,-15:g} [{DirectionArrow(_direction)}]  Cursor({_position.X,4}, {_position.Y,4})  {msg}");
+                Task.Run(() => log($"{sw.Elapsed,-15:g} [{DirectionArrow(_direction)}]  Cursor({_position.X,4}, {_position.Y,4})  {msg}"));
             };
 
             static char DirectionArrow(Direction d)
@@ -95,7 +96,7 @@ namespace MouseTrap.Service {
                 if (current != null && current.HasBridges) {
                     MouseTrap(current);
 
-                    var direction = GetDirection(position);
+                    var direction = GetDirection(in position);
 
                     // ==>
                     var hotspace = current.RightHotSpace;
@@ -106,8 +107,8 @@ namespace MouseTrap.Service {
                             if (target != Rectangle.Empty) {
                                 MouseTrapClear();
 
-                                var newY = MapY(position.Y, ref hotspace, ref target);
-                                MouseMove(targetScreen, (target.X + target.Width + 1), newY);
+                                var newY = MapY(position.Y, in hotspace, in target);
+                                MouseMove(in current.Bounds, in targetScreen.Bounds, (target.X + target.Width + 1), newY);
                             }
                         }
                     }
@@ -121,8 +122,8 @@ namespace MouseTrap.Service {
                             if (target != Rectangle.Empty) {
                                 MouseTrapClear();
 
-                                var newY = MapY(position.Y, ref hotspace, ref target);
-                                MouseMove(targetScreen, (target.X - 1), newY);
+                                var newY = MapY(position.Y, in hotspace, in target);
+                                MouseMove(in current.Bounds, in targetScreen.Bounds, (target.X - 1), newY);
                             }
                         }
                     }
@@ -137,8 +138,8 @@ namespace MouseTrap.Service {
                             if (target != Rectangle.Empty) {
                                 MouseTrapClear();
 
-                                var newX = MapX(position.X, ref hotspace, ref target);
-                                MouseMove(targetScreen, newX, (target.Y - 1));
+                                var newX = MapX(position.X, in hotspace, in target);
+                                MouseMove(in current.Bounds, in targetScreen.Bounds, newX, (target.Y - 1));
                             }
                         }
                     }
@@ -152,8 +153,8 @@ namespace MouseTrap.Service {
                             if (target != Rectangle.Empty) {
                                 MouseTrapClear();
 
-                                var newX = MapX(position.X, ref hotspace, ref target);
-                                MouseMove(targetScreen, newX, (target.Y + target.Height + 1));
+                                var newX = MapX(position.X, in hotspace, in target);
+                                MouseMove(in current.Bounds, in targetScreen.Bounds, newX, (target.Y + target.Height + 1));
                             }
                         }
                     }
@@ -175,7 +176,7 @@ namespace MouseTrap.Service {
         private int _posOldy;
         private Direction _direction;
 
-        private Direction GetDirection(Point pos)
+        private Direction GetDirection(in Point pos)
         {
             var ret = Direction.None;
             if (_posOldx < pos.X) {
@@ -205,14 +206,14 @@ namespace MouseTrap.Service {
             return _direction = ret;
         }
 
-        private static int MapY(int y, ref Rectangle src, ref Rectangle dst)
+        private static int MapY(int y, in Rectangle src, in Rectangle dst)
         {
             var percent = (y - src.Y) / (float) src.Height;
             var newY = (int) (dst.Height * percent) + dst.Y;
             return newY;
         }
 
-        private static int MapX(int x, ref Rectangle src, ref Rectangle dst)
+        private static int MapX(int x, in Rectangle src, in Rectangle dst)
         {
             var percent = (x - src.X) / (float) src.Width;
             var newX = (int) (dst.Width * percent) + dst.X;
@@ -224,9 +225,9 @@ namespace MouseTrap.Service {
 
         private void MouseTrap(ScreenConfig config)
         {
-            if (_activeTrap != config.ScreenId || Mouse.Clip != config.Bounds) {
+            if (_activeTrap != config.ScreenId || Mouse.GetClip() != config.Bounds) {
                 _log($"MouseTrap({config.Bounds})");
-                Mouse.Clip = config.Bounds;
+                Mouse.SetClip(in config.Bounds);
                 _activeTrap = config.ScreenId;
             }
         }
@@ -235,21 +236,21 @@ namespace MouseTrap.Service {
         {
             if (_activeTrap != -1) {
                 _log($"MouseTrapClear({_activeTrap})");
-                Mouse.Clip = Rectangle.Empty;
+                Mouse.ClearClip();
                 _activeTrap = -1;
             }
         }
 
-        private void MouseMove(ScreenConfig targetScreen, int x, int y)
+        private void MouseMove(in Rectangle srcBounds, in Rectangle targetBounds, int x, int y)
         {
-            _log($"Move To Screen -> {targetScreen.Bounds}");
+            _log($"Move To Screen -> {targetBounds}");
             _log($"    SwitchToInputDesktop");
 
             Mouse.SwitchToInputDesktop();
 
             // first move to center of screen, because windows has some problems :(
-            var cx = targetScreen.Bounds.X + (targetScreen.Bounds.Width / 2);
-            var cy = targetScreen.Bounds.Y + (targetScreen.Bounds.Height / 2);
+            var cx = targetBounds.X + (targetBounds.Width / 2);
+            var cy = targetBounds.Y + (targetBounds.Height / 2);
             _log($"    MoveToCenter   ({cx,4}, {cy,4})");
             Mouse.MoveCursor(cx, cy);
 

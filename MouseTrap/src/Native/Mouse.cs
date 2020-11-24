@@ -11,24 +11,33 @@ namespace MouseTrap.Native {
             Win32.SetCursorPos(x, y);
         }
 
-        public static Rectangle Clip {
-            get {
-                var rect = new Win32.RECT();
-                if (Win32.GetClipCursor(rect)) {
-                    return rect;
-                }
-                else {
-                    var error = Marshal.GetLastWin32Error();
-                    throw new Win32Exception(error);
-                }
+        public static Rectangle GetClip()
+        {
+            if (!Win32.GetClipCursor(out var rect)) {
+                var error = Marshal.GetLastWin32Error();
+                throw new Win32Exception(error);
             }
-            set {
-                if (!Win32.ClipCursor(value.IsEmpty ? null : (Win32.RECT) value)) {
-                    var error = Marshal.GetLastWin32Error();
-                    throw new Win32Exception(error);
-                }
+
+            return rect;
+        }
+
+        public static void SetClip(in Rectangle value)
+        {
+            var rect = (Win32.RECT) value;
+            if (!Win32.ClipCursor(ref rect)) {
+                var error = Marshal.GetLastWin32Error();
+                throw new Win32Exception(error);
             }
         }
+
+        public static void ClearClip()
+        {
+            if (!Win32.ClipCursor(IntPtr.Zero)) {
+                var error = Marshal.GetLastWin32Error();
+                throw new Win32Exception(error);
+            }
+        }
+
 
         public static void SwitchToInputDesktop()
         {

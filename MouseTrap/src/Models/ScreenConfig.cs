@@ -28,8 +28,7 @@ namespace MouseTrap.Models {
         [JsonProperty]
         public Bridge BottomBridge { get; set; }
 
-        [JsonProperty]
-        public Rectangle Bounds { get; set; }
+        [JsonProperty] public Rectangle Bounds;
 
 
         private const int Space = 2;
