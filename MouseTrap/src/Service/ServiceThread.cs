@@ -50,10 +50,7 @@ namespace MouseTrap.Service {
 
                     service.OnExit();
                 }
-                catch (Exception e) when (e is ThreadAbortException || e is ThreadInterruptedException) {
-                    // can not do anything!
-                }
-                catch (Exception e) when (token.IsCancellationRequested || e is OperationCanceledException) {
+                catch (Exception e) when (token.IsCancellationRequested || e is OperationCanceledException || e is ThreadAbortException || e is ThreadInterruptedException) {
                     service.OnExit();
                 }
                 catch (Exception e) {

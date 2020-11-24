@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 using MouseTrap.Models;
 using MouseTrap.Native;
 
@@ -60,6 +59,12 @@ namespace MouseTrap.Service {
         private void Loop(CancellationToken token)
         {
             while (!token.IsCancellationRequested) {
+                // on win-logon etc..
+                if (!Mouse.IsInputDesktop()) {
+                    Thread.Sleep(1);
+                    continue;
+                }
+
                 var position = GetPosition();
 
                 var current = _screens.FirstOrDefault(_ => _.Bounds.Contains(position));
@@ -137,7 +142,11 @@ namespace MouseTrap.Service {
 
         private Point GetPosition()
         {
-            return Cursor.Position;
+            if (!Mouse.TryGetPosition(out var pos)) {
+                return Point.Empty;
+            }
+
+            return pos;
         }
 
 
@@ -190,12 +199,17 @@ namespace MouseTrap.Service {
 
         private int _activeTrap = -1;
 
-
         private void MouseTrap(ScreenConfig config)
         {
-            if (_activeTrap != config.ScreenId || Mouse.GetClip() != config.Bounds) {
+            if (_activeTrap != config.ScreenId) {
                 Mouse.SetClip(in config.Bounds);
                 _activeTrap = config.ScreenId;
+            }
+            else {
+                var clip = Mouse.GetClip();
+                if (clip != config.Bounds) {
+                    Mouse.SetClip(in config.Bounds);
+                }
             }
         }
 
@@ -209,14 +223,21 @@ namespace MouseTrap.Service {
 
         private void MouseMove(in Rectangle srcBounds, in Rectangle targetBounds, int x, int y)
         {
-            Mouse.SwitchToInputDesktop();
+            // Mouse.SwitchToInputDesktop();
 
-            // first move to center of screen, because windows has some problems :(
-            var cx = targetBounds.X + (targetBounds.Width / 2);
-            var cy = targetBounds.Y + (targetBounds.Height / 2);
-            Mouse.MoveCursor(cx, cy);
             Mouse.MoveCursor(x, y);
 
+            var pos = GetPosition();
+            if (pos.X != x || pos.Y != y) {
+                for (var i = 0; i < 3; i++) {
+                    Mouse.MoveCursor(x, y);
+
+                    pos = GetPosition();
+                    if (pos.X == x && pos.Y == y) {
+                        return;
+                    }
+                }
+            }
         }
     }
 

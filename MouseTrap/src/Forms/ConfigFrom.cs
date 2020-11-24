@@ -89,7 +89,18 @@ namespace MouseTrap.Forms {
             var forms = new List<ScreenConfigForm>();
 
             foreach (var screen in Screens) {
-                var form = new ScreenConfigForm(screen) {
+                var config = new ScreenConfig {
+                    Name = screen.Name,
+                    Bounds = screen.Bounds,
+                    Primary = screen.Primary,
+                    ScreenId = screen.ScreenId,
+                    TopBridge = screen.TopBridge,
+                    LeftBridge = screen.LeftBridge,
+                    RightBridge = screen.RightBridge,
+                    BottomBridge = screen.BottomBridge,
+                };
+
+                var form = new ScreenConfigForm(config) {
                     GetTargetScreenId = GetTargetScreenId
                 };
 
@@ -109,15 +120,13 @@ namespace MouseTrap.Forms {
                     forms.ForEach(_ => _.ResetBtn.Hide());
                 };
                 form.SaveBtn.Click += (s, e) => {
-                    form.ResetBtn.PerformClick();
                     var config = GetConfig();
                     Settings.Configured = config.Any(_ => _.HasBridges);
                     this.InfoText.Visible = Settings.Configured == false;
                     config.Save();
-                    Service.RestoreOriginalState();
+                    form.CancelBtn.PerformClick();
                 };
                 form.CancelBtn.Click += (s, e) => {
-                    form.ResetBtn.PerformClick();
                     forms.ForEach(_ => _.Close());
                     forms.Clear();
 

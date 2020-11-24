@@ -1,28 +1,35 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using MouseTrap.Models;
 using MouseTrap.Native;
 
 
 namespace MouseTrap.Service {
     public class MouseBridgeDiagnosticService : IService {
-        private readonly ScreenConfigCollection _screens;
-        private Action<string> _log;
+        private ScreenConfigCollection _screens;
+        private readonly Action<string> _log;
+        private volatile uint _count = 0;
 
         public MouseBridgeDiagnosticService(ScreenConfigCollection screens, Action<string> log)
         {
             _screens = screens;
+            ScreenConfigCollection.OnChanged += config => {
+                _screens = config;
+            };
 
             var sw = new Stopwatch();
             sw.Start();
+
             _log = msg => {
-                Task.Run(() => log($"{sw.Elapsed,-15:g} [{DirectionArrow(_direction)}]  Cursor({_position.X,4}, {_position.Y,4})  {msg}"));
+                msg = $"{sw.Elapsed,-15:g} {Interlocked.Increment(ref _count),11} [{DirectionArrow(_direction)}]  Cursor({_position.X,4}, {_position.Y,4})  {msg}";
+                if (_count == uint.MaxValue) _count = 0;
+
+                Task.Run(() => log(msg));
             };
 
             static char DirectionArrow(Direction d)
@@ -67,17 +74,8 @@ namespace MouseTrap.Service {
                     Run(token);
                 }
                 else {
-                    // set a noop log func to prevent death locks!
-                    _log = _ => {
-                    };
                     throw;
                 }
-            }
-
-            if (token.IsCancellationRequested) {
-                // set a noop log func to prevent death locks!
-                _log = _ => {
-                };
             }
         }
 
@@ -90,6 +88,12 @@ namespace MouseTrap.Service {
         private void Loop(CancellationToken token)
         {
             while (!token.IsCancellationRequested) {
+                // on win-logon etc..
+                if (!Mouse.IsInputDesktop()) {
+                    Thread.Sleep(1);
+                    continue;
+                }
+
                 var position = GetPosition();
 
                 var current = _screens.FirstOrDefault(_ => _.Bounds.Contains(position));
@@ -107,6 +111,8 @@ namespace MouseTrap.Service {
                             if (target != Rectangle.Empty) {
                                 MouseTrapClear();
 
+                                _log($"    Δ src-dst: {target.X - position.X} - {target.Width}  smallJump: {Math.Abs(target.X - position.X) <= target.Width + 1}");
+
                                 var newY = MapY(position.Y, in hotspace, in target);
                                 MouseMove(in current.Bounds, in targetScreen.Bounds, (target.X + target.Width + 1), newY);
                             }
@@ -121,6 +127,8 @@ namespace MouseTrap.Service {
                             var target = targetScreen.RightHotSpace;
                             if (target != Rectangle.Empty) {
                                 MouseTrapClear();
+
+                                _log($"    Δ src-dst: {target.X - position.X} - {target.Width}  smallJump: {Math.Abs(target.X - position.X) <= target.Width + 1}");
 
                                 var newY = MapY(position.Y, in hotspace, in target);
                                 MouseMove(in current.Bounds, in targetScreen.Bounds, (target.X - 1), newY);
@@ -138,6 +146,8 @@ namespace MouseTrap.Service {
                             if (target != Rectangle.Empty) {
                                 MouseTrapClear();
 
+                                _log($"    Δ src-dst: {target.Y - position.Y} - {target.Height}  smallJump: {Math.Abs(target.Y - position.Y) <= target.Height + 1}");
+
                                 var newX = MapX(position.X, in hotspace, in target);
                                 MouseMove(in current.Bounds, in targetScreen.Bounds, newX, (target.Y - 1));
                             }
@@ -152,6 +162,8 @@ namespace MouseTrap.Service {
                             var target = targetScreen.TopHotSpace;
                             if (target != Rectangle.Empty) {
                                 MouseTrapClear();
+
+                                _log($"    Δ src-dst: {target.Y - position.Y} - {target.Height}  smallJump: {Math.Abs(target.Y - position.Y) <= target.Height + 1}");
 
                                 var newX = MapX(position.X, in hotspace, in target);
                                 MouseMove(in current.Bounds, in targetScreen.Bounds, newX, (target.Y + target.Height + 1));
@@ -168,7 +180,12 @@ namespace MouseTrap.Service {
 
         private Point GetPosition()
         {
-            return _position = Cursor.Position;
+            if (!Mouse.TryGetPosition(out var pos)) {
+                _log($"Failed to receive Cursor Position");
+                return Point.Empty;
+            }
+
+            return _position = pos;
         }
 
 
@@ -222,13 +239,19 @@ namespace MouseTrap.Service {
 
         private int _activeTrap = -1;
 
-
         private void MouseTrap(ScreenConfig config)
         {
-            if (_activeTrap != config.ScreenId || Mouse.GetClip() != config.Bounds) {
-                _log($"MouseTrap({config.Bounds})");
+            if (_activeTrap != config.ScreenId) {
+                _log($"MouseTrap({config.Bounds})   -- IsInputDesktop: {Mouse.IsInputDesktop()}");
                 Mouse.SetClip(in config.Bounds);
                 _activeTrap = config.ScreenId;
+            }
+            else {
+                var clip = Mouse.GetClip();
+                if (clip != config.Bounds) {
+                    _log($"MouseTrap({config.Bounds}) system had wrong clip: {clip}   -- IsInputDesktop: {Mouse.IsInputDesktop()}");
+                    Mouse.SetClip(in config.Bounds);
+                }
             }
         }
 
@@ -243,28 +266,27 @@ namespace MouseTrap.Service {
 
         private void MouseMove(in Rectangle srcBounds, in Rectangle targetBounds, int x, int y)
         {
-            _log($"Move To Screen -> {targetBounds}");
-            _log($"    SwitchToInputDesktop");
+            _log($"    Move To Screen -> {targetBounds}");
 
-            Mouse.SwitchToInputDesktop();
+            // _log($"    SwitchToInputDesktop");
+            // Mouse.SwitchToInputDesktop();
 
-            // first move to center of screen, because windows has some problems :(
-            var cx = targetBounds.X + (targetBounds.Width / 2);
-            var cy = targetBounds.Y + (targetBounds.Height / 2);
-            _log($"    MoveToCenter   ({cx,4}, {cy,4})");
-            Mouse.MoveCursor(cx, cy);
-
-            var pos = GetPosition();
-            if (pos.X != cx || pos.Y != cy) {
-                _log($"    Move Failed ! ({pos.X,4}, {pos.Y,4})");
-            }
-
-            _log($"    MouseMove      ({x,4}, {y,4})");
+            _log($"    MouseMove     ({x,4}, {y,4})");
             Mouse.MoveCursor(x, y);
 
-            pos = GetPosition();
+            var pos = GetPosition();
             if (pos.X != x || pos.Y != y) {
-                _log($"    Move Failed ! ({pos.X,4}, {pos.Y,4})");
+                for (var i = 0; i < 3; i++) {
+                    _log($"    Move Failed ! ({pos.X,4}, {pos.Y,4}) - Retry");
+                    Mouse.MoveCursor(x, y);
+
+                    pos = GetPosition();
+                    if (pos.X == x && pos.Y == y) {
+                        return;
+                    }
+                }
+
+                _log($"    Move Failed ! ({pos.X,4}, {pos.Y,4}) - No Retry");
             }
         }
     }

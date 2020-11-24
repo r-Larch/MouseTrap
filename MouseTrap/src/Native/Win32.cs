@@ -13,6 +13,19 @@ namespace MouseTrap.Native {
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr OpenInputDesktop(uint dwFlags, bool fInherit, uint dwDesiredAccess);
 
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetUserObjectInformation(IntPtr hObj, int nIndex, IntPtr pvInfo, uint nLength, out uint lpnLengthNeeded);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetUserObjectInformation(IntPtr hObj, int nIndex, ref BOOL pvInfo, uint nLength, out uint lpnLengthNeeded);
+
+        public enum BOOL : uint {
+            False = 0,
+            True = 1,
+        }
+
+
         [DllImport("user32.dll")]
         public static extern IntPtr OpenDesktop(string lpszDesktop, uint dwFlags, bool fInherit, uint dwDesiredAccess);
 
@@ -113,13 +126,13 @@ namespace MouseTrap.Native {
         internal static extern IntPtr SendDlgItemMessage(IntPtr handleToWindow, int dlgItem, uint message, UIntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
-        internal static extern int GetCursorPos(out Point lpWinPoint);
-
-        [DllImport("user32.dll")]
         internal static extern bool ShowCursor(bool bShow);
 
         [DllImport("user32.dll")]
-        internal static extern int SetCursorPos([In] int x, [In] int y);
+        internal static extern BOOL SetCursorPos([In] int x, [In] int y);
+
+        [DllImport("user32.dll")]
+        public static extern BOOL GetCursorPos(out System.Drawing.Point pt);
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool ClipCursor([In] ref RECT rcClip);

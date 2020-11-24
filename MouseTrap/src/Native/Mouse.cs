@@ -6,9 +6,14 @@ using System.Runtime.InteropServices;
 
 namespace MouseTrap.Native {
     internal class Mouse {
-        public static void MoveCursor(int x, int y)
+        public static bool MoveCursor(int x, int y)
         {
-            Win32.SetCursorPos(x, y);
+            return Win32.SetCursorPos(x, y) != Win32.BOOL.False;
+        }
+
+        public static bool TryGetPosition(out Point point)
+        {
+            return Win32.GetCursorPos(out point) != Win32.BOOL.False;
         }
 
         public static Rectangle GetClip()
@@ -39,30 +44,23 @@ namespace MouseTrap.Native {
         }
 
 
-        public static void SwitchToInputDesktop()
+        public static bool IsInputDesktop()
         {
-            try {
-                // var threadCurrent = GetCurrentDesktop();
-                var inputCurrent = GetInputDesktop();
+            var inputCurrent = GetCurrentDesktop();
+            return IsInputDesktop(inputCurrent);
+        }
 
-                if (inputCurrent != IntPtr.Zero) {
-                    try {
-                        // if (threadCurrent != inputCurrent) {
-                        SetCurrentDesktop(inputCurrent);
-                        // }
-                    }
-                    finally {
-                        Win32.CloseDesktop(inputCurrent);
-                    }
-                }
+        private static bool IsInputDesktop(IntPtr hDesktop)
+        {
+            const int UOI_IO = 6;
+            var isInputDesktop = Win32.BOOL.False;
+            var success = Win32.GetUserObjectInformation(hDesktop, UOI_IO, ref isInputDesktop, sizeof(Win32.BOOL), out _);
+            if (!success) {
+                var error = Marshal.GetLastWin32Error();
+                throw new Win32Exception(error);
             }
-            catch (Win32Exception e) {
-                const int accessIsDenied = 5;
 
-                if (e.NativeErrorCode != accessIsDenied) {
-                    throw;
-                }
-            }
+            return isInputDesktop == Win32.BOOL.True;
         }
 
         private static IntPtr GetCurrentDesktop()
@@ -78,13 +76,39 @@ namespace MouseTrap.Native {
             return hDesktop;
         }
 
+
+        public static void SwitchToInputDesktop()
+        {
+            try {
+                var inputCurrent = GetInputDesktop();
+                if (inputCurrent != IntPtr.Zero) {
+                    try {
+                        SetCurrentDesktop(inputCurrent);
+                    }
+                    finally {
+                        Win32.CloseDesktop(inputCurrent);
+                    }
+                }
+            }
+            catch (Win32Exception e) {
+                const int accessIsDenied = 5;
+
+                if (e.NativeErrorCode != accessIsDenied) {
+                    throw;
+                }
+            }
+        }
+
+
         private static void SetCurrentDesktop(IntPtr desktopHandle)
         {
+            // NOTE: It is impossible to set the thread desktop
+            // after using SetWindowsHookEx() in a Thread!
             var success = Win32.SetThreadDesktop(desktopHandle);
             if (!success) {
                 var error = Marshal.GetLastWin32Error();
                 if (error == 170 /*The requested resource is in use*/) {
-                    return;
+                    throw new Exception("The requested resource is in use. Are there any hooks 'SetWindowsHookEx()' registered for this Thread?", new Win32Exception(error));
                 }
 
                 throw new Win32Exception(error);
