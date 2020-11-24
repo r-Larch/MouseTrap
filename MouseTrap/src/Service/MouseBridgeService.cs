@@ -61,6 +61,7 @@ namespace MouseTrap.Service {
             while (!token.IsCancellationRequested) {
                 // on win-logon etc..
                 if (!Mouse.IsInputDesktop()) {
+                    MouseTrapClear();
                     Thread.Sleep(1);
                     continue;
                 }

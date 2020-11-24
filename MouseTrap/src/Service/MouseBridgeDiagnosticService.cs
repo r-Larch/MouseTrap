@@ -90,6 +90,7 @@ namespace MouseTrap.Service {
             while (!token.IsCancellationRequested) {
                 // on win-logon etc..
                 if (!Mouse.IsInputDesktop()) {
+                    MouseTrapClear();
                     Thread.Sleep(1);
                     continue;
                 }
@@ -268,6 +269,7 @@ namespace MouseTrap.Service {
         {
             _log($"    Move To Screen -> {targetBounds}");
 
+            // TODO enable SwitchToInputDesktop for setup screen!
             // _log($"    SwitchToInputDesktop");
             // Mouse.SwitchToInputDesktop();
 
