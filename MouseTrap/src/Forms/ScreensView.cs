@@ -7,6 +7,8 @@ using MouseTrap.Models;
 
 namespace MouseTrap {
     public partial class ScreensView : UserControl {
+        private ScreenConfigCollection _config;
+
         public ScreensView()
         {
             InitializeComponent();
@@ -14,7 +16,7 @@ namespace MouseTrap {
 
         protected override void OnLoad(EventArgs e)
         {
-            Screens = ScreenConfigCollection.Load();
+            _config = ScreenConfigCollection.Load();
             ScreenConfigCollection.OnChanged += OnDisplaySettingsChanged;
 
             base.OnLoad(e);
@@ -22,11 +24,10 @@ namespace MouseTrap {
 
         private void OnDisplaySettingsChanged(ScreenConfigCollection config)
         {
-            Screens = config;
+            _config = config;
             this.Invalidate();
         }
 
-        public ScreenConfigCollection Screens { get; set; }
 
         protected override void OnResize(EventArgs e)
         {
@@ -53,7 +54,7 @@ namespace MouseTrap {
 
         private void Draw(Graphics graphics, Rectangle clipRectangle)
         {
-            var bounds = Screens.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Bounds));
+            var bounds = _config.Aggregate(Rectangle.Empty, (rect, screen) => Rectangle.Union(rect, screen.Bounds));
 
             var scale = InnerWidth / (float) bounds.Width;
             if (bounds.Height * scale > InnerHeight) {
@@ -69,7 +70,7 @@ namespace MouseTrap {
             using (var screen2Brush = new SolidBrush(HexColor("314150")))
             using (var textBrush = new SolidBrush(HexColor("f2f2f2"))) {
                 // Draw screens
-                foreach (var config in Screens) {
+                foreach (var config in _config) {
                     var rect = ScaleRect(config.Bounds, scale);
 
                     graphics.FillRectangle(screen1Brush, rect);
