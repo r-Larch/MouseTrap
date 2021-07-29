@@ -53,18 +53,6 @@ namespace MouseTrap.Forms {
             if (!Settings.Configured && !Settings.AutoStartEnabled) {
                 this.EnableAutoStart.Checked = true;
             }
-
-            this.TeleportationActive.Checked = Settings.TeleportationActive;
-            this.TeleportationActive.CheckedChanged += delegate {
-                if (TeleportationActive.Checked) {
-                    Service.StartService();
-                    Settings.TeleportationActive = true;
-                }
-                else {
-                    Service.StopService();
-                    Settings.TeleportationActive = false;
-                }
-            };
         }
 
 

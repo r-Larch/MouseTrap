@@ -32,7 +32,6 @@ namespace MouseTrap.Forms
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.ScreensView = new MouseTrap.ScreensView();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.TeleportationActive = new System.Windows.Forms.CheckBox();
             this.BtnDiagnostic = new System.Windows.Forms.Button();
             this.InfoText = new System.Windows.Forms.TextBox();
             this.EnableAutoStart = new System.Windows.Forms.CheckBox();
@@ -73,7 +72,6 @@ namespace MouseTrap.Forms
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.TeleportationActive);
             this.panel1.Controls.Add(this.BtnDiagnostic);
             this.panel1.Controls.Add(this.InfoText);
             this.panel1.Controls.Add(this.EnableAutoStart);
@@ -86,17 +84,6 @@ namespace MouseTrap.Forms
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1372, 242);
             this.panel1.TabIndex = 2;
-            // 
-            // TeleportationActive
-            // 
-            this.TeleportationActive.AutoSize = true;
-            this.TeleportationActive.Location = new System.Drawing.Point(14, 122);
-            this.TeleportationActive.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.TeleportationActive.Name = "TeleportationActive";
-            this.TeleportationActive.Size = new System.Drawing.Size(249, 29);
-            this.TeleportationActive.TabIndex = 6;
-            this.TeleportationActive.Text = "Mouse teleportation active";
-            this.TeleportationActive.UseVisualStyleBackColor = true;
             // 
             // BtnDiagnostic
             // 
@@ -201,6 +188,5 @@ namespace MouseTrap.Forms
         private System.Windows.Forms.CheckBox EnableAutoStart;
         private System.Windows.Forms.TextBox InfoText;
         private System.Windows.Forms.Button BtnDiagnostic;
-        private System.Windows.Forms.CheckBox TeleportationActive;
     }
 }

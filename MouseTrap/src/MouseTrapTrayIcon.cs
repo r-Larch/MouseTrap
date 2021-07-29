@@ -8,18 +8,28 @@ using MouseTrap.Service;
 
 namespace MouseTrap {
     public class MouseTrapTrayIcon : TrayIcon {
-        public ServiceThread Service;
+        private readonly ServiceThread _service;
+        private WeakReference<ConfigFrom> _configFromRef;
+
 
         public MouseTrapTrayIcon(ServiceThread service)
         {
-            Service = service;
+            _service = service;
 
             Icon = App.Icon;
             Text = App.Name;
 
-            ContextMenu.Items.Add("Settings", null, (s, e) => OpenSettings());
-            ContextMenu.Items.Add("Reinit", null, (s, e) => Reinit());
-            ContextMenu.Items.Add("Exit", null, (s, e) => Close());
+            ContextMenu.Items.Add(new ToolStripMenuItem("Settings", null, (s, e) => OpenSettings()) {
+                ToolTipText = "Open configuration screen",
+            });
+            ContextMenu.Items.Add(new ToolStripMenuItem("Mouse teleportation", null, (sender, args) => ToggleTeleportation((ToolStripMenuItem) sender)) {
+                Checked = true,
+                CheckOnClick = true,
+                ToolTipText = "Turn off mouse teleportation e.g. while gaming",
+            });
+            ContextMenu.Items.Add(new ToolStripMenuItem("Exit", null, (s, e) => Close()) {
+                ToolTipText = "Fully exit MouseTrap process",
+            });
 
             // make first option bold
             ContextMenu.Items[0].Font = WithFontStyle(ContextMenu.Items[0].Font, FontStyle.Bold);
@@ -33,12 +43,22 @@ namespace MouseTrap {
             }
         }
 
-        private WeakReference<ConfigFrom> _configFromRef;
+
+        private void ToggleTeleportation(ToolStripMenuItem checkBox)
+        {
+            if (checkBox.Checked) {
+                _service.StartService();
+            }
+            else {
+                _service.StopService();
+            }
+        }
+
 
         public void OpenSettings()
         {
             if (_configFromRef == null || !_configFromRef.TryGetTarget(out var configFrom) || configFrom.Disposing || configFrom.IsDisposed) {
-                configFrom = new ConfigFrom(Service);
+                configFrom = new ConfigFrom(_service);
                 configFrom.Show();
                 _configFromRef = new WeakReference<ConfigFrom>(configFrom);
             }
@@ -47,11 +67,6 @@ namespace MouseTrap {
                 configFrom.TopMost = true;
                 configFrom.TopMost = false;
             }
-        }
-
-        public void Reinit()
-        {
-            Service.RestoreOriginalState();
         }
 
 
@@ -64,7 +79,7 @@ namespace MouseTrap {
                 Close();
             }
 
-            Service.WndProc(ref m);
+            _service.WndProc(ref m);
 
             base.WndProc(ref m);
         }

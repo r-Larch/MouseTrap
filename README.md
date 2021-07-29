@@ -56,11 +56,11 @@ mousetrap
 You can always find your running **MouseTrap** app as a system-tray icon in the right corner of your Taskbar.
 Right-clicking the icon shows some options:
 
-   Option    |   Description
--------------|------------------------------------------------------------------
-**Settings** | allows you to configure it
-Reinit       | **[beta-option]** to reinitialize it, in case it hangs :worried:
-**Exit**     | to close the running instance
+   Option           |   Description
+--------------------|------------------------------------------------------------------
+**Settings**        | Open configuration screen
+Mouse teleportation | **Checkbox** Turn off mouse teleportation e.g. while gaming
+Exit                | Fully exit MouseTrap process
 
 _NOTE: reinit can be triggered by commandline:_ `mousetrap --reinit`
 
