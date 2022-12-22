@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 
 namespace MouseTrap;
@@ -21,13 +21,13 @@ internal class MutexRunner : MsgBroadcast {
                     Mutex.ReleaseMutex();
                 }
             }
+
+            return false;
         }
         catch (System.Threading.AbandonedMutexException) {
             Mutex.ReleaseMutex();
-            MutexRun(program);
+            return MutexRun(program);
         }
-
-        return false;
     }
 
     public static void NotifyRunningInstance()
