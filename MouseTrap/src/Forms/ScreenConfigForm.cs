@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using MouseTrap.Models;
+﻿using MouseTrap.Models;
 
 
 namespace MouseTrap.Forms {
@@ -25,7 +22,9 @@ namespace MouseTrap.Forms {
 
         public ScreenConfig Screen { get; }
 
+#pragma warning disable CS8618 // Non-nullable variable must contain a non-null value when exiting constructor. Consider declaring it as nullable.
         public ScreenConfigForm()
+#pragma warning restore CS8618
         {
             InitializeComponent();
         }
@@ -64,7 +63,7 @@ namespace MouseTrap.Forms {
             var table = new TableLayoutPanel() {
                 Bounds = inner,
                 ColumnCount = 1,
-                ColumnStyles = {new ColumnStyle(SizeType.Percent, 100)},
+                ColumnStyles = { new ColumnStyle(SizeType.Percent, 100) },
                 RowCount = 2,
                 RowStyles = {
                     new RowStyle(SizeType.Percent, 60),
@@ -108,7 +107,7 @@ namespace MouseTrap.Forms {
                 Size = new Size(6 + TestBtn.Width + 6 + SaveBtn.Width + 6 + CancelBtn.Width + 6, 40 + 6),
                 Padding = new Padding(3),
                 Anchor = AnchorStyles.None,
-                Controls = {TestBtn, ResetBtn, SaveBtn, CancelBtn}
+                Controls = { TestBtn, ResetBtn, SaveBtn, CancelBtn }
             }, 0, 1);
 
             Panel.Controls.Add(table);

@@ -1,8 +1,4 @@
-﻿using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using MouseTrap.Models;
-using MouseTrap.Properties;
+﻿using MouseTrap.Models;
 
 
 namespace MouseTrap {

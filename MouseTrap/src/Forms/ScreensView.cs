@@ -1,13 +1,9 @@
-﻿using System;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using MouseTrap.Models;
+﻿using MouseTrap.Models;
 
 
 namespace MouseTrap {
     public partial class ScreensView : UserControl {
-        private ScreenConfigCollection _config;
+        private ScreenConfigCollection _config = null!;
 
         public ScreensView()
         {
@@ -87,7 +83,7 @@ namespace MouseTrap {
                                      $"offset x: {config.Bounds.X}, y: {config.Bounds.Y}\r\n" +
                                      $"{(config.Primary ? "primary screen" : "")}\r\n";
 
-                    graphics.DrawString(infoString, Font, textBrush, textRect, new StringFormat {Alignment = StringAlignment.Center});
+                    graphics.DrawString(infoString, Font, textBrush, textRect, new StringFormat { Alignment = StringAlignment.Center });
                 }
             }
         }

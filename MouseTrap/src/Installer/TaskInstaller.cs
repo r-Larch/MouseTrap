@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Runtime.Versioning;
 using System.Security.Principal;
 using Microsoft.Win32.TaskScheduler;
@@ -9,11 +7,11 @@ using Microsoft.Win32.TaskScheduler;
 namespace MouseTrap.Installer {
     [SupportedOSPlatform("windows")]
     internal class TaskInstaller {
-        public string TaskName { get; set; }
-        public WindowsIdentity RunAsUser { get; set; }
+        public string? TaskName { get; set; }
+        public WindowsIdentity? RunAsUser { get; set; }
         public bool HighestPrivileges { get; set; }
-        public string ExecutablePath { get; set; }
-        public string Arguments { get; set; }
+        public string? ExecutablePath { get; set; }
+        public string? Arguments { get; set; }
 
 
         public void Install(InstallerState stateSaver)
@@ -26,7 +24,7 @@ namespace MouseTrap.Installer {
             task.RegistrationInfo.Date = DateTime.Now;
             task.RegistrationInfo.Description = "";
 
-            task.Principal.UserId = RunAsUser.Name;
+            task.Principal.UserId = RunAsUser?.Name;
             task.Principal.LogonType = TaskLogonType.InteractiveToken;
             task.Principal.RunLevel = HighestPrivileges ? TaskRunLevel.Highest : TaskRunLevel.LUA;
 
@@ -48,7 +46,7 @@ namespace MouseTrap.Installer {
 
             task.Triggers.Add(new LogonTrigger {
                 Enabled = true,
-                UserId = RunAsUser.Name
+                UserId = RunAsUser?.Name
             });
 
             task.Actions.Add(

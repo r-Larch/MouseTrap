@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace MouseTrap.Models {
+﻿namespace MouseTrap.Models {
     [Serializable]
     public class Settings {
         public void Save()

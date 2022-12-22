@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
 using System.Reflection;
-using System.Windows.Forms;
 
 
 namespace MouseTrap {
@@ -48,7 +46,7 @@ namespace MouseTrap {
             set => NotifyIcon.Visible = value;
         }
 
-        public TrayApplication Application { get; set; }
+        public TrayApplication? Application { get; set; }
 
         public void Hide()
         {

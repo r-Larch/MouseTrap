@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 
 namespace MouseTrap {
@@ -277,7 +273,7 @@ namespace MouseTrap {
             }
         }
 
-        public static string DeviceFriendlyName(this Screen screen)
+        public static string? DeviceFriendlyName(this Screen screen)
         {
             try {
                 var allFriendlyNames = GetAllMonitorsFriendlyNames();

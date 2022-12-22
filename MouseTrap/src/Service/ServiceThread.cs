@@ -1,15 +1,12 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Windows.Forms;
+﻿using System.Diagnostics;
 using MouseTrap.Models;
 
 
 namespace MouseTrap.Service {
     public class ServiceThread : MsgBroadcast {
-        public Func<IService> ServiceFactory { get; set; }
-        private CancellationTokenSource _cts;
-        private Thread _thread;
+        public Func<IService> ServiceFactory { get; set; } = null!;
+        private CancellationTokenSource? _cts;
+        private Thread? _thread;
         private volatile int _errorCount;
 
         public void StartService()
@@ -83,7 +80,7 @@ namespace MouseTrap.Service {
         public virtual void StopService()
         {
             if (_thread != null) {
-                _cts.Cancel(true);
+                _cts?.Cancel(true);
 
                 var end = DateTime.Now.AddSeconds(1);
                 while (_thread.IsAlive && DateTime.Now < end) {

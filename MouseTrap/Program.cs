@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Forms;
-using MouseTrap.Installer;
+﻿using MouseTrap.Installer;
 using MouseTrap.Models;
 using MouseTrap.Service;
 
@@ -43,8 +40,11 @@ namespace MouseTrap {
         private static void RunUI()
         {
             try {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(true);
+                // It is unfortunate but we have to set it to Unknown first.
+                //Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);
+                //Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+
+                ApplicationConfiguration.Initialize();
 
                 var service = new ServiceThread {
                     ServiceFactory = () => new MouseBridgeService()

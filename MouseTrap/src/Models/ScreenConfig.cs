@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 
 namespace MouseTrap.Models {
@@ -12,7 +10,7 @@ namespace MouseTrap.Models {
         public string ScreenNum => (ScreenId + 1).ToString();
 
         [JsonProperty]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [JsonProperty]
         public bool Primary { get; set; }
@@ -20,13 +18,13 @@ namespace MouseTrap.Models {
         public bool HasBridges => TopBridge != null || LeftBridge != null || RightBridge != null || BottomBridge != null;
 
         [JsonProperty]
-        public Bridge TopBridge { get; set; }
+        public Bridge? TopBridge { get; set; }
         [JsonProperty]
-        public Bridge LeftBridge { get; set; }
+        public Bridge? LeftBridge { get; set; }
         [JsonProperty]
-        public Bridge RightBridge { get; set; }
+        public Bridge? RightBridge { get; set; }
         [JsonProperty]
-        public Bridge BottomBridge { get; set; }
+        public Bridge? BottomBridge { get; set; }
 
         [JsonProperty] public Rectangle Bounds;
 

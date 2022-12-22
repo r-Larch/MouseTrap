@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using MouseTrap.Forms;
+﻿using MouseTrap.Forms;
 using MouseTrap.Models;
 using MouseTrap.Service;
 
@@ -9,7 +6,7 @@ using MouseTrap.Service;
 namespace MouseTrap {
     public class MouseTrapTrayIcon : TrayIcon {
         private readonly ServiceThread _service;
-        private WeakReference<ConfigFrom> _configFromRef;
+        private WeakReference<ConfigFrom>? _configFromRef;
 
 
         public MouseTrapTrayIcon(ServiceThread service)
@@ -22,7 +19,7 @@ namespace MouseTrap {
             ContextMenu.Items.Add(new ToolStripMenuItem("Settings", null, (s, e) => OpenSettings()) {
                 ToolTipText = "Open configuration screen",
             });
-            ContextMenu.Items.Add(new ToolStripMenuItem("Mouse teleportation", null, (sender, args) => ToggleTeleportation((ToolStripMenuItem) sender)) {
+            ContextMenu.Items.Add(new ToolStripMenuItem("Mouse teleportation", null, (sender, args) => ToggleTeleportation((ToolStripMenuItem) sender!)) {
                 Checked = true,
                 CheckOnClick = true,
                 ToolTipText = "Turn off mouse teleportation e.g. while gaming",

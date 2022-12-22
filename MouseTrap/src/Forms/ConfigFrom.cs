@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using MouseTrap.Installer;
 using MouseTrap.Models;
 using MouseTrap.Service;

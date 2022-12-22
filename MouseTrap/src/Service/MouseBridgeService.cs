@@ -1,8 +1,4 @@
-using System;
 using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Threading;
 using MouseTrap.Models;
 using MouseTrap.Native;
 
@@ -77,7 +73,7 @@ namespace MouseTrap.Service {
                     // ==>
                     var hotspace = current.RightHotSpace;
                     if (direction.HasFlag(Direction.ToRight) && hotspace.Contains(position)) {
-                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.RightBridge.TargetScreenId);
+                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.RightBridge!.TargetScreenId);
                         if (targetScreen != null) {
                             var target = targetScreen.LeftHotSpace;
                             if (target != Rectangle.Empty) {
@@ -92,7 +88,7 @@ namespace MouseTrap.Service {
                     // <==
                     hotspace = current.LeftHotSpace;
                     if (direction.HasFlag(Direction.ToLeft) && hotspace.Contains(position)) {
-                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.LeftBridge.TargetScreenId);
+                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.LeftBridge!.TargetScreenId);
                         if (targetScreen != null) {
                             var target = targetScreen.RightHotSpace;
                             if (target != Rectangle.Empty) {
@@ -108,7 +104,7 @@ namespace MouseTrap.Service {
                     // ^
                     hotspace = current.TopHotSpace;
                     if (direction.HasFlag(Direction.ToTop) && hotspace.Contains(position)) {
-                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.TopBridge.TargetScreenId);
+                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.TopBridge!.TargetScreenId);
                         if (targetScreen != null) {
                             var target = targetScreen.BottomHotSpace;
                             if (target != Rectangle.Empty) {
@@ -123,7 +119,7 @@ namespace MouseTrap.Service {
                     // v
                     hotspace = current.BottomHotSpace;
                     if (direction.HasFlag(Direction.ToBottom) && hotspace.Contains(position)) {
-                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.BottomBridge.TargetScreenId);
+                        var targetScreen = _screens.FirstOrDefault(_ => _.ScreenId == current.BottomBridge!.TargetScreenId);
                         if (targetScreen != null) {
                             var target = targetScreen.TopHotSpace;
                             if (target != Rectangle.Empty) {

@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace MouseTrap.Installer {
+﻿namespace MouseTrap.Installer {
     public class ProjectInstaller : IInstaller {
         private readonly IInstaller _installer;
 

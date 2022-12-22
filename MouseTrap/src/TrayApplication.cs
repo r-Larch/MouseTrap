@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-
-
-namespace MouseTrap {
+﻿namespace MouseTrap {
     public class TrayApplication : ApplicationContext {
         public TrayIcon TrayIcon { get; }
 
@@ -41,7 +37,7 @@ namespace MouseTrap {
             base.ExitThreadCore();
         }
 
-        protected override void OnMainFormClosed(object sender, EventArgs e)
+        protected override void OnMainFormClosed(object? sender, EventArgs e)
         {
             // prevent TrayIcon form disappearing after first configuration!!
             //base.OnMainFormClosed(sender, e);
@@ -57,8 +53,8 @@ namespace MouseTrap {
         }
 
 
-        public event EventHandler BeforeStart;
-        public event EventHandler BeforeExit;
+        public event EventHandler? BeforeStart;
+        public event EventHandler? BeforeExit;
 
         protected virtual void OnBeforeStart()
         {

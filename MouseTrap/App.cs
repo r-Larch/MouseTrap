@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using MouseTrap.Properties;
+﻿using MouseTrap.Properties;
 
 
 namespace MouseTrap {

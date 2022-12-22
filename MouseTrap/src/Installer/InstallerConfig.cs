@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using MouseTrap.Models;
-using Newtonsoft.Json;
+﻿using MouseTrap.Models;
 
 
 namespace MouseTrap.Installer {
     public class InstallerConfig {
-        private Dictionary<string, IDictionary<string, string>> InstallerState { get; set; }
+        private Dictionary<string, IDictionary<string, string?>> InstallerState { get; set; } = null!;
 
         public static InstallerConfig Load()
         {
             return new InstallerConfig {
-                InstallerState = SettingsFile.Load<Dictionary<string, IDictionary<string, string>>>(nameof(InstallerState)),
+                InstallerState = SettingsFile.Load<Dictionary<string, IDictionary<string, string?>>>(nameof(InstallerState)),
             };
         }
 
@@ -24,7 +22,7 @@ namespace MouseTrap.Installer {
         {
             var key = typeof(T).Name;
             if (!InstallerState.TryGetValue(key, out var state)) {
-                InstallerState.Add(key, state = new Dictionary<string, string>());
+                InstallerState.Add(key, state = new Dictionary<string, string?>());
             }
 
             return new InstallerState(state);
@@ -33,10 +31,10 @@ namespace MouseTrap.Installer {
 
 
     public class InstallerState {
-        private readonly IDictionary<string, string> _value;
-        public InstallerState(IDictionary<string, string> value) => _value = value;
+        private readonly IDictionary<string, string?> _value;
+        public InstallerState(IDictionary<string, string?> value) => _value = value;
 
-        public string this[string key] {
+        public string? this[string key] {
             get => _value.TryGetValue(key, out var state) ? state : default;
             set {
                 if (!_value.TryAdd(key, value)) _value[key] = value;

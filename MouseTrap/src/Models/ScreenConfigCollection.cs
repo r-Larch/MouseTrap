@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 
 
 namespace MouseTrap.Models {
@@ -26,9 +22,9 @@ namespace MouseTrap.Models {
             }
         }
 
-        public static event ScreenConfigChanged OnChanged;
+        public static event ScreenConfigChanged? OnChanged;
 
-        private static void DisplaySettingsChanged(object sender, EventArgs eventArgs)
+        private static void DisplaySettingsChanged(object? sender, EventArgs eventArgs)
         {
             var configCollection = Load();
             OnChanged?.Invoke(configCollection);

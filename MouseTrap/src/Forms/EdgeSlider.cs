@@ -1,9 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Windows.Forms;
-using MouseTrap.Models;
+﻿using System.Drawing.Drawing2D;
 
 
 namespace MouseTrap.Forms {
@@ -17,7 +12,7 @@ namespace MouseTrap.Forms {
         public Control Form { get; }
 
         public LayoutStyle LayoutStyle { get; set; }
-        internal Bar Bar { get; private set; }
+        internal Bar Bar { get; private set; } = null!;
         internal Bar FullBar => GetBar(Size, 0, 0);
 
         internal int BarLength => Math.Max(Width, Height);
@@ -136,8 +131,8 @@ namespace MouseTrap.Forms {
 
         private void Invalidate(GraphicsPath path)
         {
-            var points = path.PathData.Points;
-            var types = path.PathData.Types;
+            var points = path.PathData.Points!;
+            var types = path.PathData.Types!;
             for (int i = 0; i < points.Length; i++) {
                 points[i] = new PointF(points[i].X + Bounds.Location.X, points[i].Y + Bounds.Location.Y);
             }

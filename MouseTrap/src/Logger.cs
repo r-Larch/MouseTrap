@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using MouseTrap.Models;
 
@@ -9,10 +7,10 @@ using MouseTrap.Models;
 namespace MouseTrap {
     internal class Logger : SettingsFile {
         private readonly string _datetimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
-        private readonly object _fileLock = new object();
+        private readonly object _fileLock = new();
         public readonly string LogFilename;
 
-        public static readonly Logger Log = new Logger();
+        public static readonly Logger Log = new();
 
         public Logger()
         {
@@ -43,14 +41,15 @@ namespace MouseTrap {
         }
 
 
-        public static void Error(string message, Exception e)
+        public static void Error(string message, Exception? e)
         {
             var msg = new StringBuilder();
-            do {
+            if (e is null) msg.Append(message);
+            while (e != null) {
                 var hResult = (e is Win32Exception win32) ? win32.NativeErrorCode : e.HResult;
                 msg.AppendLine($"[0x{0x80070000 + hResult:X}] {e.GetType().FullName}: {e.Message}\r\n{e.StackTrace}");
                 e = e.InnerException;
-            } while (e != null);
+            }
 
             Log.Error(msg.ToString());
 

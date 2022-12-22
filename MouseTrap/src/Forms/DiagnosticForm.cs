@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 using MouseTrap.Models;
 using MouseTrap.Service;
 using Newtonsoft.Json;
@@ -93,9 +89,9 @@ namespace MouseTrap.Forms {
                 this.InfosBox.AppendText($"{msg}\r\n");
             }
 
-            static IDictionary<string, object> StaticProperties(Type type)
+            static IDictionary<string, object?> StaticProperties(Type type)
             {
-                var data = new Dictionary<string, object>();
+                var data = new Dictionary<string, object?>();
                 foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Static)) {
                     try {
                         data.Add(property.Name, property.GetValue(null));
