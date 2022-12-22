@@ -74,7 +74,7 @@ public class EdgeSlider /*: UserControl*/ {
                 var offset = Bar.Top.CursorPos;
                 pos = pos - offset;
 
-                TopOffset = LayoutStyle == LayoutStyle.Left || LayoutStyle == LayoutStyle.Right ? pos.Y : pos.X;
+                TopOffset = LayoutStyle is LayoutStyle.Left or LayoutStyle.Right ? pos.Y : pos.X;
                 Bar = GetBar(Size, TopOffset, BottomOffset);
                 Bar.Top.Hover = Bar.Top.Active = true;
                 Bar.Top.CursorPos = offset;
@@ -85,7 +85,7 @@ public class EdgeSlider /*: UserControl*/ {
                 var offset = Bar.Bottom.CursorPos;
                 pos = pos + offset;
 
-                BottomOffset = LayoutStyle == LayoutStyle.Left || LayoutStyle == LayoutStyle.Right ? Height - pos.Y : Width - pos.X;
+                BottomOffset = LayoutStyle is LayoutStyle.Left or LayoutStyle.Right ? Height - pos.Y : Width - pos.X;
                 Bar = GetBar(Size, TopOffset, BottomOffset);
                 Bar.Bottom.Hover = Bar.Bottom.Active = true;
                 Bar.Bottom.CursorPos = offset;
@@ -104,7 +104,7 @@ public class EdgeSlider /*: UserControl*/ {
     {
         var pos = this.PointToClient(Cursor.Position);
         if (Bar.Top.Contains(pos)) {
-            this.Form.Cursor = LayoutStyle == LayoutStyle.Left || LayoutStyle == LayoutStyle.Right ? Cursors.SizeNS : Cursors.SizeWE;
+            this.Form.Cursor = LayoutStyle is LayoutStyle.Left or LayoutStyle.Right ? Cursors.SizeNS : Cursors.SizeWE;
             if (!Bar.Top.Hover) {
                 Bar.Top.Hover = true;
                 this.Invalidate(Bar.Top);
@@ -117,7 +117,7 @@ public class EdgeSlider /*: UserControl*/ {
         }
 
         if (Bar.Bottom.Contains(pos)) {
-            this.Form.Cursor = LayoutStyle == LayoutStyle.Left || LayoutStyle == LayoutStyle.Right ? Cursors.SizeNS : Cursors.SizeWE;
+            this.Form.Cursor = LayoutStyle is LayoutStyle.Left or LayoutStyle.Right ? Cursors.SizeNS : Cursors.SizeWE;
             if (!Bar.Bottom.Hover) {
                 Bar.Bottom.Hover = true;
                 this.Invalidate(Bar.Bottom);

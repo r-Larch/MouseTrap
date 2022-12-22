@@ -48,7 +48,7 @@ public class ServiceThread : MsgBroadcast {
 
                 service.OnExit();
             }
-            catch (Exception e) when (token.IsCancellationRequested || e is OperationCanceledException || e is ThreadAbortException || e is ThreadInterruptedException) {
+            catch (Exception e) when (token.IsCancellationRequested || e is OperationCanceledException or ThreadAbortException or ThreadInterruptedException) {
                 service.OnExit();
             }
             catch (Exception e) {
