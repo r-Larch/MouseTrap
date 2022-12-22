@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 
-namespace MouseTrap.Native; 
+namespace MouseTrap.Native;
 
 internal class Mouse {
     public static bool MoveCursor(int x, int y)

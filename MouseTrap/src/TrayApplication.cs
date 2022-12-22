@@ -1,4 +1,4 @@
-﻿namespace MouseTrap; 
+﻿namespace MouseTrap;
 
 public class TrayApplication : ApplicationContext {
     public TrayIcon TrayIcon { get; }

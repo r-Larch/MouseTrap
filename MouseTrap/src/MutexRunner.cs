@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 
-namespace MouseTrap; 
+namespace MouseTrap;
 
 internal class MutexRunner : MsgBroadcast {
     private const string Name = App.Name;

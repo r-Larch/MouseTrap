@@ -3,7 +3,7 @@ using MouseTrap.Models;
 using MouseTrap.Native;
 
 
-namespace MouseTrap.Service; 
+namespace MouseTrap.Service;
 
 public class MouseBridgeService : IService {
     private ScreenConfigCollection _screens;
@@ -238,7 +238,6 @@ public class MouseBridgeService : IService {
         }
     }
 }
-
 
 [Flags]
 internal enum Direction : byte {

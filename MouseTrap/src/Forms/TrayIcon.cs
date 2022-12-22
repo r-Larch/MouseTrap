@@ -2,7 +2,7 @@
 using System.Reflection;
 
 
-namespace MouseTrap; 
+namespace MouseTrap;
 
 public class TrayIcon : Component, IMessageFilter {
     private readonly IContainer Components = new Container();

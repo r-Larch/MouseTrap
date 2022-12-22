@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Versioning;
 
 
-namespace MouseTrap.Installer; 
+namespace MouseTrap.Installer;
 
 [SupportedOSPlatform("windows")]
 public class WindowsInstaller : IInstaller {

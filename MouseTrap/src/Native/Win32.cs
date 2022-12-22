@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 
-namespace MouseTrap.Native; 
+namespace MouseTrap.Native;
 
 internal class Win32 {
     /// <summary>

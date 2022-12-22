@@ -6,7 +6,7 @@ using MouseTrap.Service;
 
 
 // ReSharper disable LocalizableElement
-namespace MouseTrap.Forms; 
+namespace MouseTrap.Forms;
 
 public partial class ConfigFrom : Form {
     public ServiceThread Service { get; set; }

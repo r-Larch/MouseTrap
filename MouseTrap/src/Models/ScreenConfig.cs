@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 
-namespace MouseTrap.Models; 
+namespace MouseTrap.Models;
 
 [Serializable]
 [JsonObject(MemberSerialization.OptIn)]

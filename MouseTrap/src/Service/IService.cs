@@ -1,4 +1,4 @@
-﻿namespace MouseTrap.Service; 
+﻿namespace MouseTrap.Service;
 
 public interface IService {
     void Run(CancellationToken token);

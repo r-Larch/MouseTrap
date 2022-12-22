@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using MouseTrap.Models;
 
 
-namespace MouseTrap.Service; 
+namespace MouseTrap.Service;
 
 public class ServiceThread : MsgBroadcast {
     public Func<IService> ServiceFactory { get; set; } = null!;

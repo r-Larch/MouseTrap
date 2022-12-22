@@ -1,4 +1,4 @@
-﻿namespace MouseTrap.Installer; 
+﻿namespace MouseTrap.Installer;
 
 public class ProjectInstaller : IInstaller {
     private readonly IInstaller _installer;
@@ -25,7 +25,6 @@ public class ProjectInstaller : IInstaller {
         _installer.Uninstall();
     }
 }
-
 
 public interface IInstaller {
     public void Install();

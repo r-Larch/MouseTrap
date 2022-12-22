@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 
-namespace MouseTrap.Models; 
+namespace MouseTrap.Models;
 
 public class SettingsFile {
     protected static string SavePath(string name) => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), App.Name, name + ".json");

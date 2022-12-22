@@ -1,7 +1,7 @@
-﻿using System.Drawing.Drawing2D;
+using System.Drawing.Drawing2D;
 
 
-namespace MouseTrap.Forms; 
+namespace MouseTrap.Forms;
 
 public class EdgeSlider /*: UserControl*/ {
     public bool Visible { get; set; }
@@ -215,7 +215,6 @@ public class EdgeSlider /*: UserControl*/ {
     }
 }
 
-
 internal class Bar {
     public Triangle Top { get; }
     public Rectangle Body { get; }
@@ -266,12 +265,12 @@ internal class Triangle {
 
     public Triangle(int x, int y, int x1, int y1, int x2, int y2)
     {
-        Points = new[] {new Point(x, y), new Point(x1, y1), new Point(x2, y2)};
+        Points = new[] { new Point(x, y), new Point(x1, y1), new Point(x2, y2) };
     }
 
     public Triangle(Point p1, Point p2, Point p3)
     {
-        Points = new[] {p1, p2, p3};
+        Points = new[] { p1, p2, p3 };
     }
 
     public Point[] Points { get; }

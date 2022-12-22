@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 
 
-namespace MouseTrap.Models; 
+namespace MouseTrap.Models;
 
 [Serializable]
 public class ScreenConfigCollection : List<ScreenConfig> {
@@ -47,7 +47,7 @@ public class ScreenConfigCollection : List<ScreenConfig> {
 
         var obj = new ScreenConfigCollection();
         for (var i = 0; i < screens.Length; i++) {
-            var config = loaded.FirstOrDefault(x => x.ScreenId == i) ?? new ScreenConfig() {ScreenId = i};
+            var config = loaded.FirstOrDefault(x => x.ScreenId == i) ?? new ScreenConfig() { ScreenId = i };
 
             config.Name = screens[i].DeviceFriendlyName();
             config.Bounds = screens[i].Bounds;

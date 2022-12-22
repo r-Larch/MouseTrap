@@ -1,4 +1,4 @@
-﻿namespace MouseTrap.Forms; 
+﻿namespace MouseTrap.Forms;
 
 public class SliderPanel : Panel {
     public List<EdgeSlider> Sliders = new List<EdgeSlider>();

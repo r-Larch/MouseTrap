@@ -1,4 +1,4 @@
-﻿namespace MouseTrap.Models; 
+﻿namespace MouseTrap.Models;
 
 [Serializable]
 public class Settings {

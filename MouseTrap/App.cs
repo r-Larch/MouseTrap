@@ -1,7 +1,7 @@
 ﻿using MouseTrap.Properties;
 
 
-namespace MouseTrap; 
+namespace MouseTrap;
 
 internal class App {
     public const string Name = "MouseTrap";

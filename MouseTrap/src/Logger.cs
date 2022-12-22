@@ -4,7 +4,7 @@ using System.Text;
 using MouseTrap.Models;
 
 
-namespace MouseTrap; 
+namespace MouseTrap;
 
 internal class Logger : SettingsFile {
     private readonly string _datetimeFormat = "yyyy-MM-dd HH:mm:ss.fff";

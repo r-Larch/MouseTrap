@@ -1,7 +1,7 @@
 ﻿using MouseTrap.Models;
 
 
-namespace MouseTrap; 
+namespace MouseTrap;
 
 public partial class ScreensView : UserControl {
     private ScreenConfigCollection _config = null!;

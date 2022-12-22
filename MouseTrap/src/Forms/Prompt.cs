@@ -1,7 +1,7 @@
 ﻿using MouseTrap.Models;
 
 
-namespace MouseTrap; 
+namespace MouseTrap;
 
 public class Prompt {
     public static int ChooseScreenDialog(ScreenConfigCollection screens, int screenIdToexclude)

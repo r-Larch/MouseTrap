@@ -4,7 +4,7 @@ using System.Security.Principal;
 using Microsoft.Win32.TaskScheduler;
 
 
-namespace MouseTrap.Installer; 
+namespace MouseTrap.Installer;
 
 [SupportedOSPlatform("windows")]
 internal class TaskInstaller {

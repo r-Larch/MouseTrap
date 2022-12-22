@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 
 // ReSharper disable LocalizableElement
-namespace MouseTrap.Forms; 
+namespace MouseTrap.Forms;
 
 public partial class DiagnosticForm : Form {
     public ServiceThread Service { get; }

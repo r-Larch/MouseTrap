@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 
-namespace MouseTrap; 
+namespace MouseTrap;
 
 // ReSharper disable InconsistentNaming
 public static class ScreenInterrogatory {

@@ -4,7 +4,7 @@ using MouseTrap.Models;
 using MouseTrap.Native;
 
 
-namespace MouseTrap.Service; 
+namespace MouseTrap.Service;
 
 public class MouseBridgeDiagnosticService : IService {
     private ScreenConfigCollection _screens;

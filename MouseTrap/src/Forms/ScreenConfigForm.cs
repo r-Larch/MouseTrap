@@ -1,7 +1,7 @@
 ﻿using MouseTrap.Models;
 
 
-namespace MouseTrap.Forms; 
+namespace MouseTrap.Forms;
 
 // ReSharper disable LocalizableElement
 public partial class ScreenConfigForm : Form {

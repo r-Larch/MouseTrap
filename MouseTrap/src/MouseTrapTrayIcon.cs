@@ -1,9 +1,9 @@
-﻿using MouseTrap.Forms;
+using MouseTrap.Forms;
 using MouseTrap.Models;
 using MouseTrap.Service;
 
 
-namespace MouseTrap; 
+namespace MouseTrap;
 
 public class MouseTrapTrayIcon : TrayIcon {
     private readonly ServiceThread _service;

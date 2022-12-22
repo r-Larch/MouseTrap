@@ -1,7 +1,7 @@
 ﻿using MouseTrap.Models;
 
 
-namespace MouseTrap.Installer; 
+namespace MouseTrap.Installer;
 
 public class InstallerConfig {
     private Dictionary<string, IDictionary<string, string?>> InstallerState { get; set; } = null!;
@@ -29,7 +29,6 @@ public class InstallerConfig {
         return new InstallerState(state);
     }
 }
-
 
 public class InstallerState {
     private readonly IDictionary<string, string?> _value;
