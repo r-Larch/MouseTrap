@@ -11,7 +11,7 @@ different resolutions and scaling settings.
 For this tool to function correctly you should have:
 
  - At least **Windows 10 Creators update** (Build 1703)
- - [**.NET 5 Runtime**](https://dotnet.microsoft.com/download/dotnet/current/runtime) (in most cases it will notify you if the runtime is missing)
+ - [**.NET 6 Runtime**](https://dotnet.microsoft.com/download/dotnet/current/runtime) (in most cases it will notify you if the runtime is missing)
 
 
 ## Download and Setup
@@ -38,6 +38,11 @@ mousetrap
 
 
 ## Changelog
+
+### Version 1.0.15
+
+ - **Migrate to .NET 6**
+ - Bug fixes
 
 ### Version 1.0.6
 
