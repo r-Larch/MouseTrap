@@ -58,14 +58,13 @@ public class MouseTrapTrayIcon : TrayIcon {
         if (_configFromRef == null || !_configFromRef.TryGetTarget(out var configFrom) || configFrom.Disposing || configFrom.IsDisposed) {
             configFrom = new ConfigFrom(_service);
             configFrom.Show();
-            configFrom.Activate();
             _configFromRef = new WeakReference<ConfigFrom>(configFrom);
         }
-        else {
-            configFrom.Activate();
-            configFrom.TopMost = true;
-            configFrom.TopMost = false;
-        }
+
+        // bring window into foreground:
+        configFrom.Activate();
+        configFrom.TopMost = true;
+        configFrom.TopMost = false;
     }
 
 
