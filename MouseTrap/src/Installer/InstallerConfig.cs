@@ -1,44 +1,44 @@
 ﻿using MouseTrap.Models;
 
 
-namespace MouseTrap.Installer {
-    public class InstallerConfig {
-        private Dictionary<string, IDictionary<string, string?>> InstallerState { get; set; } = null!;
+namespace MouseTrap.Installer; 
 
-        public static InstallerConfig Load()
-        {
-            return new InstallerConfig {
-                InstallerState = SettingsFile.Load<Dictionary<string, IDictionary<string, string?>>>(nameof(InstallerState)),
-            };
-        }
+public class InstallerConfig {
+    private Dictionary<string, IDictionary<string, string?>> InstallerState { get; set; } = null!;
 
-        public void Save()
-        {
-            SettingsFile.Save(InstallerState, nameof(InstallerState));
-        }
+    public static InstallerConfig Load()
+    {
+        return new InstallerConfig {
+            InstallerState = SettingsFile.Load<Dictionary<string, IDictionary<string, string?>>>(nameof(InstallerState)),
+        };
+    }
 
-
-        public InstallerState State<T>()
-        {
-            var key = typeof(T).Name;
-            if (!InstallerState.TryGetValue(key, out var state)) {
-                InstallerState.Add(key, state = new Dictionary<string, string?>());
-            }
-
-            return new InstallerState(state);
-        }
+    public void Save()
+    {
+        SettingsFile.Save(InstallerState, nameof(InstallerState));
     }
 
 
-    public class InstallerState {
-        private readonly IDictionary<string, string?> _value;
-        public InstallerState(IDictionary<string, string?> value) => _value = value;
+    public InstallerState State<T>()
+    {
+        var key = typeof(T).Name;
+        if (!InstallerState.TryGetValue(key, out var state)) {
+            InstallerState.Add(key, state = new Dictionary<string, string?>());
+        }
 
-        public string? this[string key] {
-            get => _value.TryGetValue(key, out var state) ? state : default;
-            set {
-                if (!_value.TryAdd(key, value)) _value[key] = value;
-            }
+        return new InstallerState(state);
+    }
+}
+
+
+public class InstallerState {
+    private readonly IDictionary<string, string?> _value;
+    public InstallerState(IDictionary<string, string?> value) => _value = value;
+
+    public string? this[string key] {
+        get => _value.TryGetValue(key, out var state) ? state : default;
+        set {
+            if (!_value.TryAdd(key, value)) _value[key] = value;
         }
     }
 }

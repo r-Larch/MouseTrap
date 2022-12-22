@@ -1,33 +1,33 @@
-﻿namespace MouseTrap.Installer {
-    public class ProjectInstaller : IInstaller {
-        private readonly IInstaller _installer;
+﻿namespace MouseTrap.Installer; 
 
-        public ProjectInstaller()
-        {
-            var config = InstallerConfig.Load();
+public class ProjectInstaller : IInstaller {
+    private readonly IInstaller _installer;
 
-            if (OperatingSystem.IsWindows()) {
-                _installer = new WindowsInstaller(config);
-            }
-            else {
-                throw new PlatformNotSupportedException();
-            }
+    public ProjectInstaller()
+    {
+        var config = InstallerConfig.Load();
+
+        if (OperatingSystem.IsWindows()) {
+            _installer = new WindowsInstaller(config);
         }
-
-        public void Install()
-        {
-            _installer.Install();
-        }
-
-        public void Uninstall()
-        {
-            _installer.Uninstall();
+        else {
+            throw new PlatformNotSupportedException();
         }
     }
 
-
-    public interface IInstaller {
-        public void Install();
-        public void Uninstall();
+    public void Install()
+    {
+        _installer.Install();
     }
+
+    public void Uninstall()
+    {
+        _installer.Uninstall();
+    }
+}
+
+
+public interface IInstaller {
+    public void Install();
+    public void Uninstall();
 }
