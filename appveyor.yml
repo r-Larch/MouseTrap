@@ -54,7 +54,7 @@ deploy:
     So in case you get some "Windows protected your PC" warning, just hit "more infos" and then "Run anyway".
     Or download the Source Code and Build it on your own.
   auth_token:
-    secure: zYHtyBs13JvlzMOq5tFTt6qCGLGBKEBNGK0Ho/c9ZsuknYU5M62uYMymS66cxgDH
+    secure: OI8UYJ7wYXUR0hQ3rrAd7zTd0yCV5Ssl1dGrSo+yqcKspC8XTx9/5Us3SfmDbXW+/L96DCCPhJTRbCZmtbVMPUDyJiBzuWjAc8wPlXLTAZMAbmbFS1lLEwC0B/sMfUdZ
   # artifact: /*\.exe/
   on:
     branch: master
