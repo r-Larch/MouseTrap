@@ -3,6 +3,7 @@ using System.Text;
 using MouseTrap.Models;
 using MouseTrap.Service;
 using Newtonsoft.Json;
+using TextCopy;
 
 
 // ReSharper disable LocalizableElement
@@ -48,7 +49,7 @@ public partial class DiagnosticForm : Form {
             sb.AppendLine();
             sb.AppendLine(LogfileBox.Text);
 
-            Clipboard.SetText(sb.ToString());
+            ClipboardService.SetText(sb.ToString());
 
             MessageBox.Show("Diagnostic data copied to clipboard.");
         };

@@ -18,6 +18,7 @@
     <PackageReference Include="TaskScheduler" Verson="2.8.21" Version="2.9.2" />
     <PackageReference Include="Costura.Fody" Version="5.7.0" PrivateAssets="All" />
     <PackageReference Include="Fody" Version="6.6.0" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+    <PackageReference Include="TextCopy" Version="6.2.1" />
   </ItemGroup>
 
   <ItemGroup>
