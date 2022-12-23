@@ -41,9 +41,9 @@ Here you can find the [documentation](https://github.com/r-Larch/MouseTrap/blob/
   <files>
     <file src="..\..\LICENSE.txt" />
     <file src="..\..\VERIFICATION.txt" />
-    <file src="..\bin\net5.0-windows\*.dll" target="tools" />
-    <file src="..\bin\net5.0-windows\*.exe" target="tools" />
-    <file src="..\bin\net5.0-windows\*.runtimeconfig.json" target="tools" />
+    <file src="..\bin\net6.0-windows\*.dll" target="tools" />
+    <file src="..\bin\net6.0-windows\*.exe" target="tools" />
+    <file src="..\bin\net6.0-windows\*.runtimeconfig.json" target="tools" />
     <file src="*.ps1" target="tools" />
   </files>
 </package>
