@@ -27,8 +27,8 @@ public class TrayIcon : Component, IMessageFilter {
         };
     }
 
-    public Icon Icon {
-        get => NotifyIcon.Icon;
+    public Icon? Icon {
+        get => NotifyIcon.Icon!;
         set => NotifyIcon.Icon = value;
     }
 
@@ -38,7 +38,7 @@ public class TrayIcon : Component, IMessageFilter {
     }
 
     public ContextMenuStrip ContextMenu {
-        get => NotifyIcon.ContextMenuStrip;
+        get => NotifyIcon.ContextMenuStrip!;
         set => NotifyIcon.ContextMenuStrip = value;
     }
 

@@ -38,6 +38,7 @@ public partial class ScreenConfigForm : Form {
         this.StartPosition = FormStartPosition.Manual;
         this.Bounds = Screen.Bounds;
         this.CancelButton = CancelBtn;
+        this.AutoScaleMode = AutoScaleMode.Dpi;
         this.KeyPreview = true;
         this.KeyDown += (sender, args) => {
             if (args.KeyCode == Keys.Escape) {
