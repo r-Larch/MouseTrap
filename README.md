@@ -1,7 +1,6 @@
 # MouseTrap
 
-[![Build](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)](https://ci.appveyor.com/project/r-Larch/mousetrap/branch/master)
-[![master](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true&passingText=master%20-%20OK)](https://ci.appveyor.com/project/r-Larch/mousetrap/branch/master)
+[![Build](https://github.com/r-Larch/MouseTrap/actions/workflows/build.yml/badge.svg)](https://github.com/r-Larch/MouseTrap/actions/workflows/build.yml)
 
 MouseTrap is a small tool to map the cursor between multiple monitors with <br>
 different resolutions and scaling settings.
@@ -19,29 +18,14 @@ For this tool to function correctly you should have:
 You can find the latest release here:
 > [Download](https://github.com/r-Larch/MouseTrap/releases)
 
-You can install MouseTrap with **chocolatey**:
-```Powershell
-# install the package
-choco install mousetrap
-
-# running it
-mousetrap
-```
-
->If you don't have chocolatey allready, I highly recommend installing it.<br>
->It's as simple as pasting the following in a cmd or Powershell window:
->```Powershell
->PowerShell
->Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object >System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
->```
->*[Why Chocolatey](https://chocolatey.org/docs/why) + [installation](https://chocolatey.org/docs/installation)*
-
 
 ## Changelog
 
 ### Version 1.0.16
 
  - **Migrate to .NET 8**
+ - Discontinue `chocolatey` support
+ - Migrate CI to Github Actions
  - Bug fixes
 
 ### Version 1.0.15
