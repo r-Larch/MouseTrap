@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using MouseTrap.Models;
 using MouseTrap.Service;
-using Newtonsoft.Json;
 using TextCopy;
 
 
@@ -109,9 +110,10 @@ public partial class DiagnosticForm : Form {
         static string Json(object obj)
         {
             try {
-                return JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                return JsonSerializer.Serialize(obj, new JsonSerializerOptions {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
                 });
             }
             catch (Exception e) {
@@ -123,8 +125,8 @@ public partial class DiagnosticForm : Form {
 
     public void RealtimeLog(string msg)
     {
-        ConsoleBox.Invoke(new Action(() => {
+        ConsoleBox.Invoke(() => {
             this.ConsoleBox.AppendText($"{msg}\r\n");
-        }));
+        });
     }
 }

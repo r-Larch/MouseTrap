@@ -1,37 +1,32 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 
 namespace MouseTrap.Models;
 
 [Serializable]
-[JsonObject(MemberSerialization.OptIn)]
 public class ScreenConfig {
-    [JsonProperty]
     public int ScreenId { get; set; }
+    [JsonIgnore]
     public string ScreenNum => (ScreenId + 1).ToString();
 
-    [JsonProperty]
     public string? Name { get; set; }
 
-    [JsonProperty]
     public bool Primary { get; set; }
 
+    [JsonIgnore]
     public bool HasBridges => TopBridge != null || LeftBridge != null || RightBridge != null || BottomBridge != null;
 
-    [JsonProperty]
     public Bridge? TopBridge { get; set; }
-    [JsonProperty]
     public Bridge? LeftBridge { get; set; }
-    [JsonProperty]
     public Bridge? RightBridge { get; set; }
-    [JsonProperty]
     public Bridge? BottomBridge { get; set; }
 
-    [JsonProperty] public Rectangle Bounds;
+    public Rectangle Bounds;
 
 
     private const int Space = 2;
 
+    [JsonIgnore]
     public Rectangle RightHotSpace => RightBridge != null
         ? new Rectangle(
             Bounds.X + Bounds.Width - Space,
@@ -41,6 +36,7 @@ public class ScreenConfig {
         )
         : Rectangle.Empty;
 
+    [JsonIgnore]
     public Rectangle LeftHotSpace => LeftBridge != null
         ? new Rectangle(
             Bounds.X,
@@ -50,6 +46,7 @@ public class ScreenConfig {
         )
         : Rectangle.Empty;
 
+    [JsonIgnore]
     public Rectangle TopHotSpace => TopBridge != null
         ? new Rectangle(
             Bounds.X + TopBridge.TopOffset,
@@ -59,6 +56,7 @@ public class ScreenConfig {
         )
         : Rectangle.Empty;
 
+    [JsonIgnore]
     public Rectangle BottomHotSpace => BottomBridge != null
         ? new Rectangle(
             Bounds.X + BottomBridge.TopOffset,
@@ -70,12 +68,8 @@ public class ScreenConfig {
 }
 
 [Serializable]
-[JsonObject(MemberSerialization.OptIn)]
 public class Bridge {
-    [JsonProperty]
     public int TopOffset { get; set; }
-    [JsonProperty]
     public int BottomOffset { get; set; }
-    [JsonProperty]
     public int TargetScreenId { get; set; }
 }

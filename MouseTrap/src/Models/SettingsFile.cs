@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace MouseTrap.Models;
@@ -10,7 +11,7 @@ public class SettingsFile {
     {
         var path = SavePath(filename ?? typeof(T).Name);
 
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj, JsonSettings);
+        var json = JsonSerializer.Serialize(obj, JsonSettings);
 
         if (!Directory.Exists(Path.GetDirectoryName(path))) {
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
@@ -19,8 +20,8 @@ public class SettingsFile {
         File.WriteAllText(path, json);
     }
 
-    public static JsonSerializerSettings JsonSettings = new JsonSerializerSettings {
-        NullValueHandling = NullValueHandling.Ignore
+    private static readonly JsonSerializerOptions JsonSettings = new() {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
     public static T Load<T>(string? fileName = null) where T : class, new()
@@ -28,6 +29,6 @@ public class SettingsFile {
         var path = SavePath(fileName ?? typeof(T).Name);
         var json = File.Exists(path) ? File.ReadAllText(path) : null;
 
-        return json != null ? Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json) ?? new T() : new T();
+        return json != null ? JsonSerializer.Deserialize<T>(json) ?? new T() : new T();
     }
 }
