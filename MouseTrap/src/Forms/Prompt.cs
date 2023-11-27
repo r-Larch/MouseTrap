@@ -4,7 +4,7 @@
 namespace MouseTrap;
 
 public class Prompt {
-    public static int ChooseScreenDialog(ScreenConfigCollection screens, int screenIdToexclude)
+    public static int ChooseScreenDialog(ScreenConfigCollection screens, int screenIdToExclude)
     {
         var resultId = -1;
         do {
@@ -30,7 +30,7 @@ public class Prompt {
                     Text = screen.ScreenNum,
                     Width = 50,
                     Height = 50,
-                    Enabled = screen.ScreenId != screenIdToexclude
+                    Enabled = screen.ScreenId != screenIdToExclude
                 };
                 button.Click += (sender, e) => {
                     resultId = screen.ScreenId;

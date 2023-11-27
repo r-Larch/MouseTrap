@@ -2,11 +2,17 @@
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <OutputPath>bin\</OutputPath>
+
+    <Title>MouseTrap</Title>
+    <Description>MouseTrap is a small tool to map the cursor between multiple monitors with different resolutions and scaling settings.</Description>
+    <Company>LarchSys</Company>
+    <Product>MouseTrap</Product>
+    <Copyright>LarchSys © 2024</Copyright>
+
     <ApplicationIcon>AppIcon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
