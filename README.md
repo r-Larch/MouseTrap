@@ -21,7 +21,7 @@ You can find the latest release here:
 
 ## Changelog
 
-### Version 1.0.16
+### Version 1.0.19
 
  - **Migrate to .NET 8**
  - Discontinue `chocolatey` support
