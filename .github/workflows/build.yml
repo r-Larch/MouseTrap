@@ -78,3 +78,7 @@ jobs:
           Or download the Source Code and Build it on your own.
         files: ./MouseTrap-${{ steps.version.outputs.version }}.zip
 
+    - name: Push to Chocolatey
+      env:
+        CHOCO_TOKEN: ${{ secrets.CHOCO_TOKEN }}
+      run: pwsh .\MouseTrap\choco\Push.ps1 -nuspec .\MouseTrap\choco\MouseTrap.nuspec -zip ./MouseTrap-${{ steps.version.outputs.version }}.zip -version ${{ steps.version.outputs.version_tag }}

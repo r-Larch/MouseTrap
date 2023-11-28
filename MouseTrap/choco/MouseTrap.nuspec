@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>MouseTrap</id>
+    <version>0.0.0</version>
+    <title>MouseTrap DPI aware mouse move across screens</title>
+    <tags>multiscreen mouse-pointer screen-scale dpi-awareness dpi-scaling cursor-moves cursor-position</tags>
+    <summary>A small tool to map the cursor between monitors with different DPIs</summary>
+    <description>
+      # MouseTrap
+
+      MouseTrap is a small tool to map the cursor between multiple monitors with
+      different resolutions and scaling settings.
+
+      ## Min requirements
+
+      For this tool to function correctly you should have:
+
+      - At least **Windows 10 Creators update** (Build 1703)
+      - [**.NET 8 Runtime**](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (in most cases it will notify you if the runtime is missing)
+
+      ## Usage and Configuration
+
+      Here you can find the [documentation](https://github.com/r-Larch/MouseTrap/blob/master/README.md).
+    </description>
+    <authors>René Larch</authors>
+    <owners>René Larch</owners>
+    <copyright>Copyright 2023 René Larch</copyright>
+    <licenseUrl>https://github.com/r-Larch/MouseTrap/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/r-Larch/MouseTrap</projectUrl>
+    <projectSourceUrl>https://github.com/r-Larch/MouseTrap</projectSourceUrl>
+    <bugTrackerUrl>https://github.com/r-Larch/MouseTrap/issues</bugTrackerUrl>
+    <docsUrl>https://github.com/r-Larch/MouseTrap/blob/master/README.md</docsUrl>
+    <iconUrl>https://raw.githubusercontent.com/r-Larch/MouseTrap/master/MouseTrap/AppIcon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>...</releaseNotes>
+  </metadata>
+  <files>
+    <file src="..\..\LICENSE.txt" />
+    <file src="..\..\VERIFICATION.txt" />
+    <file src="*.ps1" target="tools" />
+  </files>
+</package>

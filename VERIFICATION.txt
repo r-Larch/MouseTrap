@@ -2,9 +2,22 @@
 VERIFICATION
 Verification is intended to assist the Chocolatey moderators and community
 in verifying that this package's contents are trustworthy.
- 
 
-This package contains MouseTrap.exe; This is an open source Windows Application written by me (René Larch).
+
+This package contains the tool MouseTrap.
+This is an open source Windows Application written by me (René Larch).
 You can find the source code on github:
 
  * https://github.com/r-Larch/MouseTrap/
+
+Files:
+
+|-------------------------------|--------------------------------------------------------|
+| Files                         | Description                                            |
+|-------------------------------|--------------------------------------------------------|
+| MouseTrap.exe                 | Executable .NET wrapper to start the .NET Core Runtime |
+| MouseTrap.dll                 | The actual application to run in the .NET Core Runtime |
+| MouseTrap.pdb                 | Debugging symbols to have better error reports         |
+| MouseTrap.deps.json           | Dependencies file required for the .NET Core Runtime   |
+| MouseTrap.runtimeconfig.json  | Runtimeconfig file required for the .NET Core Runtime  |
+|-------------------------------|--------------------------------------------------------|

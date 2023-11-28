@@ -18,8 +18,19 @@ For this tool to function correctly you should have:
 You can find the latest release here:
 > [Download](https://github.com/r-Larch/MouseTrap/releases)
 
+You can install MouseTrap with **chocolatey**:
+```Powershell
+# install the package
+choco install mousetrap
+
+# running it
+mousetrap
+```
 
 ## Changelog
+
+### Version 1.0.20
+ - Add `chocolatey` support
 
 ### Version 1.0.19
 
