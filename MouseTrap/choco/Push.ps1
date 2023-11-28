@@ -1,4 +1,4 @@
-
+﻿
 param (
 	[string] $nuspec,
 	[string] $zip,
@@ -8,11 +8,11 @@ param (
 
 
 function Main() {
-	$dir  = Split-Path -parent $nuspec;
+	$dir  = Split-Path -parent $(Resolve-Path MouseTrap.nuspec).Path;
 
 	$choco = @{
 		version = $version
-		nuspec = $nuspec
+		nuspec = $(Resolve-Path MouseTrap.nuspec).Path
 		dir = $dir
 		installScript = [System.IO.Path]::Combine($dir, "chocolateyinstall.ps1")
 		uninstallScript = [System.IO.Path]::Combine($dir, "chocolateyuninstall.ps1")
@@ -22,7 +22,7 @@ function Main() {
 	ChocoUpdateScript $choco $version $hash
 
 	Push-Location $dir
-	$previousTag = [Git]::GetVersionTags() | where { $_ -ne "v$version" } | sort -Descending | select -first 2 | select -last 1;
+	$previousTag = [Git]::GetVersionTags() | where { !$_.startsWith("v$version") } | select -first 1;
 	$history = [Git]::GetHistorySince($previousTag);
 	Pop-Location
 
@@ -34,18 +34,18 @@ function Main() {
 
 
 function ChocoUpdateScript([object] $choco, [string] $version, [string] $hash) {
-    $script = Get-Content $choco.installScript -Encoding UTF8 -Raw
+    $script = Get-Content $choco.installScript -Encoding UTF8
     $script = $script.replace('<version>', $version)
 	$script = $script.replace('<hash>', $hash)
     $script | Set-Content $choco.installScript -Force -Encoding UTF8
 }
 
 
-function ChocoUpdateNuspec([object] $choco, [string] $history, [string] $githubRepoApi) {
+function ChocoUpdateNuspec([object] $choco, [string[]] $history, [string] $githubRepoApi) {
 	$repo = $(Invoke-Webrequest $githubRepoApi).Content | ConvertFrom-Json;
 	$topics = $(Invoke-Webrequest $githubRepoApi/topics -Headers @{'Accept'='application/vnd.github.mercy-preview+json'}).Content | ConvertFrom-Json
 	$xml = [xml] $(gc -Path $choco.nuspec -Encoding UTF8);
-	$xml.package.metadata.version = [Regex]::Replace($version, '^v', '');
+	$xml.package.metadata.version = $version;
 	$xml.package.metadata.summary = $repo.description;
 	$xml.package.metadata.tags = [string]::Join(" ", $topics.names);
 	$xml.package.metadata.copyright = "Copyright $([DateTime]::Now.Year) René Larch";
@@ -64,16 +64,15 @@ function ChocoPublish([object] $choco, [bool] $debug = $false) {
 	}
 
 	# create the nuspec package
-	& $chocoCommand pack $choco.nuspec --out $choco.dir
+	& $chocoCommand pack "$($choco.nuspec)" --outputdirectory "$($choco.dir)"
 
-	$ver = [Regex]::Replace($choco.version, "^v(.*)", '$1');
-	$nupkgName = $choco.nuspec.replace('.nuspec', ".$($ver).nupkg");
+	$nupkgName = $choco.nuspec.replace('.nuspec', ".$($choco.version).nupkg");
 
 	if (!$debug) {
 		# if token is given, we will publish the package to Chocolatey here
 		if ($env:CHOCO_TOKEN) {
 			& $chocoCommand apiKey -k $env:CHOCO_TOKEN -source https://push.chocolatey.org/
-			& $chocoCommand push $nupkgName -source https://push.chocolatey.org/
+			& $chocoCommand push "$nupkgName" -source https://push.chocolatey.org/
 		} else {
 			Write-Warning "Chocolatey token was not set. Publication skipped."
 		}
@@ -94,7 +93,7 @@ function ChocoPublish([object] $choco, [bool] $debug = $false) {
 		Write-Host $nuspec
 		Write-Host "===================================================="
 
-		Write-Host "$chocoCommand pack " $choco.nuspec
+		Write-Host "$chocoCommand pack $($choco.nuspec)"
 		Write-Host "$chocoCommand apiKey -k $env:CHOCO_TOKEN -source https://push.chocolatey.org/"
 		Write-Host "$chocoCommand push $nupkgName"
 	}
@@ -103,7 +102,7 @@ function ChocoPublish([object] $choco, [bool] $debug = $false) {
 
 class Git {
 	static [string[]] GetTags() {
-		return $(git tag --list).Split("`n");
+		return $(git tag --list --sort -creatordate).Split("`n");
 	}
 	static [string[]] GetVersionTags() {
 		return [Git]::GetTags() | Select-String -pattern "v[\d+\.]+(-(alpha|beta))?";

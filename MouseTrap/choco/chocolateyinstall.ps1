@@ -1,12 +1,11 @@
-﻿$ErrorActionPreference = 'Stop';
+$ErrorActionPreference = 'Stop';
 
 $version       = '<version>'
 $hash          = '<hash>'
-$versionNumber = [Regex]::Replace($version, 'v(\d+\.\d+\.\d+).*', '$1')
 
 $packageName   = 'mousetrap'
 $toolsDir      = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url           = "https://github.com/r-Larch/MouseTrap/releases/download/$version/MouseTrap-$versionNumber.zip"
+$url           = "https://github.com/r-Larch/MouseTrap/releases/download/v$version-beta/MouseTrap-$version.zip"
 
 
 $packageArgs = @{
