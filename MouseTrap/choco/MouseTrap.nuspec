@@ -27,6 +27,7 @@
     <owners>René Larch</owners>
     <copyright>Copyright 2023 René Larch</copyright>
     <licenseUrl>https://github.com/r-Larch/MouseTrap/blob/master/LICENSE.txt</licenseUrl>
+    <packageSourceUrl>https://github.com/r-Larch/MouseTrap</packageSourceUrl>
     <projectUrl>https://github.com/r-Larch/MouseTrap</projectUrl>
     <projectSourceUrl>https://github.com/r-Larch/MouseTrap</projectSourceUrl>
     <bugTrackerUrl>https://github.com/r-Larch/MouseTrap/issues</bugTrackerUrl>
