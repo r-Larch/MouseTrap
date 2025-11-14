@@ -1,4 +1,5 @@
-﻿using MouseTrap.Models;
+﻿using System.ComponentModel;
+using MouseTrap.Models;
 
 
 namespace MouseTrap.Forms;
@@ -279,6 +280,7 @@ public partial class ScreenConfigForm : Form {
     }
 
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public TargetScreenIdGetter GetTargetScreenId { get; set; }
 
     public ScreenConfig GetConfig()

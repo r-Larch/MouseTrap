@@ -9,8 +9,12 @@ using MouseTrap.Service;
 namespace MouseTrap.Forms;
 
 public partial class ConfigFrom : Form {
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ServiceThread Service { get; set; }
+
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ScreenConfigCollection Screens { get; set; }
+
     public Settings Settings { get; }
 
     public ConfigFrom(ServiceThread service)
@@ -147,10 +151,10 @@ public partial class ConfigFrom : Form {
     }
 
 
-    protected override void OnClosing(CancelEventArgs e)
+    protected override void OnFormClosing(FormClosingEventArgs e)
     {
         Settings.Save();
-        base.OnClosing(e);
+        base.OnFormClosing(e);
     }
 }
 

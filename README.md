@@ -10,7 +10,7 @@ different resolutions and scaling settings.
 For this tool to function correctly you should have:
 
  - At least **Windows 10 Creators update** (Build 1703)
- - [**.NET 8 Runtime**](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (in most cases it will notify you if the runtime is missing)
+ - [**.NET 10 Runtime**](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) (in most cases it will notify you if the runtime is missing)
 
 
 ## Download and Setup
@@ -18,16 +18,11 @@ For this tool to function correctly you should have:
 You can find the latest release here:
 > [Download](https://github.com/r-Larch/MouseTrap/releases)
 
-You can install MouseTrap with **chocolatey**:
-```Powershell
-# install the package
-choco install mousetrap
-
-# running it
-mousetrap
-```
-
 ## Changelog
+
+### Version 1.0.21
+ - **Migrate to .NET 10**
+ - Discontinue `chocolatey` support
 
 ### Version 1.0.20
  - Add `chocolatey` support

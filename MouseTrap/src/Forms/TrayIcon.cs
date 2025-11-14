@@ -27,26 +27,31 @@ public class TrayIcon : Component, IMessageFilter {
         };
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Icon? Icon {
         get => NotifyIcon.Icon!;
         set => NotifyIcon.Icon = value;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string Text {
         get => NotifyIcon.Text;
         set => NotifyIcon.Text = value;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ContextMenuStrip ContextMenu {
         get => NotifyIcon.ContextMenuStrip!;
         set => NotifyIcon.ContextMenuStrip = value;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Visible {
         get => NotifyIcon.Visible;
         set => NotifyIcon.Visible = value;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public TrayApplication? Application { get; set; }
 
     public void Hide()

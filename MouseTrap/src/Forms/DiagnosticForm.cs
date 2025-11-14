@@ -55,7 +55,7 @@ public partial class DiagnosticForm : Form {
             MessageBox.Show("Diagnostic data copied to clipboard.");
         };
 
-        this.Closing += delegate {
+        this.FormClosing += delegate {
             Service.RestoreOriginalState();
         };
 
